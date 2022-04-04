@@ -82,7 +82,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def useoldVertical(self):
         layout = self.graphlayout
-        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_list_vertical[1][::-1], self.intensity_list_vertical[0], title="Vertical scan")
+        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_y[1][::-1], self.intensity_y[0], title="Vertical scan")
         self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVline)
         self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
         self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
@@ -102,10 +102,10 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         stopy = max([start, stop])
         intensity_list = self.calcHorizontal(startx, stopx, starty, stopy)
         coordinatelist = list(range(startx, stopx))
-        intensity_list = self.removeZeroes(intensity_list, coordinatelist)
+        self.intensity_x = self.removeZeroes(intensity_list, coordinatelist)
 
         layout = self.graphlayout
-        self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, intensity_list[1], intensity_list[0], title="Horizontal scan")
+        self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_x[1], self.intensity_x[0], title="Horizontal scan")
 
     def startVertical(self):
         start = int(self.x0)
@@ -119,9 +119,9 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         layout = self.graphlayout
         intensity_list = self.calcVertical(startx, stopx, starty, stopy)
         coordinatelist = list(range(min([int(self.y0), int(self.y1)]), max([int(self.y0), int(self.y1)])))
-        self.intensity_list_vertical = self.removeZeroes(intensity_list, coordinatelist)
+        self.intensity_y = self.removeZeroes(intensity_list, coordinatelist)
 
-        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_list_vertical[1][::-1], self.intensity_list_vertical[0], title="Vertical scan")
+        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_y[1][::-1], self.intensity_y[0], title="Vertical scan")
         self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVline)
         self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
         self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
