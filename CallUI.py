@@ -72,14 +72,29 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.figurecanvas[1].draw()
         self.clearLayout(self.graphlayout)
         self.calcOffSpec()
-        ax.patches = []
 
 
 
     def calcOffSpec(self):
         print(f"The x-coordinates span from x0={self.x0} to x1={self.x1}")
         print(f"The y-coordinates span from y0={self.y0} to y10={self.y1}")
+        self.startHorizontal()
+        print(self.holdVertical.isChecked())
+        if self.holdVertical.isChecked() == False:
+            self.startVertical()
+        else:
+            self.useoldVertical()
 
+    def useoldVertical(self):
+        layout = self.graphlayout
+        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_list_vertical[1][::-1], self.intensity_list_vertical[0], title="Vertical scan")
+        self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVline)
+        self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
+        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
+
+
+
+    def startHorizontal(self):
         start = int(self.x0)
         stop = int(self.x1)
         startx = min([start, stop])
@@ -90,19 +105,66 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         stop = int(max(self.ylist) - self.y0)
         starty = min([start, stop])
         stopy = max([start, stop])
-        print(f"Starty is equal to {starty}")
-        print(f"stopy is equal to {stopy}")
-
         intensity_list = self.calcHorizontal(startx, stopx, starty, stopy)
-        intensity_list = self.removeZeroes(intensity_list)
-        self.intensity_x = intensity_list
+        coordinatelist = list(range(startx, stopx))
+        intensity_list = self.removeZeroes(intensity_list, coordinatelist)
         layout = self.graphlayout
-        gisax.plotGraphOnCanvas(self, layout, intensity_list[1], intensity_list[0], title="Horizontal scan")
+        self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, intensity_list[1], intensity_list[0], title="Horizontal scan")
 
+    def startVertical(self):
+        start = int(self.x0)
+        stop = int(self.x1)
+        startx = min([start, stop])
+        stopx = max([start, stop])
+        start = int(max(self.ylist) - self.y1)
+        stop = int(max(self.ylist) - self.y0)
+        starty = min([start, stop])
+        stopy = max([start, stop])
+        layout = self.graphlayout
         intensity_list = self.calcVertical(startx, stopx, starty, stopy)
-        intensity_list = self.removeZeroes(intensity_list)
-        self.intensity_y = intensity_list
-        gisax.plotGraphOnCanvas(self, layout, intensity_list[1][::-1], intensity_list[0], title="Vertical scan")
+        coordinatelist = list(range(min([int(self.y0), int(self.y1)]), max([int(self.y0), int(self.y1)])))
+        self.intensity_list_vertical = self.removeZeroes(intensity_list, coordinatelist)
+
+        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_list_vertical[1][::-1], self.intensity_list_vertical[0], title="Vertical scan")
+        self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVline)
+        self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
+        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
+
+
+
+
+    def dragVline(self, event):
+        print(self.clicked)
+        if self.clicked == True:
+            try:
+                self.vline.remove()
+            except:
+                pass
+            figure = self.verticalscanfig[0]
+            axle = figure.axes[0]
+            self.vlinepos = event.xdata
+            y0 = (event.xdata) - abs((self.y1 - self.y0))/2
+            y1 = (event.xdata) + abs((self.y1 - self.y0))/2
+            print(y0)
+            print(y1)
+            self.y1 = y1
+            self.y0 = y0
+            self.rect.set_width(self.x1 - self.x0)
+            self.rect.set_height(y1 - y0)
+            self.rect.set_xy((self.x0, y0))
+            self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
+                                       linestyle='--'))  # Change the line in the list to new selected line
+            self.verticalscanfig[1].draw()
+            self.figurecanvas[1].draw()
+
+    def pressVline(self, event):
+        self.clicked = True
+
+    def releaseVline(self, event, trigger=False):
+        self.clicked = False
+        self.clearLayout(self.graphlayout)
+        self.calcOffSpec()
+
 
     def saveFileDialog(self, documenttype="Portable Document Format (PDF) (*.pdf)"):
         options = QFileDialog.Options()
@@ -139,6 +201,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         intensity_list = []
         print(f"{starty} is starty")
         print(stopy)
+        print(self.y0)
+        print(self.y1)
         for i in range(starty, stopy):
             for j in range(startx, stopx):
                 intensity += self.z[i][j]
@@ -153,15 +217,16 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         plt.title(title)
         plt.show()
 
-    def removeZeroes(self, intensity_list):
+    def removeZeroes(self, intensity_list, coordinatelist):
         new_list = []
         indexlist = []
+        new_coordinatelist = []
         for index in range(len(intensity_list)):
             if intensity_list[index] > 0:
                 new_list.append(intensity_list[index])
-                indexlist.append(index)
+                new_coordinatelist.append(coordinatelist[index])
         print(min(new_list))
-        return [new_list, indexlist]
+        return [new_list, new_coordinatelist]
 
 
     def clearLayout(self, layout):
