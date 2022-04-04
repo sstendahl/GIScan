@@ -36,7 +36,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clicked = True
         self.x0 = int(event.xdata)
         self.y0 = int(event.ydata)
-        print(self.x0)
 
     def on_hover(self, event):
         if self.clicked == True:
@@ -46,14 +45,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.rect.set_height(self.y1 - self.y0)
             self.rect.set_xy((self.x0, self.y0))
             figure = self.figurecanvas[0]
-            print(figure.axes[0])
-            ax = 0
             ax = figure.axes[0]
             try:
                 ax.patches = []
             except:
                 pass
-            print(self.rect)
             ax.add_patch(self.rect)
             self.figurecanvas[1].draw()
 
