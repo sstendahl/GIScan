@@ -1,5 +1,5 @@
 # GIScan
-Simply tool to read and analyze existing GISAXS data. 
+Simple tool to read and analyze existing GISAXS data. 
 This software has only been tested on GISXAS-data obtained at DESY in Germany, exported to a .dat file by PyMCa. Any other type of data is unsupported.
 
 Very early alpha. 
