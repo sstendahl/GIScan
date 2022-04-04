@@ -3,8 +3,8 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-
-
+from PyQt5.QtWidgets import QFileDialog
+import numpy as np
 
 import gisax
 
@@ -29,6 +29,9 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def connectActions(self):
         # Connect File actions
         self.load_button.clicked.connect(lambda: gisax.loadMap(self))
+        self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
+        self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
+
 
     def on_press(self, event):
         self.clicked = True
@@ -92,12 +95,34 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
         intensity_list = self.calcHorizontal(startx, stopx, starty, stopy)
         intensity_list = self.removeZeroes(intensity_list)
+        self.intensity_x = intensity_list
         layout = self.graphlayout
         gisax.plotGraphOnCanvas(self, layout, intensity_list[1], intensity_list[0], title="Horizontal scan")
 
         intensity_list = self.calcVertical(startx, stopx, starty, stopy)
         intensity_list = self.removeZeroes(intensity_list)
+        self.intensity_y = intensity_list
         gisax.plotGraphOnCanvas(self, layout, intensity_list[1][::-1], intensity_list[0], title="Vertical scan")
+
+    def saveFileDialog(self, documenttype="Portable Document Format (PDF) (*.pdf)"):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", "",
+                                               documenttype, options=options)
+        return fileName
+
+    def saveFile(self, horizontal = True):
+        path = self.saveFileDialog(documenttype="Text file (*.txt)")
+        filename = path[0]
+        if filename[-4:] != ".txt":
+            filename = filename + ".txt"
+        if horizontal == True:
+            array = np.stack([self.intensity_x[1], self.intensity_x[0]], axis=1)
+        else:
+            array = np.stack([self.intensity_y[1][::-1], self.intensity_y[0]], axis=1)
+        np.savetxt(filename, array, delimiter="\t")
+
+
 
     def calcHorizontal(self, startx, stopx, starty, stopy):
         intensity = 0
