@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>main</class>
+ <widget class="QMainWindow" name="main">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1344</width>
+    <height>857</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>GIScan</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="1">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="maplayout"/>
+        </item>
+        <item row="0" column="1">
+         <layout class="QVBoxLayout" name="graphlayout"/>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="load_button">
+          <property name="text">
+           <string>Load Data</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <action name="actionOpen_SampleDB">
+   <property name="text">
+    <string>Open SampleDB</string>
+   </property>
+   <property name="shortcut">
+    <string comment="test" extracomment="test"/>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionOff_specular">
+   <property name="text">
+    <string>Off-specular</string>
+   </property>
+  </action>
+  <action name="actionNeutrons">
+   <property name="text">
+    <string>Neutrons</string>
+   </property>
+  </action>
+  <action name="actionX_Rays">
+   <property name="text">
+    <string>X-Rays</string>
+   </property>
+  </action>
+  <action name="actionOpen_single_specular_file">
+   <property name="text">
+    <string>Open single specular file</string>
+   </property>
+  </action>
+  <action name="actionSpecular_X_ray">
+   <property name="text">
+    <string>Specular X-ray</string>
+   </property>
+  </action>
+  <action name="menuXraySource">
+   <property name="text">
+    <string>X-rays</string>
+   </property>
+  </action>
+  <action name="menuNeutronSource">
+   <property name="text">
+    <string>Neutrons</string>
+   </property>
+  </action>
+  <action name="actionSpecular_neutron">
+   <property name="text">
+    <string>Specular neutron</string>
+   </property>
+  </action>
+  <action name="actionOff_specular_neutron">
+   <property name="text">
+    <string>Off-specular neutron</string>
+   </property>
+  </action>
+  <action name="actionData_tools">
+   <property name="text">
+    <string>General analysis</string>
+   </property>
+  </action>
+  <action name="actionDetect_peaks">
+   <property name="text">
+    <string>Detect peaks</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
