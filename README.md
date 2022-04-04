@@ -5,7 +5,6 @@ This software has only been tested on GISXAS-data obtained at DESY in Germany, e
 Very early alpha. 
 The total feature set of this program will be quite limited, but is planned to contain at least:
 
-* Export of horizontal and vertical scans in text files
 * Coordinate conversions from pixels to angles and q
 * Automated scans for specific coordinates (detector scan, yoneda scan, bragg peak scan)
 
