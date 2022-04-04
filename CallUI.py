@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
-
 import gisax
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
@@ -108,6 +107,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         intensity_list = self.calcHorizontal(startx, stopx, starty, stopy)
         coordinatelist = list(range(startx, stopx))
         intensity_list = self.removeZeroes(intensity_list, coordinatelist)
+
         layout = self.graphlayout
         self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, intensity_list[1], intensity_list[0], title="Horizontal scan")
 
@@ -222,11 +222,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         indexlist = []
         new_coordinatelist = []
         for index in range(len(intensity_list)):
-            if intensity_list[index] > 0:
+            if intensity_list[index] > 2:
                 new_list.append(intensity_list[index])
                 new_coordinatelist.append(coordinatelist[index])
-        print(min(new_list))
-        return [new_list, new_coordinatelist]
+            else:
+                new_list.append(np.nan)
+        return [new_list, coordinatelist]
 
 
     def clearLayout(self, layout):
