@@ -32,6 +32,42 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
         self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
         self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
+        self.yoneda_button.clicked.connect(lambda: self.pressYoneda())
+        self.detector_button.clicked.connect(lambda: self.pressDetector())
+
+    def pressYoneda(self):
+        self.firstRun = True
+        self.scanX()
+        self.holdVertical.setChecked(True)
+        self.y0 = 230
+        self.y1 = 240
+        self.x0 = 550
+        self.x1 = 1200
+        self.middleY = (self.y0 + self.y1)/2
+        self.middleX = (self.x0+self.x1)/2
+        self.defineRectangle()
+        self.drawRectangle()
+        self.firstRun = False
+
+    def pressDetector(self):
+        self.firstRun = True
+        self.y0 = None
+        self.y1 = None
+        self.x0 = None
+        self.x1 = None
+        self.scanX()
+        self.y0 = None
+        self.y1 = None
+        self.middleX = None
+        self.middleY = None
+        self.y0 = 39
+        self.y1 = 1121
+
+        self.defineRectangle()
+        self.drawRectangle()
+        self.firstRun = False
+
+
 
     def setRectangleFromEntry(self):
         width = int(self.recWidthEntry.displayText())
@@ -69,7 +105,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             print("MiddleX was none")
             self.middleX = (x0 + x1)/2
         if self.middleY == None:
-            self.middleY = (y1+y2)/2
+            self.middleY = (y0+y1)/2
 
 
         self.fitRectange()
