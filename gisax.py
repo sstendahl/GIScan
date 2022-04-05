@@ -24,6 +24,7 @@ def loadMap(self):
     self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
     filename = openFile(self)
+    self.filename = filename
     data = np.genfromtxt(filename)
     x_list = data[:, 1]
     y_list = data[:, 0]
@@ -57,7 +58,6 @@ def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None
 def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log",marker=None, linestyle="solid"):
     fig = canvas.theplot
     fig.plot(X, Y, label=filename, linestyle=linestyle, marker=marker)
-    canvas.theplot.legend()
     canvas.theplot.set_title(title)
     canvas.theplot.set_xlim(xlim)
     canvas.theplot.set_yscale(scale)
@@ -103,7 +103,6 @@ def plotFigure(X, Y, Z, canvas, filename="", xlim=None, title="", scale="linear"
                         norm=LogNorm(),
                         aspect='auto', cmap="gray_r")
 
-    canvas.theplot.legend()
     canvas.theplot.set_title(title)
     canvas.theplot.set_xlim(xlim)
     canvas.theplot.set_yscale(scale)

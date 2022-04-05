@@ -35,18 +35,18 @@
         <property name="verticalSpacing">
          <number>6</number>
         </property>
-        <item row="2" column="0" alignment="Qt::AlignTop">
-         <widget class="QPushButton" name="saveHorizontal">
+        <item row="5" column="0" alignment="Qt::AlignTop">
+         <widget class="QPushButton" name="holdVertical">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
             <horstretch>0</horstretch>
-            <verstretch>100</verstretch>
+            <verstretch>218</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
            <size>
             <width>200</width>
-            <height>26</height>
+            <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -56,16 +56,19 @@
            </size>
           </property>
           <property name="text">
-           <string>Save horizontal cut as txt</string>
+           <string>Hold vertical</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="1" column="0" alignment="Qt::AlignTop">
+        <item row="2" column="0" alignment="Qt::AlignTop">
          <widget class="QPushButton" name="saveVertical">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
             <horstretch>0</horstretch>
-            <verstretch>1</verstretch>
+            <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
@@ -110,13 +113,29 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0" alignment="Qt::AlignTop">
-         <widget class="QPushButton" name="holdVertical">
+        <item row="4" column="0">
+         <widget class="QPushButton" name="holdHorizontal">
+          <property name="text">
+           <string>Hold Horizontal</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="saveHorizontal">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
             <horstretch>0</horstretch>
-            <verstretch>218</verstretch>
+            <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>26</height>
+           </size>
           </property>
           <property name="maximumSize">
            <size>
@@ -125,10 +144,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Hold vertical</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
+           <string>Save horizontal cut as txt</string>
           </property>
          </widget>
         </item>
