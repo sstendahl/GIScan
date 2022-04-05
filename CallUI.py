@@ -157,31 +157,29 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.calcOffSpec()
 
 
-
-    def scanX(self):
+    def findSpecular(self):
         self.y0 = 220
         self.y1 = 250
         self.x0 = 550
         self.x1 = 1200
         self.middleY = (self.y0 + self.y1)/2
         self.middleX = (self.x0+self.x1)/2
-        self.defineRectangle(x0=550, x1=1200, y0=220, y1=250)
+        self.defineRectangle()
         self.clearLayout(self.graphlayout)
         self.calcOffSpec()
         peakindex = gisax.detectPeak(self)[0]
-        print(peakindex)
         self.middleX = self.intensity_x[1][peakindex]
 
 
+    def scanX(self):
+        self.findSpecular()
         self.y0 = 39
         self.y1 = 1121
         heigth = self.y1 - self.y0
         self.x0 = self.middleX - 5
         self.x1 = self.middleX + 5
         width = self.middleX
-        print("Now I will define the rectangle for the second time")
         self.defineRectangle(width=width, heigth=heigth)
-        print("And I have now done this")
         self.clearLayout(self.graphlayout)
         self.calcOffSpec()
 
@@ -313,11 +311,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
-            self.defineRectangle()
             self.horizontalscanfig[1].draw()
             if self.performanceButton.isChecked():
                 pass
             else:
+                #self.fitRectange()
+                self.defineRectangle()
                 self.drawRectangle()
 
 
@@ -332,12 +331,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
-            self.fitRectange()
-            self.defineRectangle()
             self.verticalscanfig[1].draw()
             if self.performanceButton.isChecked():
                 pass
             else:
+               # self.fitRectange()
+                self.defineRectangle()
                 self.drawRectangle()
 
     def pressVline(self, event):
@@ -348,10 +347,9 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         if self.dragButton.isChecked():
             self.clearLayout(self.graphlayout)
             self.calcOffSpec()
-            if self.performanceButton.isChecked():
-                self.drawRectangle()
-            else:
-                pass
+            self.defineRectangle()
+            self.drawRectangle()
+
 
     def fitRectange(self):
         if self.y0 < 0:
