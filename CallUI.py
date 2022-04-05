@@ -39,12 +39,14 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.firstRun = True
         self.scanX()
         self.holdVertical.setChecked(True)
-        self.y0 = 230
-        self.y1 = 240
-        self.x0 = 550
-        self.x1 = 1200
+        self.y0 = 295
+        self.y1 = 310
+        self.x0 = 369
+        self.x1 = 1369
         self.middleY = (self.y0 + self.y1)/2
         self.middleX = (self.x0+self.x1)/2
+        self.clearLayout(self.graphlayout)
+        self.calcOffSpec()
         self.defineRectangle()
         self.drawRectangle()
         self.firstRun = False
