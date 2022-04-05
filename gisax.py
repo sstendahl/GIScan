@@ -43,8 +43,6 @@ def loadMap(self):
     self.figurecanvas[0].ax = plt.gca()
 
 def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None):
-    print(title)
-    print("Hello world")
     canvas = PlotWidget(xlabel="Relative detector position (pixels)", ylabel="Intensity (arb. u)",
                         title = "Horizontal Scan")
     figure = canvas.figure
@@ -63,9 +61,10 @@ def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log"
     canvas.theplot.set_yscale(scale)
 
 def singlePlotonCanvas(self, layout, X, Y, Z, xlim=None):
-    canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)")
+    canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)", title="GISAXS Data")
+    canvas.theplot.set_title("GISAXS Data")
     figure = canvas.figure
-    plotFigure(X, Y, Z, canvas)
+    plotFigure(X, Y, Z, canvas, title = "GISAXS Data")
     layout.addWidget(canvas)
     figurecanvas = [figure, canvas]
     self.toolbar = NavigationToolbar(canvas, self)
@@ -102,7 +101,6 @@ def plotFigure(X, Y, Z, canvas, filename="", xlim=None, title="", scale="linear"
     fig.imshow(Z, extent=(np.amin(Y), np.amax(Y), np.amin(X), np.amax(X)),
                         norm=LogNorm(),
                         aspect='auto', cmap="gray_r")
-
     canvas.theplot.set_title(title)
     canvas.theplot.set_xlim(xlim)
     canvas.theplot.set_yscale(scale)
@@ -113,7 +111,6 @@ class PlotWidget(FigureCanvas):
         super(PlotWidget, self).__init__(Figure())
         self.setParent(parent)
         self.figure = Figure()
-        print(f"The title is {title}")
         self.canvas = FigureCanvas(self.figure)
         self.theplot = self.figure.add_subplot(111)
         self.theplot.set_title(title)

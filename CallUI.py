@@ -1,8 +1,7 @@
 #CallUI.py
 import sys
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5 import QtWidgets, uic
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
 import gisax
@@ -30,8 +29,27 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.load_button.clicked.connect(lambda: gisax.loadMap(self))
         self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
         self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
+        self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
 
-    def defineRectangle(self, y0 = None, y1 = None, x0 = None, x1 = None):
+    def setRectangleFromEntry(self):
+        width = int(self.recWidthEntry.displayText())
+        heigth = int(self.recHeigthEntry.displayText())
+        self.middleX = int(self.middleXEntry.displayText())
+        self.middleY = int(self.middleYEntry.displayText())
+        y0 = int(abs((self.y1 + self.y0)) / 2 - heigth/2)
+        y1 = int(abs((self.y1 + self.y0)) / 2 + heigth/2)
+        self.y0 = y0
+        self.y1 = y1
+        x0 = int(abs((self.x1 + self.x0)) / 2 - width/2)
+        x1 = int(abs((self.x1 + self.x0)) / 2 + width/2)
+        self.x0 = x0
+        self.x1 = x1
+        self.defineRectangle(width=width, heigth=heigth)
+        self.drawRectangle()
+        self.clearLayout(self.graphlayout)
+        self.calcOffSpec()
+
+    def defineRectangle(self, y0 = None, y1 = None, x0 = None, x1 = None, width = None, heigth = None):
         if y0 == None:
             y0 = self.y0
         if y1 == None:
@@ -40,9 +58,19 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             x0 = self.x0
         if x1 == None:
             x1 = self.x1
-        self.rect.set_width(x1 - x0)
-        self.rect.set_height(y1 - y0)
-        self.rect.set_xy((x0, y0))
+        if width == None:
+            width = x1 - x0
+        if heigth == None:
+            heigth = y1 - y0
+
+        self.rect.set_width(width)
+        self.rect.set_height(heigth)
+        self.rect.set_xy((self.middleX - (width / 2), self.middleY - (heigth / 2)))
+        self.recHeigthEntry.setText(str(abs(int(heigth))))
+        self.recWidthEntry.setText(str(abs(int(width))))
+        self.middleXEntry.setText(str(int(self.middleX)))
+        self.middleYEntry.setText(str(int(self.middleY)))
+
 
     def drawRectangle(self):
         figure = self.figurecanvas[0]
@@ -59,6 +87,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         if self.clicked == True:
             self.x1 = int(event.xdata)
             self.y1 = int(event.ydata)
+            self.middleX = int((self.x0 + self.x1) / 2)
+            self.middleY = int((self.y0 + self.y1) / 2)
             self.defineRectangle()
             self.drawRectangle()
 
@@ -101,6 +131,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
 
     def startHorizontal(self):
+        self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
+        self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
+        self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
+        self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
+
         start = int(self.x0)
         stop = int(self.x1)
         startx = min([start, stop])
@@ -120,7 +155,22 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.horizontalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
         self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
 
+    def calcHorizontal(self, startx, stopx, starty, stopy):
+        intensity = 0
+        intensity_list = []
+        for i in range(startx, stopx):
+            for j in range(starty, stopy):
+                intensity += self.z[j][i]
+            intensity_list.append(intensity)
+            intensity = 0
+        return intensity_list
+
     def startVertical(self):
+        self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
+        self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
+        self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
+        self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
+
         start = int(self.x0)
         stop = int(self.x1)
         startx = min([start, stop])
@@ -160,58 +210,56 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         return [new_list, new_coordinatelist]
 
     def dragVlineX(self, event):
-        if self.clicked == True:
+        if self.clicked == True and self.dragButton.isChecked():
             try:
                 self.vline.remove()
             except:
                 pass
             figure = self.horizontalscanfig[0]
-            self.vlinepos = event.xdata
-            x0 = (event.xdata) - abs((self.x1 - self.x0))/2
-            x1 = (event.xdata) + abs((self.x1 - self.x0))/2
-            self.x1 = x1
-            self.x0 = x0
-
+            self.middleX = event.xdata
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
             self.fitRectange()
             self.defineRectangle()
             self.horizontalscanfig[1].draw()
-            self.drawRectangle()
+            if self.performanceButton.isChecked():
+                pass
+            else:
+                self.drawRectangle()
 
 
     def dragVlineY(self, event):
-        if self.clicked == True:
+        if self.clicked == True and self.dragButton.isChecked():
             try:
                 self.vline.remove()
             except:
                 pass
             figure = self.verticalscanfig[0]
-            self.vlinepos = event.xdata
-            y0 = (event.xdata) - abs((self.y1 - self.y0))/2
-            y1 = (event.xdata) + abs((self.y1 - self.y0))/2
-            self.y1 = y1
-            self.y0 = y0
-
-
+            self.middleY = event.xdata
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
             self.fitRectange()
             self.defineRectangle()
             self.verticalscanfig[1].draw()
-            self.drawRectangle()
+            if self.performanceButton.isChecked():
+                pass
+            else:
+                self.drawRectangle()
 
     def pressVline(self, event):
         self.clicked = True
 
     def releaseVline(self, event):
         self.clicked = False
-        self.clearLayout(self.graphlayout)
-        self.calcOffSpec()
-
-
+        if self.dragButton.isChecked():
+            self.clearLayout(self.graphlayout)
+            self.calcOffSpec()
+            if self.performanceButton.isChecked():
+                self.drawRectangle()
+            else:
+                pass
 
     def fitRectange(self):
         if self.y0 < 0:
@@ -243,16 +291,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         np.savetxt(filename, array, delimiter="\t")
 
 
-
-    def calcHorizontal(self, startx, stopx, starty, stopy):
-        intensity = 0
-        intensity_list = []
-        for i in range(startx, stopx):
-            for j in range(starty, stopy):
-                intensity += self.z[j][i]
-            intensity_list.append(intensity)
-            intensity = 0
-        return intensity_list
 
 
     def plotFigure(self, x, y, title=""):
