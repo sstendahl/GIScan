@@ -63,6 +63,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         if heigth == None:
             heigth = y1 - y0
 
+        self.fitRectange()
         self.rect.set_width(width)
         self.rect.set_height(heigth)
         self.rect.set_xy((self.middleX - (width / 2), self.middleY - (heigth / 2)))
@@ -82,6 +83,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clicked = True
         self.x0 = int(event.xdata)
         self.y0 = int(event.ydata)
+
 
     def on_hover(self, event):
         if self.clicked == True:
@@ -220,7 +222,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
-            self.fitRectange()
             self.defineRectangle()
             self.horizontalscanfig[1].draw()
             if self.performanceButton.isChecked():
