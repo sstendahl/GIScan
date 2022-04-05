@@ -7,7 +7,6 @@ If you share this program or your modifications
 you must grant the recipients the same freedoms.
 To be more specific: you must share the source code under the same license.
 For details see https://www.gnu.org/licenses/gpl-3.0.html
--------------------------------------------------------------------------------------------
 
 # GIScan
 Simple tool to read and analyze existing GISAXS data. 
