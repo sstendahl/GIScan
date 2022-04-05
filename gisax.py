@@ -7,6 +7,13 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.patches import Rectangle
+from scipy.signal import find_peaks
+
+def detectPeak(self, scan="horizontal"):
+    if scan == "horizontal":
+        peakindex = find_peaks(np.log(self.intensity_x[0]), prominence=2)[0]
+        print(peakindex)
+    return peakindex
 
 def getPath(self, documenttype="Data files (*.txt *.xy *.dat);;All Files (*)"):
     options = QFileDialog.Options()
@@ -20,6 +27,7 @@ def openFile(self):
     return filename
 
 def loadMap(self):
+    self.firstRun = True
     self.rect = None
     self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
@@ -39,8 +47,11 @@ def loadMap(self):
     self.figurecanvas[1].canvas.mpl_connect('button_press_event', self.on_press)
     self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
     self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
-
     self.figurecanvas[0].ax = plt.gca()
+    self.scanX()
+    self.holdVertical.setChecked(True)
+    self.YonedaScan()
+    self.firstRun = False
 
 def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None):
     canvas = PlotWidget(xlabel="Relative detector position (pixels)", ylabel="Intensity (arb. u)",

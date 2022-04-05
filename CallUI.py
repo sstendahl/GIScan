@@ -19,6 +19,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clicked = False
         self.x0 = None
         self.y0 = None
+        self.middleX = None
+        self.middleY = None
         self.x1 = None
         self.y1 = None
         gisax.loadEmpty(self)
@@ -63,6 +65,13 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         if heigth == None:
             heigth = y1 - y0
 
+        if self.middleX == None:
+            print("MiddleX was none")
+            self.middleX = (x0 + x1)/2
+        if self.middleY == None:
+            self.middleY = (y1+y2)/2
+
+
         self.fitRectange()
         self.rect.set_width(width)
         self.rect.set_height(heigth)
@@ -94,7 +103,50 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.defineRectangle()
             self.drawRectangle()
 
+    def YonedaScan(self):
+        self.y0 = 295
+        self.y1 = 305
+        self.x0 = 369
+        self.x1 = 1369
+        self.middleY = (self.y0 + self.y1)/2
+        self.middleX = (self.x0+self.x1)/2
+        self.recHeigthEntry.setText(str(10))
+        self.recWidthEntry.setText(str(1000))
+        self.middleXEntry.setText(str(int(self.middleX)))
+        self.middleYEntry.setText(str(int(self.middleY)))
+        self.defineRectangle()
+        self.drawRectangle()
+        self.clearLayout(self.graphlayout)
+        self.calcOffSpec()
 
+
+
+    def scanX(self):
+        self.y0 = 220
+        self.y1 = 250
+        self.x0 = 550
+        self.x1 = 1200
+        self.middleY = (self.y0 + self.y1)/2
+        self.middleX = (self.x0+self.x1)/2
+        self.defineRectangle(x0=550, x1=1200, y0=220, y1=250)
+        self.clearLayout(self.graphlayout)
+        self.calcOffSpec()
+        peakindex = gisax.detectPeak(self)[0]
+        print(peakindex)
+        self.middleX = self.intensity_x[1][peakindex]
+
+
+        self.y0 = 39
+        self.y1 = 1121
+        heigth = self.y1 - self.y0
+        self.x0 = self.middleX - 5
+        self.x1 = self.middleX + 5
+        width = self.middleX
+        print("Now I will define the rectangle for the second time")
+        self.defineRectangle(width=width, heigth=heigth)
+        print("And I have now done this")
+        self.clearLayout(self.graphlayout)
+        self.calcOffSpec()
 
     def on_release(self, event):
         self.clicked = False
@@ -133,10 +185,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
 
     def startHorizontal(self):
-        self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
-        self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
-        self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
-        self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
+        if self.firstRun == False:
+            self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
+            self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
+            self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
+            self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
 
         start = int(self.x0)
         stop = int(self.x1)
@@ -168,10 +221,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         return intensity_list
 
     def startVertical(self):
-        self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
-        self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
-        self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
-        self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
+        if self.firstRun == False:
+            self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
+            self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
+            self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
+            self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
 
         start = int(self.x0)
         stop = int(self.x1)
