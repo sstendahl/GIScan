@@ -104,7 +104,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             heigth = y1 - y0
 
         if self.middleX == None:
-            print("MiddleX was none")
             self.middleX = (x0 + x1)/2
         if self.middleY == None:
             self.middleY = (y0+y1)/2
