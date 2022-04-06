@@ -349,17 +349,17 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 self.vline.remove()
             except:
                 pass
-        figure = self.verticalscanfig[0]
-        self.middleY = event.xdata
-        axle = figure.axes[0]
-        self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
-                                   linestyle='--'))  # Change the line in the list to new selected line
-        self.verticalscanfig[1].draw()
-        self.clearLayout(self.graphlayout)
-        self.calcOffSpec()
-        self.defineRectangle()
-        self.drawRectangle()
-        self.figurecanvas[1].draw()
+            figure = self.verticalscanfig[0]
+            self.middleY = event.xdata
+            axle = figure.axes[0]
+            self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
+                                       linestyle='--'))  # Change the line in the list to new selected line
+            self.verticalscanfig[1].draw()
+            self.clearLayout(self.graphlayout)
+            self.calcOffSpec()
+            self.defineRectangle()
+            self.drawRectangle()
+            self.figurecanvas[1].draw()
 
     def releaseVlineX(self, event):
         self.clicked = False
@@ -368,17 +368,17 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 self.vline.remove()
             except:
                 pass
-        figure = self.verticalscanfig[0]
-        self.middleX = event.xdata
-        axle = figure.axes[0]
-        self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
-                                   linestyle='--'))  # Change the line in the list to new selected line
-        self.horizontalscanfig[1].draw()
-        self.clearLayout(self.graphlayout)
-        self.calcOffSpec()
-        self.defineRectangle()
-        self.drawRectangle()
-        self.figurecanvas[1].draw()
+            figure = self.verticalscanfig[0]
+            self.middleX = event.xdata
+            axle = figure.axes[0]
+            self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
+                                       linestyle='--'))  # Change the line in the list to new selected line
+            self.horizontalscanfig[1].draw()
+            self.clearLayout(self.graphlayout)
+            self.calcOffSpec()
+            self.defineRectangle()
+            self.drawRectangle()
+            self.figurecanvas[1].draw()
 
 
 
