@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QFileDialog, QShortcut
 from pathlib import Path
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
@@ -24,14 +25,17 @@ def getPath(self, documenttype="Data files (*.txt *.xy *.dat);;All Files (*)"):
 def openFile(self):
     path = getPath(self)
     filename = Path(path).name
-    return filename
+    return path
 
 def loadMap(self):
     self.firstRun = True
     self.rect = None
     self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
-    filename = openFile(self)
+    file = openFile(self)
+    path = os.path.dirname(file)
+    filename = Path(file).name
+    os.chdir(path)
     self.filename = filename
     data = np.genfromtxt(filename)
     x_list = data[:, 1]
