@@ -24,7 +24,6 @@ def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
 
 def openFile(self):
     path = getPath(self)
-    filename = Path(path).name
     return path
 
 def loadMap(self):
@@ -54,7 +53,7 @@ def loadMap(self):
     self.firstRun = False
 
 def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None, revert = False):
-    canvas = PlotWidget(xlabel="Relative detector position (pixels)", ylabel="Intensity (arb. u)",
+    canvas = PlotWidget(xlabel="Detector position (pixels)", ylabel="Intensity (arb. u)",
                         title = "Horizontal Scan")
     figure = canvas.figure
     plotgGraphFigure(X, Y, canvas, revert=revert, title=title)
