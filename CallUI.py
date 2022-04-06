@@ -207,14 +207,14 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_y[1], self.intensity_y[0], title="Vertical scan")
         self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineY)
         self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
+        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineY)
 
     def useoldHorizontal(self):
         layout = self.graphlayout
         self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_x[1], self.intensity_x[0], title="Horizontal scan")
         self.horizontalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineX)
         self.horizontalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
+        self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineX)
 
 
 
@@ -243,7 +243,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, data[1], data[0], title="Horizontal scan")
         self.horizontalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineX)
         self.horizontalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
+        self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineX)
 
     def calcHorizontal(self, startx, stopx, starty, stopy):
         intensity = 0
@@ -278,7 +278,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, data[1], data[0], title="Vertical scan")
         self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineY)
         self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVline)
+        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineY)
 
     def calcVertical(self, startx, stopx, starty, stopy):
         intensity = 0
@@ -342,14 +342,43 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def pressVline(self, event):
         self.clicked = True
 
-    def releaseVline(self, event):
+    def releaseVlineY(self, event):
         self.clicked = False
         if self.dragButton.isChecked():
-            self.clearLayout(self.graphlayout)
-            self.calcOffSpec()
-            self.defineRectangle()
-            self.drawRectangle()
+            try:
+                self.vline.remove()
+            except:
+                pass
+        figure = self.verticalscanfig[0]
+        self.middleY = event.xdata
+        axle = figure.axes[0]
+        self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
+                                   linestyle='--'))  # Change the line in the list to new selected line
+        self.verticalscanfig[1].draw()
+        self.clearLayout(self.graphlayout)
+        self.calcOffSpec()
+        self.defineRectangle()
+        self.drawRectangle()
+        self.figurecanvas[1].draw()
 
+    def releaseVlineX(self, event):
+        self.clicked = False
+        if self.dragButton.isChecked():
+            try:
+                self.vline.remove()
+            except:
+                pass
+        figure = self.verticalscanfig[0]
+        self.middleX = event.xdata
+        axle = figure.axes[0]
+        self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
+                                   linestyle='--'))  # Change the line in the list to new selected line
+        self.horizontalscanfig[1].draw()
+        self.clearLayout(self.graphlayout)
+        self.calcOffSpec()
+        self.defineRectangle()
+        self.drawRectangle()
+        self.figurecanvas[1].draw()
 
     def fitRectange(self):
         if self.y0 < 0:
