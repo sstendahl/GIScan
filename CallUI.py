@@ -39,8 +39,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.firstRun = True
         self.scanX()
         self.holdVertical.setChecked(True)
-        self.y0 = 295
-        self.y1 = 310
+        self.y0 = 1370
+        self.y1 = 1375
         self.x0 = 369
         self.x1 = 1369
         self.middleY = (self.y0 + self.y1)/2
@@ -62,8 +62,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.y1 = None
         self.middleX = None
         self.middleY = None
-        self.y0 = 39
-        self.y1 = 1121
+        self.y0 = 500
+        self.y1 = 1600
 
         self.defineRectangle()
         self.drawRectangle()
@@ -109,7 +109,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.middleY = (y0+y1)/2
 
 
-        self.fitRectange()
         self.rect.set_width(width)
         self.rect.set_height(heigth)
         self.rect.set_xy((self.middleX - (width / 2), self.middleY - (heigth / 2)))
@@ -141,13 +140,13 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.drawRectangle()
 
     def YonedaScan(self):
-        self.y0 = 295
-        self.y1 = 305
+        self.y0 = 1370
+        self.y1 = 1375
         self.x0 = 369
         self.x1 = 1369
         self.middleY = (self.y0 + self.y1)/2
         self.middleX = (self.x0+self.x1)/2
-        self.recHeigthEntry.setText(str(10))
+        self.recHeigthEntry.setText(str(5))
         self.recWidthEntry.setText(str(1000))
         self.middleXEntry.setText(str(int(self.middleX)))
         self.middleYEntry.setText(str(int(self.middleY)))
@@ -158,8 +157,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
 
     def findSpecular(self):
-        self.y0 = 220
-        self.y1 = 250
+        self.y0 = 1450
+        self.y1 = 1500
         self.x0 = 550
         self.x1 = 1200
         self.middleY = (self.y0 + self.y1)/2
@@ -168,13 +167,14 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clearLayout(self.graphlayout)
         self.calcOffSpec()
         peakindex = gisax.detectPeak(self)[0]
+        print(f"Peakindex = {peakindex}")
         self.middleX = self.intensity_x[1][peakindex]
 
 
     def scanX(self):
         self.findSpecular()
-        self.y0 = 39
-        self.y1 = 1121
+        self.y0 = 500
+        self.y1 = 1600
         heigth = self.y1 - self.y0
         self.x0 = self.middleX - 5
         self.x1 = self.middleX + 5
@@ -204,7 +204,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def useoldVertical(self):
         layout = self.graphlayout
-        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_y[1], self.intensity_y[0], title="Vertical scan")
+        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_y[1], self.intensity_y[0], title="Vertical scan", revert = True)
         self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineY)
         self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
         self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineY)
@@ -230,8 +230,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         stop = int(self.x1)
         startx = min([start, stop])
         stopx = max([start, stop])
-        start = int(max(self.ylist) - self.y1)
-        stop = int(max(self.ylist) - self.y0)
+        start = int(self.y1)
+        stop = int(self.y0)
         starty = min([start, stop])
         stopy = max([start, stop])
         intensity_list = self.calcHorizontal(startx, stopx, starty, stopy)
@@ -250,7 +250,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         intensity_list = []
         for i in range(startx, stopx):
             for j in range(starty, stopy):
-                intensity += self.z[j][i]
+                intensity += self.data[j][i]
             intensity_list.append(intensity)
             intensity = 0
         return intensity_list
@@ -266,16 +266,16 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         stop = int(self.x1)
         startx = min([start, stop])
         stopx = max([start, stop])
-        start = int(max(self.ylist) - self.y1)
-        stop = int(max(self.ylist) - self.y0)
+        start = int(self.y1)
+        stop = int(self.y0)
         starty = min([start, stop])
         stopy = max([start, stop])
         layout = self.graphlayout
         intensity_list = self.calcVertical(startx, stopx, starty, stopy)
-        coordinatelist = list(range(min([int(self.y0), int(self.y1)]), max([int(self.y0), int(self.y1)])))[::-1]
+        coordinatelist = list(range(min([int(self.y0), int(self.y1)]), max([int(self.y0), int(self.y1)])))
         data = self.removeZeroes(intensity_list, coordinatelist)
         self.intensity_y = data
-        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, data[1], data[0], title="Vertical scan")
+        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, data[1], data[0], title="Vertical scan", revert = True)
         self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineY)
         self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
         self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineY)
@@ -285,7 +285,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         intensity_list = []
         for i in range(starty, stopy):
             for j in range(startx, stopx):
-                intensity += self.z[i][j]
+                intensity += self.data[i][j]
             intensity_list.append(intensity)
             intensity = 0
         return intensity_list
@@ -295,7 +295,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         new_list = []
         new_coordinatelist = []
         for index in range(len(intensity_list)):
-            if intensity_list[index] > 10:
+            if intensity_list[index] > intensity_list[0]/3:
                 new_list.append(intensity_list[index])
                 new_coordinatelist.append(coordinatelist[index])
         return [new_list, new_coordinatelist]
@@ -380,15 +380,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.drawRectangle()
         self.figurecanvas[1].draw()
 
-    def fitRectange(self):
-        if self.y0 < 0:
-            self.y0 = 0
-        if self.y1 < 0:
-            self.y1 = 0
-        if self.y0 > max(self.ylist):
-            self.y0 = max(self.ylist)
-        if self.y1 > max(self.ylist):
-            self.y1 = max(self.ylist)
 
 
     def saveFileDialog(self, documenttype="Text file (*.txt)"):

@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QFileDialog, QShortcut
 from pathlib import Path
 import os
 import numpy as np
+import cbf
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 from matplotlib.figure import Figure
@@ -13,7 +14,6 @@ from scipy.signal import find_peaks
 def detectPeak(self, scan="horizontal"):
     if scan == "horizontal":
         peakindex = find_peaks(np.log(self.intensity_x[0]), prominence=2)[0]
-        print(peakindex)
     return peakindex
 
 def getPath(self, documenttype="Data files (*.txt *.xy *.dat);;All Files (*)"):
@@ -37,17 +37,12 @@ def loadMap(self):
     filename = Path(file).name
     os.chdir(path)
     self.filename = filename
-    data = np.genfromtxt(filename)
-    x_list = data[:, 1]
-    y_list = data[:, 0]
-    z_list = data[:, 2]
-    self.xlist = x_list
-    self.ylist = y_list
-    z = z_list.reshape(int(max(y_list)) + 1, int(max(x_list)) + 1)
-    self.z = z
+    contents = cbf.read(filename)
+    data = contents.data
+    self.data = data
     layout = self.maplayout
     self.clearLayout(self.maplayout)
-    self.figurecanvas = singlePlotonCanvas(self, layout, y_list, x_list, z)
+    self.figurecanvas = singlePlotonCanvas(self, layout, data)
     self.figurecanvas[1].canvas.mpl_connect('button_press_event', self.on_press)
     self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
     self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
@@ -57,29 +52,33 @@ def loadMap(self):
     self.YonedaScan()
     self.firstRun = False
 
-def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None):
+def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None, revert = False):
     canvas = PlotWidget(xlabel="Relative detector position (pixels)", ylabel="Intensity (arb. u)",
                         title = "Horizontal Scan")
     figure = canvas.figure
-    plotgGraphFigure(X, Y, canvas, title=title)
+    plotgGraphFigure(X, Y, canvas, revert=revert, title=title)
     layout.addWidget(canvas)
     figurecanvas = [figure, canvas]
     self.toolbar = NavigationToolbar(canvas, self)
     layout.addWidget(self.toolbar)
     return figurecanvas
 
-def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log",marker=None, linestyle="solid"):
+def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log",marker=None, linestyle="solid", revert = False):
     fig = canvas.theplot
     fig.plot(X, Y, label=filename, linestyle=linestyle, marker=marker)
+    print(f"Revert is {revert}")
+    if revert:
+        print("Reverting axis")
+        fig.invert_xaxis()
     canvas.theplot.set_title(title)
     canvas.theplot.set_xlim(xlim)
     canvas.theplot.set_yscale(scale)
 
-def singlePlotonCanvas(self, layout, X, Y, Z, xlim=None):
+def singlePlotonCanvas(self, layout, data, xlim=None):
     canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)", title="GISAXS Data")
     canvas.theplot.set_title("GISAXS Data")
     figure = canvas.figure
-    plotFigure(X, Y, Z, canvas, title = "GISAXS Data")
+    plotFigure(data, canvas, title = "GISAXS Data")
     layout.addWidget(canvas)
     figurecanvas = [figure, canvas]
     self.toolbar = NavigationToolbar(canvas, self)
@@ -111,11 +110,9 @@ def loadEmpty(self):
 
 
 
-def plotFigure(X, Y, Z, canvas, filename="", xlim=None, title="", scale="linear",marker=None, linestyle="solid"):
+def plotFigure(data, canvas, filename="", xlim=None, title="", scale="linear",marker=None, linestyle="solid"):
     fig = canvas.theplot
-    fig.imshow(Z, extent=(np.amin(Y), np.amax(Y), np.amin(X), np.amax(X)),
-                        norm=LogNorm(),
-                        aspect='auto', cmap="gray_r")
+    fig.imshow(data, cmap='gray_r', norm=LogNorm())
     canvas.theplot.set_title(title)
     canvas.theplot.set_xlim(xlim)
     canvas.theplot.set_yscale(scale)
