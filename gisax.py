@@ -35,6 +35,7 @@ def loadMap(self):
     file = openFile(self)
     path = os.path.dirname(file)
     filename = Path(file).name
+    print(f"The path is {path} with the filename being {filename}")
     os.chdir(path)
     self.filename = filename
     contents = cbf.read(filename)
