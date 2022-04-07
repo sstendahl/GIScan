@@ -34,6 +34,10 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
         self.yoneda_button.clicked.connect(lambda: self.pressYoneda())
         self.detector_button.clicked.connect(lambda: self.pressDetector())
+        self.findFWHM_button.clicked.connect(lambda: self.press_FWHM_button())
+
+    def press_FWHM_button(self):
+        self.dragButton.setChecked(False)
 
     def pressYoneda(self):
         self.firstRun = True
@@ -52,6 +56,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.firstRun = False
 
     def pressDetector(self):
+        self.holdHorizontal.setChecked(True)
         self.firstRun = True
         self.y0 = None
         self.y1 = None
@@ -166,7 +171,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.defineRectangle()
         self.clearLayout(self.graphlayout)
         self.calcOffSpec()
-        peakindex = gisax.detectPeak(self)[0]
+        peakindex = gisax.detectPeak(self, self.intensity_x[0])[0]
         print(f"Peakindex = {peakindex}")
         self.middleX = self.intensity_x[1][peakindex]
 
@@ -191,59 +196,42 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.calcOffSpec()
 
 
-
     def calcOffSpec(self):
         if self.holdHorizontal.isChecked() == False:
-            self.startHorizontal()
+            self.startHorizontal(hold_horizontal = False)
         else:
-            self.useoldHorizontal()
+            self.startHorizontal(hold_horizontal = True)
         if self.holdVertical.isChecked() == False:
-            self.startVertical()
+            self.startVertical(hold_vertical = False)
         else:
-            self.useoldVertical()
+            self.startVertical(hold_vertical = True)
 
-    def useoldVertical(self):
-        layout = self.graphlayout
-        self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_y[1], self.intensity_y[0], title="Vertical scan", revert = True)
-        self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineY)
-        self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineY)
+    def startHorizontal(self, hold_horizontal = False):
+        if hold_horizontal == False:
+            if self.firstRun == False:
+                self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
+                self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
+                self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
+                self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
 
-    def useoldHorizontal(self):
-        layout = self.graphlayout
-        self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, self.intensity_x[1], self.intensity_x[0], title="Horizontal scan")
-        self.horizontalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineX)
-        self.horizontalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineX)
+            startstop = self.find_startstop()
+            startx = startstop[0]
+            stopx = startstop[1]
+            starty = startstop[2]
+            stopy = startstop[3]
 
-
-
-
-    def startHorizontal(self):
-        if self.firstRun == False:
-            self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
-            self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
-            self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
-            self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
-
-        start = int(self.x0)
-        stop = int(self.x1)
-        startx = min([start, stop])
-        stopx = max([start, stop])
-        start = int(self.y1)
-        stop = int(self.y0)
-        starty = min([start, stop])
-        stopy = max([start, stop])
-        intensity_list = self.calcHorizontal(startx, stopx, starty, stopy)
-        coordinatelist = list(range(startx, stopx))
-        data = self.removeZeroes(intensity_list, coordinatelist)
-        self.intensity_x = data
+            intensity_list = self.calcHorizontal(startx, stopx, starty, stopy)
+            coordinatelist = list(range(startx, stopx))
+            data = self.removeZeroes(intensity_list, coordinatelist)
+            self.intensity_x = data
+        else:
+            data = self.intensity_x
 
         layout = self.graphlayout
         self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, data[1], data[0], title="Horizontal scan")
-        self.horizontalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineX)
+        self.horizontalscanfig[1].canvas.mpl_connect('motion_notify_event', lambda event: self.dragVline(event, scan="horizontal"))
         self.horizontalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineX)
+        self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', lambda event: self.releaseVline(event, scan="horizontal"))
 
     def calcHorizontal(self, startx, stopx, starty, stopy):
         intensity = 0
@@ -255,13 +243,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             intensity = 0
         return intensity_list
 
-    def startVertical(self):
-        if self.firstRun == False:
-            self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
-            self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
-            self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
-            self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
-
+    def find_startstop(self):
         start = int(self.x0)
         stop = int(self.x1)
         startx = min([start, stop])
@@ -270,15 +252,31 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         stop = int(self.y0)
         starty = min([start, stop])
         stopy = max([start, stop])
+        return [startx, stopx, starty, stopy]
+
+    def startVertical(self, hold_vertical = False):
+        if hold_vertical == False:
+            if self.firstRun == False:
+                self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
+                self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
+                self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
+                self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
+            startstop = self.find_startstop()
+            startx = startstop[0]
+            stopx = startstop[1]
+            starty = startstop[2]
+            stopy = startstop[3]
+            intensity_list = self.calcVertical(startx, stopx, starty, stopy)
+            coordinatelist = list(range(min([int(self.y0), int(self.y1)]), max([int(self.y0), int(self.y1)])))
+            data = self.removeZeroes(intensity_list, coordinatelist)
+            self.intensity_y = data
+        else:
+            data = self.intensity_y
         layout = self.graphlayout
-        intensity_list = self.calcVertical(startx, stopx, starty, stopy)
-        coordinatelist = list(range(min([int(self.y0), int(self.y1)]), max([int(self.y0), int(self.y1)])))
-        data = self.removeZeroes(intensity_list, coordinatelist)
-        self.intensity_y = data
         self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, data[1], data[0], title="Vertical scan", revert = True)
-        self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', self.dragVlineY)
+        self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', lambda event: self.dragVline(event, scan="vertical"))
         self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', self.releaseVlineY)
+        self.verticalscanfig[1].canvas.mpl_connect('button_release_event', lambda event: self.releaseVline(event, scan="vertical"))
 
     def calcVertical(self, startx, stopx, starty, stopy):
         intensity = 0
@@ -300,18 +298,26 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 new_coordinatelist.append(coordinatelist[index])
         return [new_list, new_coordinatelist]
 
-    def dragVlineX(self, event):
+    def dragVline(self, event, scan = "vertical"):
         if self.clicked == True and self.dragButton.isChecked():
             try:
                 self.vline.remove()
             except:
                 pass
-            figure = self.horizontalscanfig[0]
-            self.middleX = event.xdata
+
+            if scan == "horizontal":
+                figure = self.horizontalscanfig[0]
+                canvas = self.horizontalscanfig[1]
+                self.middleX = event.xdata
+            if scan == "vertical":
+                figure = self.verticalscanfig[0]
+                canvas = self.verticalscanfig[1]
+                self.middleY = event.xdata
+
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
-            self.horizontalscanfig[1].draw()
+            canvas.draw()
             if self.performanceButton.isChecked():
                 pass
             else:
@@ -320,66 +326,104 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 self.drawRectangle()
 
 
-    def dragVlineY(self, event):
-        if self.clicked == True and self.dragButton.isChecked():
-            try:
-                self.vline.remove()
-            except:
-                pass
-            figure = self.verticalscanfig[0]
-            self.middleY = event.xdata
-            axle = figure.axes[0]
-            self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
-                                       linestyle='--'))  # Change the line in the list to new selected line
-            self.verticalscanfig[1].draw()
-            if self.performanceButton.isChecked():
-                pass
-            else:
-               # self.fitRectange()
-                self.defineRectangle()
-                self.drawRectangle()
-
     def pressVline(self, event):
         self.clicked = True
 
-    def releaseVlineY(self, event):
-        self.clicked = False
-        if self.dragButton.isChecked():
-            try:
-                self.vline.remove()
-            except:
-                pass
+    def find_peak_in_range(self, position, xdata, ydata):
+        total_range = max(xdata) - min(xdata)
+        # Will check for a peak within a range the size of about 6.7% of the total area around the clicked point.
+        check_range = int((total_range / 15) / 2)
+        chosen_point = int(position)
+        chosen_index = 0
+        for index in range(len(ydata)):
+            if xdata[index] == chosen_point:
+                chosen_index = index
+
+        chosen_Yrange = ydata[chosen_index - check_range:chosen_index + check_range]
+        chosen_Xrange = xdata[chosen_index - check_range:chosen_index + check_range]
+
+        peakindex = gisax.detectPeak(self, chosen_Yrange, prominence = 1)[0]
+        for index in range(len(xdata)):
+            if xdata[index] == chosen_Xrange[peakindex]:
+                total_index = index
+        return total_index
+
+    def find_FWHM(self, position, scan="vertical"):
+        if scan == "horizontal":
+            xdata = self.intensity_x[1]
+            ydata = self.intensity_x[0]
+            figure = self.horizontalscanfig[0]
+            axes = figure.axes[0]
+            canvas = self.horizontalscanfig[1]
+
+        if scan == "vertical":
+            xdata = self.intensity_y[1]
+            ydata = self.intensity_y[0]
             figure = self.verticalscanfig[0]
-            self.middleY = event.xdata
+            axes = figure.axes[0]
+            canvas = self.verticalscanfig[1]
+        peak_position = self.find_peak_in_range(position, xdata, ydata)
+
+
+        half_intensity = ydata[peak_position]/2
+
+        #Find left boundary:
+        start_position = peak_position
+        for index in range(len(ydata)):
+            y_value = ydata[start_position - index]
+            if y_value <= half_intensity:
+                left_boundary_index = start_position - index + 1
+                left_boundary_value = xdata[left_boundary_index]
+                break
+
+        for index in range(len(ydata)):
+            y_value = ydata[start_position + index]
+            if y_value <= half_intensity:
+                right_boundary_index = start_position + index
+                right_boundary_value = xdata[right_boundary_index]
+                break
+        FWHM = right_boundary_value - left_boundary_value
+        if hasattr(self, 'hline'):
+            self.hline.remove()
+        step_size = abs(xdata[1] - xdata[0])
+        self.hline = axes.hlines(y=ydata[peak_position]/2, xmin=left_boundary_value - step_size / 2, xmax=right_boundary_value - step_size / 2, color='r')
+        self.verticalscanfig[1].draw()
+        self.horizontalscanfig[1].draw()
+        return FWHM
+
+    def releaseVline(self, event, scan = ""):
+        self.clicked = False
+
+        if scan == "vertical":
+            figure = self.verticalscanfig[0]
+            canvas = self.verticalscanfig[1]
+        if scan == "horizontal":
+            figure = self.horizontalscanfig[0]
+            canvas = self.horizontalscanfig[1]
+
+
+        if self.findFWHM_button.isChecked():
+            FWHM = self.find_FWHM(event.xdata, scan=scan)
+            self.FWHM_entry.setText(str(FWHM))
+
+        if self.dragButton.isChecked():
+            if hasattr(self, 'vline'):
+                self.vline.remove()
+
+            #Will find a more elegant solution to seperate these two cases hesre
+            if scan == "vertical":
+                self.middleY = event.xdata
+            if scan == "horizontal":
+                self.middleX = event.xdata
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
-            self.verticalscanfig[1].draw()
+            canvas.draw()
             self.clearLayout(self.graphlayout)
             self.calcOffSpec()
             self.defineRectangle()
             self.drawRectangle()
             self.figurecanvas[1].draw()
-
-    def releaseVlineX(self, event):
-        self.clicked = False
-        if self.dragButton.isChecked():
-            try:
-                self.vline.remove()
-            except:
-                pass
-            figure = self.verticalscanfig[0]
-            self.middleX = event.xdata
-            axle = figure.axes[0]
-            self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
-                                       linestyle='--'))  # Change the line in the list to new selected line
-            self.horizontalscanfig[1].draw()
-            self.clearLayout(self.graphlayout)
-            self.calcOffSpec()
-            self.defineRectangle()
-            self.drawRectangle()
-            self.figurecanvas[1].draw()
-
 
 
     def saveFileDialog(self, documenttype="Text file (*.txt)"):

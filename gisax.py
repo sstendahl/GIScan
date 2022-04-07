@@ -11,9 +11,9 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.patches import Rectangle
 from scipy.signal import find_peaks
 
-def detectPeak(self, scan="horizontal"):
+def detectPeak(self, data, scan="horizontal", prominence = 2):
     if scan == "horizontal":
-        peakindex = find_peaks(np.log(self.intensity_x[0]), prominence=2)[0]
+        peakindex = find_peaks(np.log(data), prominence=prominence)[0]
     return peakindex
 
 def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
@@ -29,12 +29,13 @@ def openFile(self):
 def loadMap(self):
     self.firstRun = True
     self.rect = None
+    self.holdVertical.setChecked(False)
+    self.holdHorizontal.setChecked(False)
     self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
     file = openFile(self)
     path = os.path.dirname(file)
     filename = Path(file).name
-    print(f"The path is {path} with the filename being {filename}")
     os.chdir(path)
     self.filename = filename
     contents = cbf.read(filename)
@@ -44,7 +45,6 @@ def loadMap(self):
     self.clearLayout(self.maplayout)
     self.figurecanvas = singlePlotonCanvas(self, layout, data)
     self.figurecanvas[1].canvas.mpl_connect('button_press_event', self.on_press)
-    self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
     self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
     self.figurecanvas[0].ax = plt.gca()
     self.scanX()
@@ -66,9 +66,7 @@ def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None
 def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log",marker=None, linestyle="solid", revert = False):
     fig = canvas.theplot
     fig.plot(X, Y, label=filename, linestyle=linestyle, marker=marker)
-    print(f"Revert is {revert}")
     if revert:
-        print("Reverting axis")
         fig.invert_xaxis()
     canvas.theplot.set_title(title)
     canvas.theplot.set_xlim(xlim)
