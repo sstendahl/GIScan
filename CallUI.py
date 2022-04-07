@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
 import gisax
-
+from scipy.interpolate import interp1d
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
 
 
@@ -365,25 +365,37 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
         half_intensity = ydata[peak_position]/2
         #Find left boundary:
+
+        interfunction = interp1d(xdata[::-1], ydata[::-1], kind='linear')
+        xs = np.sort(xdata)
+        ys = np.array(ydata)[np.argsort(xdata)]
+        x0 = 1200
         start_position = peak_position
-        for index in range(len(ydata)):
-            y_value = ydata[start_position - index]
-            if y_value <= half_intensity:
-                left_boundary_index = start_position - index + 1
-                left_boundary_value = xdata[left_boundary_index]
+        peak_coordinate = xdata[start_position]
+
+        found_left = False
+        found_right = False
+        mesh_step = 1000000
+
+        for index in range(mesh_step):
+            index = index/(mesh_step / 200)
+            y_value_left = np.interp(peak_coordinate-index, xs, ys)
+            y_value_right = np.interp(peak_coordinate+index, xs, ys)
+            if found_left == False and y_value_left <= half_intensity:
+                left_boundary_value = peak_coordinate - index
+                found_left = True
+            if found_right == False and y_value_right <= half_intensity:
+                right_boundary_value = peak_coordinate + index
+                found_right = True
+            if found_left == True and found_right == True:
                 break
 
-        for index in range(len(ydata)):
-            y_value = ydata[start_position + index]
-            if y_value <= half_intensity:
-                right_boundary_index = start_position + index
-                right_boundary_value = xdata[right_boundary_index]
-                break
+
         FWHM = right_boundary_value - left_boundary_value
         if hasattr(self, 'hline'):
             self.hline.remove()
         step_size = abs(xdata[1] - xdata[0])
-        self.hline = axes.hlines(y=ydata[peak_position]/2, xmin=left_boundary_value - step_size / 2, xmax=right_boundary_value - step_size / 2, color='r')
+        self.hline = axes.hlines(y=ydata[peak_position]/2, xmin=left_boundary_value, xmax=right_boundary_value, color='r')
         self.verticalscanfig[1].draw()
         self.horizontalscanfig[1].draw()
         return FWHM
@@ -401,7 +413,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
         if self.findFWHM_button.isChecked():
             FWHM = self.find_FWHM(event.xdata, scan=scan)
-            self.FWHM_entry.setText(str(FWHM))
+            self.FWHM_entry.setText(str(round(FWHM,2)))
 
         if self.dragButton.isChecked():
             if hasattr(self, 'vline'):
