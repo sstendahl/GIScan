@@ -13,4 +13,4 @@ Simple tool to read and analyze existing GISAXS data.
 This software has only been tested on raw GISXAS-data obtained at DESY in Germany in .cbf format. Any other type of data is unsupported.
 While the program is mostly feature complete at the moment, it is still at an early alpha stage. The main feature that is missing right now is the ability to convert from pixels to real physical coordinates (angles or q-space). 
 
-Note that this is an early alpha. The code is extremely messy at the moment, the next big thing planned is a thorough code clean up as well as some documentation before releasing version 1.0. Any testing is done on Fedora Silverblue, but the software should be functional on Linux, MacOS and Windows at least. 
+Note that this is an early alpha. The code is very messy at the moment, the next big thing planned is a thorough code clean up as well as some documentation before releasing version 1.0. Any testing is done on Fedora Silverblue, but the software should be functional on Linux, MacOS and Windows at least. 
