@@ -63,7 +63,8 @@ def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None
     layout.addWidget(self.toolbar)
     return figurecanvas
 
-def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log",marker=None, linestyle="solid", revert = False):
+def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log",marker=None, linestyle="solid",
+                     revert = False):
     fig = canvas.theplot
     fig.plot(X, Y, label=filename, linestyle=linestyle, marker=marker)
     if revert:
@@ -73,7 +74,8 @@ def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log"
     canvas.theplot.set_yscale(scale)
 
 def singlePlotonCanvas(self, layout, data, xlim=None):
-    canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)", title="GISAXS Data")
+    canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)",
+                        title="GISAXS Data")
     canvas.theplot.set_title("GISAXS Data")
     figure = canvas.figure
     plotFigure(data, canvas, title = "GISAXS Data")

@@ -366,7 +366,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
 
         half_intensity = ydata[peak_position]/2
-
         #Find left boundary:
         start_position = peak_position
         for index in range(len(ydata)):
