@@ -300,10 +300,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def dragVline(self, event, scan = "vertical"):
         if self.clicked == True and self.dragButton.isChecked():
-            try:
+            if hasattr(self, 'vline'):
                 self.vline.remove()
-            except:
-                pass
 
             if scan == "horizontal":
                 figure = self.horizontalscanfig[0]
