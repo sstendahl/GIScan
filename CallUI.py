@@ -172,7 +172,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clearLayout(self.graphlayout)
         self.calcOffSpec()
         peakindex = gisax.detectPeak(self, self.intensity_x[0])[0]
-        print(f"Peakindex = {peakindex}")
         self.middleX = self.intensity_x[1][peakindex]
 
 
