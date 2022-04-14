@@ -10,6 +10,8 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.patches import Rectangle
 from scipy.signal import find_peaks
+import scanning_tools as scan
+
 
 def detectPeak(self, data, scan="horizontal", prominence = 2):
     if scan == "horizontal":
@@ -48,9 +50,9 @@ def loadMap(self):
     self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
     self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
     self.figurecanvas[0].ax = plt.gca()
-    self.scanX()
+    scan.scanX(self)
     self.holdVertical.setChecked(True)
-    self.YonedaScan()
+    scan.YonedaScan(self)
     self.firstRun = False
 
 def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None, revert = False):
