@@ -46,7 +46,7 @@ def loadMap(self):
         self.data = data
         layout = self.maplayout
         self.clearLayout(self.maplayout)
-        self.figurecanvas = singlePlotonCanvas(self, layout, data)
+        self.figurecanvas = singlePlotonCanvas(self, layout, data, title = filename)
         self.figurecanvas[1].canvas.mpl_connect('button_press_event', self.on_press)
         self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
         self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
@@ -77,12 +77,10 @@ def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log"
     canvas.theplot.set_xlim(xlim)
     canvas.theplot.set_yscale(scale)
 
-def singlePlotonCanvas(self, layout, data, xlim=None):
-    canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)",
-                        title="GISAXS Data")
-    canvas.theplot.set_title("GISAXS Data")
+def singlePlotonCanvas(self, layout, data, xlim=None, title = "GISAXS Data"):
+    canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)")
     figure = canvas.figure
-    plotFigure(data, canvas, title = "GISAXS Data")
+    plotFigure(data, canvas, title = title)
     layout.addWidget(canvas)
     figurecanvas = [figure, canvas]
     self.toolbar = NavigationToolbar(canvas, self)
