@@ -92,7 +92,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.defineRectangle(width=width, heigth=heigth)
         self.drawRectangle()
         self.clearLayout(self.graphlayout)
-        self.calcOffSpec()
+        scan.calcOffSpec(self)
 
     def defineRectangle(self, y0 = None, y1 = None, x0 = None, x1 = None, width = None, heigth = None):
         if y0 == None:

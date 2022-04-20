@@ -36,24 +36,25 @@ def loadMap(self):
     self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
     file = openFile(self)
-    path = os.path.dirname(file)
-    filename = Path(file).name
-    os.chdir(path)
-    self.filename = filename
-    contents = cbf.read(filename)
-    data = contents.data
-    self.data = data
-    layout = self.maplayout
-    self.clearLayout(self.maplayout)
-    self.figurecanvas = singlePlotonCanvas(self, layout, data)
-    self.figurecanvas[1].canvas.mpl_connect('button_press_event', self.on_press)
-    self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
-    self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
-    self.figurecanvas[0].ax = plt.gca()
-    scan.scanX(self)
-    self.holdVertical.setChecked(True)
-    scan.YonedaScan(self)
-    self.firstRun = False
+    if file != "":
+        path = os.path.dirname(file)
+        filename = Path(file).name
+        os.chdir(path)
+        self.filename = filename
+        contents = cbf.read(filename)
+        data = contents.data
+        self.data = data
+        layout = self.maplayout
+        self.clearLayout(self.maplayout)
+        self.figurecanvas = singlePlotonCanvas(self, layout, data)
+        self.figurecanvas[1].canvas.mpl_connect('button_press_event', self.on_press)
+        self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
+        self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
+        self.figurecanvas[0].ax = plt.gca()
+        scan.scanX(self)
+        self.holdVertical.setChecked(True)
+        scan.YonedaScan(self)
+        self.firstRun = False
 
 def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None, revert = False):
     canvas = PlotWidget(xlabel="Detector position (pixels)", ylabel="Intensity (arb. u)",
