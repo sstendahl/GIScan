@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
 import gisax
+from PyQt5 import QtGui
 import scanning_tools as scan
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
 
@@ -14,6 +15,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def __init__(self):
         QtBaseClass.__init__(self)
         Ui_MainWindow.__init__(self)
+        self.setWindowIcon(QtGui.QIcon('logo.png'))
         self.setupUi(self)
         self.connectActions()
         self.clicked = False
