@@ -1,7 +1,6 @@
-import gisax
+import gisaxs
 import numpy as np
-import roi
-from sample import Sample
+import plottingtools
 
 def YonedaScan(self):
     self.y0 = 1370
@@ -73,7 +72,7 @@ def startHorizontal(self, hold_horizontal):
 
 
     layout = self.graphlayout
-    self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, self.sampledata.horizontal_scan_x, self.sampledata.horizontal_scan_y, title="Horizontal scan")
+    self.horizontalscanfig = plottingtools.plotGraphOnCanvas(self, layout, self.sampledata.horizontal_scan_x, self.sampledata.horizontal_scan_y, title="Horizontal scan")
     self.horizontalscanfig[1].canvas.mpl_connect('motion_notify_event', lambda event: self.dragVline(event, scan_type="horizontal"))
     self.horizontalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
     self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', lambda event: self.releaseVline(event, scan_type="horizontal"))
@@ -120,7 +119,7 @@ def startVertical(self, hold_vertical):
         self.sampledata.vertical_scan_y = data[0]
     layout = self.graphlayout
 
-    self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.sampledata.vertical_scan_x, self.sampledata.vertical_scan_y, title="Vertical scan", revert = True)
+    self.verticalscanfig = plottingtools.plotGraphOnCanvas(self, layout, self.sampledata.vertical_scan_x, self.sampledata.vertical_scan_y, title="Vertical scan", revert = True)
     self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', lambda event: self.dragVline(event, scan_type="vertical"))
     self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
     self.verticalscanfig[1].canvas.mpl_connect('button_release_event', lambda event: self.releaseVline(event, scan_type="vertical"))

@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, uic
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
-import gisax
+import gisaxs
 from PyQt5 import QtGui
 from sample import Sample
 import scanning_tools as scan
@@ -28,12 +28,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.middleY = None
         self.x1 = None
         self.y1 = None
-        gisax.loadEmpty(self)
+        gisaxs.loadEmpty(self)
 
 
     def connectActions(self):
         # Connect File actions
-        self.load_button.clicked.connect(lambda: gisax.loadMap(self))
+        self.load_button.clicked.connect(lambda: gisaxs.loadMap(self))
         self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
         self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
         self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
