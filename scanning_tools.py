@@ -1,5 +1,7 @@
 import gisax
 import numpy as np
+import roi
+from sample import Sample
 
 def YonedaScan(self):
     self.y0 = 1370
@@ -28,8 +30,8 @@ def findSpecular(self):
     self.defineRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
-    peakindex = gisax.detectPeak(self, self.intensity_x[0])[0]
-    self.middleX = self.intensity_x[1][peakindex]
+    peakindex = gisax.detectPeak(self, self.sampledata.horizontal_scan_y)[0]
+    self.middleX = self.sampledata.horizontal_scan_x[peakindex]
 
 
 def scanX(self):
@@ -46,16 +48,10 @@ def scanX(self):
 
 
 def calcOffSpec(self):
-    if self.holdHorizontal.isChecked() == False:
-        startHorizontal(self, hold_horizontal = False)
-    else:
-        startHorizontal(self, hold_horizontal = True)
-    if self.holdVertical.isChecked() == False:
-        startVertical(self, hold_vertical = False)
-    else:
-        startVertical(self, hold_vertical = True)
+    startHorizontal(self, self.holdHorizontal.isChecked())
+    startVertical(self, self.holdVertical.isChecked())
 
-def startHorizontal(self, hold_horizontal = False):
+def startHorizontal(self, hold_horizontal):
     if hold_horizontal == False:
         if self.firstRun == False:
             self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
@@ -72,12 +68,12 @@ def startHorizontal(self, hold_horizontal = False):
         intensity_list = calcHorizontal(self, startx, stopx, starty, stopy)
         coordinatelist = list(range(startx, stopx))
         data = removeZeroes(self, intensity_list, coordinatelist)
-        self.intensity_x = data
-    else:
-        data = self.intensity_x
+        self.sampledata.horizontal_scan_x = data[1]
+        self.sampledata.horizontal_scan_y = data[0]
+
 
     layout = self.graphlayout
-    self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, data[1], data[0], title="Horizontal scan")
+    self.horizontalscanfig = gisax.plotGraphOnCanvas(self, layout, self.sampledata.horizontal_scan_x, self.sampledata.horizontal_scan_y, title="Horizontal scan")
     self.horizontalscanfig[1].canvas.mpl_connect('motion_notify_event', lambda event: self.dragVline(event, scan_type="horizontal"))
     self.horizontalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
     self.horizontalscanfig[1].canvas.mpl_connect('button_release_event', lambda event: self.releaseVline(event, scan_type="horizontal"))
@@ -87,7 +83,7 @@ def calcHorizontal(self, startx, stopx, starty, stopy):
     intensity_list = []
     for i in range(startx, stopx):
         for j in range(starty, stopy):
-            intensity += self.data[j][i]
+            intensity += self.sampledata.gisaxs_data[j][i]
         intensity_list.append(intensity)
         intensity = 0
     return intensity_list
@@ -105,7 +101,7 @@ def find_startstop(self):
     stopy = max([start, stop])
     return [startx, stopx, starty, stopy]
 
-def startVertical(self, hold_vertical = False):
+def startVertical(self, hold_vertical):
     if hold_vertical == False:
         if self.firstRun == False:
             self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
@@ -120,11 +116,11 @@ def startVertical(self, hold_vertical = False):
         intensity_list = calcVertical(self, startx, stopx, starty, stopy)
         coordinatelist = list(range(min([int(self.y0), int(self.y1)]), max([int(self.y0), int(self.y1)])))
         data = removeZeroes(self, intensity_list, coordinatelist)
-        self.intensity_y = data
-    else:
-        data = self.intensity_y
+        self.sampledata.vertical_scan_x = data[1]
+        self.sampledata.vertical_scan_y = data[0]
     layout = self.graphlayout
-    self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, data[1], data[0], title="Vertical scan", revert = True)
+
+    self.verticalscanfig = gisax.plotGraphOnCanvas(self, layout, self.sampledata.vertical_scan_x, self.sampledata.vertical_scan_y, title="Vertical scan", revert = True)
     self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event', lambda event: self.dragVline(event, scan_type="vertical"))
     self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
     self.verticalscanfig[1].canvas.mpl_connect('button_release_event', lambda event: self.releaseVline(event, scan_type="vertical"))
@@ -134,7 +130,7 @@ def calcVertical(self, startx, stopx, starty, stopy):
     intensity_list = []
     for i in range(starty, stopy):
         for j in range(startx, stopx):
-            intensity += self.data[i][j]
+            intensity += self.sampledata.gisaxs_data[i][j]
         intensity_list.append(intensity)
         intensity = 0
     return intensity_list
@@ -171,15 +167,15 @@ def find_peak_in_range(self, position, xdata, ydata):
 
 def find_FWHM(self, position, scan_type="vertical"):
     if scan_type == "horizontal":
-        xdata = self.intensity_x[1]
-        ydata = self.intensity_x[0]
+        xdata = self.sampledata.horizontal_scan_x
+        ydata = self.sampledata.horizontal_scan_y
         figure = self.horizontalscanfig[0]
         axes = figure.axes[0]
         canvas = self.horizontalscanfig[1]
 
     if scan_type == "vertical":
-        xdata = self.intensity_y[1]
-        ydata = self.intensity_y[0]
+        xdata = self.sampledata.vertical_scan_x
+        ydata = self.sampledata.vertical_scan_y
         figure = self.verticalscanfig[0]
         axes = figure.axes[0]
         canvas = self.verticalscanfig[1]

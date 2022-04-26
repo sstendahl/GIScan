@@ -47,7 +47,7 @@ def loadMap(self):
         self.filename = filename
         contents = cbf.read(filename)
         data = contents.data
-        self.data = data
+        self.sampledata.gisaxs_data = data
         layout = self.maplayout
         self.clearLayout(self.maplayout)
         self.figurecanvas = singlePlotonCanvas(self, layout, data, title = filename)

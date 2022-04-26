@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QFileDialog
 import numpy as np
 import gisax
 from PyQt5 import QtGui
+from sample import Sample
 import scanning_tools as scan
 import roi
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
@@ -18,6 +19,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setWindowIcon(QtGui.QIcon('logo.png'))
         self.setupUi(self)
+        self.sampledata = Sample()
         self.connectActions()
         self.clicked = False
         self.x0 = None
@@ -235,9 +237,9 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         if filename[-4:] != ".txt":
             filename = filename + ".txt"
         if horizontal == True:
-            array = np.stack([self.intensity_x[1], self.intensity_x[0]], axis=1)
+            array = np.stack([self.sampledata.horizontal_scan_x, self.sampledata.horizontal_scan_y], axis=1)
         else:
-            array = np.stack([self.intensity_y[1][::-1], self.intensity_y[0]], axis=1)
+            array = np.stack([self.sampledata.vertical_scan_x[::-1], self.sampledata.vertical_scan_y], axis=1)
         np.savetxt(filename, array, delimiter="\t")
 
 
