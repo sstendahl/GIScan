@@ -12,21 +12,24 @@ from matplotlib.patches import Rectangle
 from scipy.signal import find_peaks
 import scanning_tools as scan
 
+def loadEmpty(self):
+    gisaxsmap_canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Intensity (arb. u)",
+                        title = "GISAXS data")
 
-def detectPeak(self, data, scan="horizontal", prominence = 2):
-    if scan == "horizontal":
-        peakindex = find_peaks(np.log(data), prominence=prominence)[0]
-    return peakindex
+    horizontalscan_canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)",
+                        title = "Horizontal scan")
+    verticalscan_canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Intensity (arb. u)",
+                        title = "Vertical scan")
+    create_layout(self, gisaxsmap_canvas, self.maplayout)
+    create_layout(self, horizontalscan_canvas, self.graphlayout)
+    create_layout(self, verticalscan_canvas, self.graphlayout)
 
-def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
-    options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
-    path = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "",documenttype, options=options)[0]
-    return path
+def create_layout(self, canvas, layout):
+    toolbar = NavigationToolbar(canvas, self)
+    layout.addWidget(canvas)
+    layout.addWidget(toolbar)
 
-def openFile(self):
-    path = getPath(self)
-    return path
+
 
 def loadMap(self):
     self.firstRun = True
@@ -36,6 +39,7 @@ def loadMap(self):
     self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
     file = openFile(self)
+
     if file != "":
         path = os.path.dirname(file)
         filename = Path(file).name
@@ -55,6 +59,22 @@ def loadMap(self):
         self.holdVertical.setChecked(True)
         scan.YonedaScan(self)
         self.firstRun = False
+
+
+def detectPeak(self, data, scan="horizontal", prominence = 2):
+    if scan == "horizontal":
+        peakindex = find_peaks(np.log(data), prominence=prominence)[0]
+    return peakindex
+
+def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    path = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "",documenttype, options=options)[0]
+    return path
+
+def openFile(self):
+    path = getPath(self)
+    return path
 
 def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None, revert = False):
     canvas = PlotWidget(xlabel="Detector position (pixels)", ylabel="Intensity (arb. u)",
@@ -86,30 +106,6 @@ def singlePlotonCanvas(self, layout, data, xlim=None, title = "GISAXS Data"):
     self.toolbar = NavigationToolbar(canvas, self)
     layout.addWidget(self.toolbar)
     return figurecanvas
-
-def loadEmpty(self):
-    canvas = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Intensity (arb. u)",
-                        title = "GISAXS data")
-    canvas2 = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)",
-                        title = "Horizontal scan")
-
-    figure = canvas.figure
-    layout = self.maplayout
-    self.toolbar = NavigationToolbar(canvas, self)
-    layout.addWidget(canvas)
-    layout.addWidget(self.toolbar)
-
-    layout = self.graphlayout
-    self.toolbar = NavigationToolbar(canvas, self)
-    layout.addWidget(canvas2)
-    layout.addWidget(self.toolbar)
-    canvas3 = PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Intensity (arb. u)",
-                        title = "Vertical scan")
-
-    layout.addWidget(canvas3)
-    self.toolbar = NavigationToolbar(canvas, self)
-    layout.addWidget(self.toolbar)
-
 
 
 def plotFigure(data, canvas, filename="", xlim=None, title="", scale="linear",marker=None, linestyle="solid"):

@@ -7,6 +7,7 @@ import numpy as np
 import gisax
 from PyQt5 import QtGui
 import scanning_tools as scan
+import roi
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
 
 
