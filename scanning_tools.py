@@ -2,6 +2,7 @@ import gisaxs
 import numpy as np
 import plottingtools
 
+
 def YonedaScan(self):
     self.y0 = 1370
     self.y1 = 1375
@@ -52,12 +53,13 @@ def calcOffSpec(self):
 
     # startVertical(self, self.holdVertical.isChecked())
 
-def start_offspec(self, hold_horizontal, hold_vertical, horizontal = True):
+
+def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
     if self.firstRun == False:
-        self.x0 = int(self.middleX - int(self.recWidthEntry.displayText())/2)
-        self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText())/2)
-        self.x1 = int(self.middleX + int(self.recWidthEntry.displayText())/2)
-        self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText())/2)
+        self.x0 = int(self.middleX - int(self.recWidthEntry.displayText()) / 2)
+        self.y0 = int(self.middleY - int(self.recHeigthEntry.displayText()) / 2)
+        self.x1 = int(self.middleX + int(self.recWidthEntry.displayText()) / 2)
+        self.y1 = int(self.middleY + int(self.recHeigthEntry.displayText()) / 2)
 
     startstop = find_startstop(self)
     startx = startstop[0]
@@ -65,7 +67,6 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal = True):
     starty = startstop[2]
     stopy = startstop[3]
     intensity_list = calc_cut(self, startx, stopx, starty, stopy, horizontal=horizontal)
-
 
     if horizontal:
         coordinatelist = list(range(startx, stopx))
@@ -85,27 +86,27 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal = True):
 
     if horizontal:
         scan_type = "horizontal"
-        self.horizontalscanfig = plottingtools.plotGraphOnCanvas(self, layout, data[1], data[0],
-                                                                 title="Horizontal scan")
-        self.horizontalscanfig[1].canvas.mpl_connect('motion_notify_event',
-                                                     lambda event: self.dragVline(event, scan_type=scan_type))
-        self.horizontalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.horizontalscanfig[1].canvas.mpl_connect('button_release_event',
-                                                     lambda event: self.releaseVline(event, scan_type=scan_type))
+        title = "Horizontal scan"
+        figure = plottingtools.plotGraphOnCanvas(self, layout, self.sampledata.horizontal_scan_x,
+                                                                 self.sampledata.horizontal_scan_y, title=title)
+        self.horizontalscanfig = figure
 
     else:
         scan_type = "vertical"
-        self.verticalscanfig = plottingtools.plotGraphOnCanvas(self, layout, self.sampledata.vertical_scan_x,
-                                                               self.sampledata.vertical_scan_y, title="Vertical scan",
+        title = "Vertical scan"
+        figure = plottingtools.plotGraphOnCanvas(self, layout, self.sampledata.vertical_scan_x,
+                                                               self.sampledata.vertical_scan_y, title=title,
                                                                revert=True)
-        self.verticalscanfig[1].canvas.mpl_connect('motion_notify_event',
-                                                     lambda event: self.dragVline(event, scan_type=scan_type))
-        self.verticalscanfig[1].canvas.mpl_connect('button_press_event', self.pressVline)
-        self.verticalscanfig[1].canvas.mpl_connect('button_release_event',
-                                                     lambda event: self.releaseVline(event, scan_type=scan_type))
+        self.verticalscanfig = figure
+
+    figure[1].canvas.mpl_connect('motion_notify_event',
+                                 lambda event: self.dragVline(event, scan_type=scan_type))
+    figure[1].canvas.mpl_connect('button_press_event', self.pressVline)
+    figure[1].canvas.mpl_connect('button_release_event',
+                                 lambda event: self.releaseVline(event, scan_type=scan_type))
 
 
-def calc_cut(self, startx, stopx, starty, stopy, horizontal = True):
+def calc_cut(self, startx, stopx, starty, stopy, horizontal=True):
     intensity = 0
     intensity_list = []
 
@@ -143,13 +144,11 @@ def find_startstop(self):
     return [startx, stopx, starty, stopy]
 
 
-
-
 def removeZeroes(self, intensity_list, coordinatelist):
     new_list = []
     new_coordinatelist = []
     for index in range(len(intensity_list)):
-        if intensity_list[index] > intensity_list[0]/2:
+        if intensity_list[index] > intensity_list[0] / 5:
             new_list.append(intensity_list[index])
             new_coordinatelist.append(coordinatelist[index])
     return [new_list, new_coordinatelist]
@@ -168,11 +167,12 @@ def find_peak_in_range(self, position, xdata, ydata):
     chosen_Yrange = ydata[chosen_index - check_range:chosen_index + check_range]
     chosen_Xrange = xdata[chosen_index - check_range:chosen_index + check_range]
 
-    peakindex = gisaxs.detectPeak(self, chosen_Yrange, prominence = 1)[0]
+    peakindex = gisaxs.detectPeak(self, chosen_Yrange, prominence=1)[0]
     for index in range(len(xdata)):
         if xdata[index] == chosen_Xrange[peakindex]:
             total_index = index
     return total_index
+
 
 def find_FWHM(self, position, scan_type="vertical"):
     if scan_type == "horizontal":
@@ -180,19 +180,16 @@ def find_FWHM(self, position, scan_type="vertical"):
         ydata = self.sampledata.horizontal_scan_y
         figure = self.horizontalscanfig[0]
         axes = figure.axes[0]
-        canvas = self.horizontalscanfig[1]
 
     if scan_type == "vertical":
         xdata = self.sampledata.vertical_scan_x
         ydata = self.sampledata.vertical_scan_y
         figure = self.verticalscanfig[0]
         axes = figure.axes[0]
-        canvas = self.verticalscanfig[1]
     peak_position = find_peak_in_range(self, position, xdata, ydata)
 
-
-    half_intensity = ydata[peak_position]/2
-    #Find left boundary:
+    half_intensity = ydata[peak_position] / 2
+    # Find left boundary:
 
     xs = np.sort(xdata)
     ys = np.array(ydata)[np.argsort(xdata)]
@@ -203,10 +200,11 @@ def find_FWHM(self, position, scan_type="vertical"):
     found_right = False
     mesh_step = 1000000
 
+    #Will optimize this a bit
     for index in range(mesh_step):
-        index = index/(mesh_step / 200)
-        y_value_left = np.interp(peak_coordinate-index, xs, ys)
-        y_value_right = np.interp(peak_coordinate+index, xs, ys)
+        index = index / (mesh_step / 200)
+        y_value_left = np.interp(peak_coordinate - index, xs, ys)
+        y_value_right = np.interp(peak_coordinate + index, xs, ys)
         if found_left == False and y_value_left <= half_intensity:
             left_boundary_value = peak_coordinate - index
             found_left = True
@@ -216,12 +214,11 @@ def find_FWHM(self, position, scan_type="vertical"):
         if found_left == True and found_right == True:
             break
 
-
     FWHM = right_boundary_value - left_boundary_value
     if hasattr(self, 'hline'):
         self.hline.remove()
     step_size = abs(xdata[1] - xdata[0])
-    self.hline = axes.hlines(y=ydata[peak_position]/2, xmin=left_boundary_value, xmax=right_boundary_value, color='r')
+    self.hline = axes.hlines(y=ydata[peak_position] / 2, xmin=left_boundary_value, xmax=right_boundary_value, color='r')
     self.verticalscanfig[1].draw()
     self.horizontalscanfig[1].draw()
     return FWHM
