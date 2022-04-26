@@ -148,7 +148,7 @@ def removeZeroes(self, intensity_list, coordinatelist):
     new_list = []
     new_coordinatelist = []
     for index in range(len(intensity_list)):
-        if intensity_list[index] > intensity_list[0] / 5:
+        if intensity_list[index] > intensity_list[0] / 2:
             new_list.append(intensity_list[index])
             new_coordinatelist.append(coordinatelist[index])
     return [new_list, new_coordinatelist]
