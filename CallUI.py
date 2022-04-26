@@ -8,7 +8,6 @@ import gisaxs
 from PyQt5 import QtGui
 from sample import Sample
 import scanning_tools as scan
-import roi
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
 
 
