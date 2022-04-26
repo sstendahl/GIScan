@@ -38,7 +38,7 @@ def loadMap(self):
     self.holdHorizontal.setChecked(False)
     self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
-    file = openFile(self)
+    file = getPath(self)
 
     if file != "":
         path = os.path.dirname(file)
@@ -70,10 +70,6 @@ def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
     options = QFileDialog.Options()
     options |= QFileDialog.DontUseNativeDialog
     path = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "",documenttype, options=options)[0]
-    return path
-
-def openFile(self):
-    path = getPath(self)
     return path
 
 def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None, revert = False):
