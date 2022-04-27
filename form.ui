@@ -402,11 +402,22 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item row="0" column="1">
-       <layout class="QVBoxLayout" name="graphlayout"/>
+       <layout class="QVBoxLayout" name="graphlayout">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+       </layout>
       </item>
       <item row="0" column="0">
-       <layout class="QVBoxLayout" name="maplayout"/>
+       <layout class="QVBoxLayout" name="maplayout">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+       </layout>
       </item>
      </layout>
     </item>

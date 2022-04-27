@@ -2,7 +2,7 @@ from matplotlib.colors import LogNorm
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-
+from matplotlib import rcParams
 import scanning_tools
 
 
@@ -52,10 +52,8 @@ def plotFigure(data, canvas, filename="", xlim=None, title="", scale="linear",ma
     x_max = max(x_theta_f)
     y_min = min(y_alpha_f)
     y_max = max(y_alpha_f)
-    fig.imshow(data, cmap='gray_r', norm=LogNorm(), origin="lower", extent=[x_min, x_max, y_min, y_max])
-    canvas.theplot.set_title(title)
-    canvas.theplot.set_xlim(xlim)
-    canvas.theplot.set_yscale(scale)
+    fig.imshow(data, cmap='gray_r', norm=LogNorm(), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
+
 
 
 class PlotWidget(FigureCanvas):
@@ -66,6 +64,7 @@ class PlotWidget(FigureCanvas):
         self.canvas = FigureCanvas(self.figure)
         self.theplot = self.figure.add_subplot(111)
         self.theplot.set_title(title)
+        self.figure.set_tight_layout(True)
         self.theplot.set_xlabel(xlabel)
         self.theplot.set_ylabel(ylabel)
-        self.figure.set_tight_layout(True)
+
