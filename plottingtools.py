@@ -29,7 +29,7 @@ def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log"
 
 def singlePlotonCanvas(self, layout, data, ylabel = "", xlim=None, title = "GISAXS Data"):
     canvas = PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Out-of-plane scattering angle $\\alpha{_f}$",
-                        title = "GISAXS data")
+                        title = title)
     figure = canvas.figure
     plotFigure(data, canvas, title = title)
     layout.addWidget(canvas)
