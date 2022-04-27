@@ -47,10 +47,10 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.firstRun = True
         scan.scanX(self)
         self.holdVertical.setChecked(True)
-        self.y0 = 1370
-        self.y1 = 1375
-        self.x0 = 369
-        self.x1 = 1369
+        self.y0 = 0.15
+        self.y1 = 0.25
+        self.x0 = -1.25
+        self.x1 = 1.25
         self.middleY = (self.y0 + self.y1)/2
         self.middleX = (self.x0+self.x1)/2
         self.clearLayout(self.graphlayout)
@@ -64,15 +64,15 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.firstRun = True
         self.y0 = None
         self.y1 = None
-        self.x0 = None
-        self.x1 = None
+        self.x0 = -0.1
+        self.x1 = 0.1
         scan.scanX(self)
         self.y0 = None
         self.y1 = None
         self.middleX = None
         self.middleY = None
-        self.y0 = 500
-        self.y1 = 1600
+        self.y0 = -0.2
+        self.y1 = 2.3
 
         self.defineRectangle()
         self.drawRectangle()
@@ -81,16 +81,16 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
 
     def setRectangleFromEntry(self):
-        width = int(self.recWidthEntry.displayText())
-        heigth = int(self.recHeigthEntry.displayText())
-        self.middleX = int(self.middleXEntry.displayText())
-        self.middleY = int(self.middleYEntry.displayText())
-        y0 = int(abs((self.y1 + self.y0)) / 2 - heigth/2)
-        y1 = int(abs((self.y1 + self.y0)) / 2 + heigth/2)
+        width = float(self.recWidthEntry.displayText())
+        heigth = float(self.recHeigthEntry.displayText())
+        self.middleX = float(self.middleXEntry.displayText())
+        self.middleY = float(self.middleYEntry.displayText())
+        y0 = float(abs((self.y1 + self.y0)) / 2 - heigth/2)
+        y1 = float(abs((self.y1 + self.y0)) / 2 + heigth/2)
         self.y0 = y0
         self.y1 = y1
-        x0 = int(abs((self.x1 + self.x0)) / 2 - width/2)
-        x1 = int(abs((self.x1 + self.x0)) / 2 + width/2)
+        x0 = float(abs((self.x1 + self.x0)) / 2 - width/2)
+        x1 = float(abs((self.x1 + self.x0)) / 2 + width/2)
         self.x0 = x0
         self.x1 = x1
         self.defineRectangle(width=width, heigth=heigth)
@@ -121,10 +121,10 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.rect.set_width(width)
         self.rect.set_height(heigth)
         self.rect.set_xy((self.middleX - (width / 2), self.middleY - (heigth / 2)))
-        self.recHeigthEntry.setText(str(abs(int(heigth))))
-        self.recWidthEntry.setText(str(abs(int(width))))
-        self.middleXEntry.setText(str(int(self.middleX)))
-        self.middleYEntry.setText(str(int(self.middleY)))
+        self.recHeigthEntry.setText(str(abs(round(float(heigth), 2))))
+        self.recWidthEntry.setText(str(abs(round(float(width),2))))
+        self.middleXEntry.setText(str(round(float(self.middleX),2)))
+        self.middleYEntry.setText(str(round(float(self.middleY),2)))
 
 
     def drawRectangle(self):
@@ -135,16 +135,16 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def on_press(self, event):
         self.clicked = True
-        self.x0 = int(event.xdata)
-        self.y0 = int(event.ydata)
+        self.x0 = float(event.xdata)
+        self.y0 = float(event.ydata)
 
 
     def on_hover(self, event):
         if self.clicked == True:
-            self.x1 = int(event.xdata)
-            self.y1 = int(event.ydata)
-            self.middleX = int((self.x0 + self.x1) / 2)
-            self.middleY = int((self.y0 + self.y1) / 2)
+            self.x1 = float(event.xdata)
+            self.y1 = float(event.ydata)
+            self.middleX = float((self.x0 + self.x1) / 2)
+            self.middleY = float((self.y0 + self.y1) / 2)
             self.defineRectangle()
             self.drawRectangle()
 
@@ -201,7 +201,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
         if self.findFWHM_button.isChecked():
             FWHM = scan.find_FWHM(self, event.xdata, scan_type=scan_type)
-            self.FWHM_entry.setText(str(round(FWHM,2)))
+            self.FWHM_entry.setText(str(round(FWHM,4)))
 
         if self.dragButton.isChecked():
             if hasattr(self, 'vline'):
@@ -238,7 +238,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         if horizontal == True:
             array = np.stack([self.sampledata.horizontal_scan_x, self.sampledata.horizontal_scan_y], axis=1)
         else:
-            array = np.stack([self.sampledata.vertical_scan_x[::-1], self.sampledata.vertical_scan_y], axis=1)
+            array = np.stack([self.sampledata.vertical_scan_x, self.sampledata.vertical_scan_y], axis=1)
         np.savetxt(filename, array, delimiter="\t")
 
 

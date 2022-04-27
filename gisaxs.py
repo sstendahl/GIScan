@@ -11,12 +11,12 @@ import scanning_tools as scan
 import plottingtools
 
 def loadEmpty(self):
-    gisaxsmap_canvas = plottingtools.PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Intensity (arb. u)",
+    gisaxsmap_canvas = plottingtools.PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Out-of-plane scattering angle $\\alpha{_f}$ (°)",
                         title = "GISAXS data")
 
-    horizontalscan_canvas = plottingtools.PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Vertical detector position (pixels)",
+    horizontalscan_canvas = plottingtools.PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Intensity (arb. u)",
                         title = "Horizontal scan")
-    verticalscan_canvas = plottingtools.PlotWidget(xlabel="Horizontal detector position (pixels)", ylabel="Intensity (arb. u)",
+    verticalscan_canvas = plottingtools.PlotWidget(xlabel="Out-of-plane scattering angle $\\alpha{_f}$ (°)", ylabel="Intensity (arb. u)",
                         title = "Vertical scan")
     create_layout(self, gisaxsmap_canvas, self.maplayout)
     create_layout(self, horizontalscan_canvas, self.graphlayout)
@@ -57,6 +57,7 @@ def loadMap(self):
         self.holdVertical.setChecked(True)
         scan.YonedaScan(self)
         self.firstRun = False
+
 
 
 def detectPeak(self, data, scan="horizontal", prominence = 2):
