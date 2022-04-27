@@ -21,3 +21,6 @@ An option to convert to q-space, or take the raw-data as-is from pixel coordinat
 Note that this is an alpha version. The code is messy at the moment, a proper code clean up as well as some
 documentation need to be done before declaring version 1.0. Testing is primarily done on Fedora Silverblue (Linux), but
 this software should be compatible with any modern version of Linux, MacOS or Windows.
+
+For any support or other questions, please contact me at info@sjoerd.se. Keep in mind that this program comes with 
+absolutely no warranty or formal support. But I will try to answer any questions in a proper manner.
