@@ -155,7 +155,7 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
         scan_type = "vertical"
         title = "Vertical scan"
         figure = plottingtools.plotGraphOnCanvas(self, layout, self.sampledata.vertical_scan_x,
-                                                               self.sampledata.vertical_scan_y, title=title,
+                                                               self.sampledata.vertical_scan_y, xlabel="Out-of-plane scattering angle $\\alpha{_f}$ (°)", title=title,
                                                                revert=False)
         self.verticalscanfig = figure
 

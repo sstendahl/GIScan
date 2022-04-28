@@ -5,8 +5,8 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 import scanning_tools
 import settings
 
-def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None, revert = False):
-    canvas = PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Intensity (arb. u)",
+def plotGraphOnCanvas(self, layout, X, Y, xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", title = "", scale="log", marker = None, revert = False):
+    canvas = PlotWidget(xlabel=xlabel, ylabel="Intensity (arb. u)",
                         title = "Horizontal Scan")
     figure = canvas.figure
     plotgGraphFigure(X, Y, canvas, revert=revert, title=title)
@@ -27,7 +27,7 @@ def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log"
     canvas.theplot.set_yscale(scale)
 
 def singlePlotonCanvas(self, layout, data, ylabel = "", xlim=None, title = "GISAXS Data"):
-    canvas = PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Out-of-plane scattering angle $\\alpha{_f}$",
+    canvas = PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Out-of-plane scattering angle $\\alpha{_f}$ (°)",
                         title = title)
     figure = canvas.figure
     plotFigure(data, canvas, title = title)
