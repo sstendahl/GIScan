@@ -27,16 +27,18 @@ def create_layout(self, canvas, layout):
     layout.addWidget(canvas)
     layout.addWidget(toolbar)
 
+def loadMap_from_file_picker(self):
+    path = getPath(self)
+    loadMap(self, path)
 
-
-def loadMap(self):
+def loadMap(self, file):
     self.firstRun = True
     self.rect = None
     self.holdVertical.setChecked(False)
     self.holdHorizontal.setChecked(False)
     self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
-    file = getPath(self)
+
 
     if file != "":
         path = os.path.dirname(file)
@@ -46,6 +48,7 @@ def loadMap(self):
         contents = cbf.read(filename)
         data = contents.data
         self.sampledata.gisaxs_data = data
+        self.sampledata.path = file
         layout = self.maplayout
         self.clearLayout(self.maplayout)
         self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title = filename)
@@ -54,7 +57,6 @@ def loadMap(self):
         self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
         self.figurecanvas[0].ax = plt.gca()
         scan.scanX(self)
-        self.holdVertical.setChecked(True)
         scan.YonedaScan(self)
         self.firstRun = False
 

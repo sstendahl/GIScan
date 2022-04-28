@@ -41,12 +41,31 @@ def get_settings():
     ps_y = 0.172
     return{"a_i": a_i, "sdd": sdd, "db_y": db_y, "db_x": db_x, "ps_x": ps_x, "ps_y": ps_y}
 
+def detector_scan(self):
+    self.holdHorizontal.setChecked(True)
+    self.firstRun = True
+    self.y0 = None
+    self.y1 = None
+    self.x0 = -0.1
+    self.x1 = 0.1
+    scanX(self)
+    self.y0 = None
+    self.y1 = None
+    self.middleX = None
+    self.middleY = None
+    self.y0 = -0.2
+    self.y1 = 2.3
+    self.defineRectangle()
+    self.drawRectangle()
+    self.firstRun = False
+
 
 def YonedaScan(self):
-    self.y0 = 0.1
-    self.y1 = 0.3
-    self.x0 = -1
-    self.x1 = 1
+    self.holdVertical.setChecked(True)
+    self.y0 = 0.22
+    self.y1 = 0.32
+    self.x0 = -1.25
+    self.x1 = 1.25
     self.middleY = (self.y0 + self.y1) / 2
     self.middleX = (self.x0 + self.x1) / 2
     self.recHeigthEntry.setText(str(0.2))
@@ -57,6 +76,8 @@ def YonedaScan(self):
     self.drawRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
+
+
 
 
 def findSpecular(self):

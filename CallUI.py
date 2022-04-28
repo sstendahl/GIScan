@@ -4,12 +4,19 @@ from PyQt5 import QtWidgets, uic
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
+import settings
 import gisaxs
 from PyQt5 import QtGui
 from sample import Sample
 import scanning_tools as scan
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
+Ui_settingsDialog, settingsDialogClass = uic.loadUiType("settingsdialog.ui")
 
+
+class settingsUI(settingsDialogClass, Ui_settingsDialog):
+    def __init__(self, parent=None):
+        settingsDialogClass.__init__(self, parent)
+        self.setupUi(self)
 
 
 class CallUI(QtBaseClass, Ui_MainWindow):
@@ -29,55 +36,30 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.y1 = None
         gisaxs.loadEmpty(self)
 
+    def loadMap(self):
+        path = scan.getPath()
+        gisaxs.loadMap(path)
 
     def connectActions(self):
         # Connect File actions
-        self.load_button.clicked.connect(lambda: gisaxs.loadMap(self))
+        self.load_button.clicked.connect(lambda: gisaxs.loadMap_from_file_picker(self))
         self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
         self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
         self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
-        self.yoneda_button.clicked.connect(lambda: self.pressYoneda())
-        self.detector_button.clicked.connect(lambda: self.pressDetector())
-        self.findFWHM_button.clicked.connect(lambda: self.press_FWHM_button())
+        self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
+        self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
+        self.dragButton.clicked.connect(self.press_drag_button)
+        self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
+        self.findFWHM_button.clicked.connect(self.press_FWHM_button)
+
+    def press_drag_button(self):
+        if self.dragButton.isChecked():
+            self.findFWHM_button.setChecked(False)
+
 
     def press_FWHM_button(self):
-        self.dragButton.setChecked(False)
-
-    def pressYoneda(self):
-        self.firstRun = True
-        scan.scanX(self)
-        self.holdVertical.setChecked(True)
-        self.y0 = 0.15
-        self.y1 = 0.25
-        self.x0 = -1.25
-        self.x1 = 1.25
-        self.middleY = (self.y0 + self.y1)/2
-        self.middleX = (self.x0+self.x1)/2
-        self.clearLayout(self.graphlayout)
-        scan.calcOffSpec(self)
-        self.defineRectangle()
-        self.drawRectangle()
-        self.firstRun = False
-
-    def pressDetector(self):
-        self.holdHorizontal.setChecked(True)
-        self.firstRun = True
-        self.y0 = None
-        self.y1 = None
-        self.x0 = -0.1
-        self.x1 = 0.1
-        scan.scanX(self)
-        self.y0 = None
-        self.y1 = None
-        self.middleX = None
-        self.middleY = None
-        self.y0 = -0.2
-        self.y1 = 2.3
-
-        self.defineRectangle()
-        self.drawRectangle()
-        self.firstRun = False
-
+        if self.findFWHM_button.isChecked():
+            self.dragButton.setChecked(False)
 
 
     def setRectangleFromEntry(self):
@@ -140,7 +122,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
 
     def on_hover(self, event):
-        if self.clicked == True:
+        if self.clicked == True and self.ROI_button.isChecked():
             self.x1 = float(event.xdata)
             self.y1 = float(event.ydata)
             self.middleX = float((self.x0 + self.x1) / 2)
@@ -151,10 +133,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def on_release(self, event):
         self.clicked = False
-        self.defineRectangle()
-        self.drawRectangle()
-        self.clearLayout(self.graphlayout)
-        scan.calcOffSpec(self)
+        if self.ROI_button.isChecked():
+            self.defineRectangle()
+            self.drawRectangle()
+            self.clearLayout(self.graphlayout)
+            scan.calcOffSpec(self)
 
 
 
@@ -258,7 +241,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             child = layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
-
 
 def setUpWindow():
     app = QtWidgets.QApplication(sys.argv)

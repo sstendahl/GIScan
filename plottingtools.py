@@ -2,9 +2,8 @@ from matplotlib.colors import LogNorm
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib import rcParams
 import scanning_tools
-
+import settings
 
 def plotGraphOnCanvas(self, layout, X, Y, title = "", scale="log", marker = None, revert = False):
     canvas = PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Intensity (arb. u)",
@@ -52,7 +51,8 @@ def plotFigure(data, canvas, filename="", xlim=None, title="", scale="linear",ma
     x_max = max(x_theta_f)
     y_min = min(y_alpha_f)
     y_max = max(y_alpha_f)
-    fig.imshow(data, cmap='gray_r', norm=LogNorm(), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
+    cmap = settings.get_cmap()
+    fig.imshow(data, cmap=cmap, norm=LogNorm(), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
 
 
 
