@@ -1,10 +1,8 @@
 import CallUI
 import json
 import sys
+import scanning_tools as scan
 import os
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QTableWidgetItem
-
 import gisaxs
 
 
@@ -112,6 +110,10 @@ def write_config(self):
     set_experimental_parameters(self)
     set_cmap(self)
     gisaxs.loadMap(self, self.sampledata.path)
+    scan.detector_scan(self)
+    self.holdHorizontal.setChecked(False)
+    scan.YonedaScan(self)
+
 
 def get_config(key):
     os.chdir(sys.path[0])

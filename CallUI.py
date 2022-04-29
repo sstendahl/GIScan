@@ -46,8 +46,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
         self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
         self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
-        #self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
-        #self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
+        self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
+        self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
         self.dragButton.clicked.connect(self.press_drag_button)
         self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
         self.findFWHM_button.clicked.connect(self.press_FWHM_button)
@@ -103,10 +103,14 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.rect.set_width(width)
         self.rect.set_height(heigth)
         self.rect.set_xy((self.middleX - (width / 2), self.middleY - (heigth / 2)))
-        self.recHeigthEntry.setText(str(abs(round(float(heigth), 2))))
-        self.recWidthEntry.setText(str(abs(round(float(width),2))))
-        self.middleXEntry.setText(str(round(float(self.middleX),2)))
-        self.middleYEntry.setText(str(round(float(self.middleY),2)))
+        if settings.get_config("mapping") == "q-space":
+            rounding = 4
+        else:
+            rounding = 2
+        self.recHeigthEntry.setText(str(abs(round(float(heigth), rounding))))
+        self.recWidthEntry.setText(str(abs(round(float(width),rounding))))
+        self.middleXEntry.setText(str(round(float(self.middleX),rounding)))
+        self.middleYEntry.setText(str(round(float(self.middleY),rounding)))
 
 
     def drawRectangle(self):

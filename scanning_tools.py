@@ -4,6 +4,8 @@ import plottingtools
 import json
 import os
 import sys
+
+import scanning_tools as scan
 import settings
 
 
@@ -45,116 +47,88 @@ def convert_y(pp_y):
 
 
 def detector_scan(self):
-
     self.holdHorizontal.setChecked(True)
     self.firstRun = True
-    self.y0 = None
-    self.y1 = None
     if settings.get_config("mapping") == "Angular":
         self.x0 = -0.05
         self.x1 = 0.05
+        self.y0 = -0.3
+        self.y1 = 2.4
+
     if settings.get_config("mapping") == "Pixels":
         self.x0 = 860
         self.x1 = 877
-    if settings.get_config("mapping") == "q+space":
-        self.x0 = -0.004
-        self.x1 = 0.004
-    scanX(self)
-    self.y0 = None
-    self.y1 = None
-    self.middleX = None
-    self.middleY = None
-    if settings.get_config("mapping") == "Angular":
-        self.y0 = -0.3
-        self.y1 = 2
-    if settings.get_config("mapping") == "Pixels":
         self.y0 = 90
         self.y1 = 1100
-    if settings.get_config("mapping") == "q+space":
+
+    if settings.get_config("mapping") == "q-space":
         self.y0 = 0
         self.y1 = 0.33
+        self.x0 = -0.004
+        self.x1 = 0.004
+    self.middleX = (self.x0 + self.x1) / 2
+    self.middleY = (self.y0 + self.y1) / 2
+    self.clearLayout(self.graphlayout)
+    scan.calcOffSpec(self)
     self.defineRectangle()
     self.drawRectangle()
+    self.holdVertical.setChecked(False)
     self.firstRun = False
 
 
 def YonedaScan(self):
     self.holdVertical.setChecked(True)
     if settings.get_config("mapping") == "Angular":
-        self.y0 = 0.22
-        self.y1 = 0.32
-        self.x0 = -1.25
-        self.x1 = 1.25
+        self.y0 = 0.255
+        self.y1 = 0.275
+        self.x0 = -1.2
+        self.x1 = 1.2
     if settings.get_config("mapping") == "Pixels":
-        self.y0 = 397
-        self.y1 = 308
-        self.x0 = self.middleX - 410
-        self.x1 = self.middleX + 410
-    else:
-        self.y0 = 0.073
-        self.y1 = 0.080
+        self.y0 = 306
+        self.y1 = 295
+        self.x0 = 600
+        self.x1 = 1140
+    if settings.get_config("mapping") == "q-space":
+        self.y0 = 0.075
+        self.y1 = 0.078
         self.x0 = -0.12
         self.x1 = 0.12
+    height = self.y1 - self.y0
+    width = self.x1 - self.x0
     self.middleY = (self.y0 + self.y1) / 2
     self.middleX = (self.x0 + self.x1) / 2
-    self.recHeigthEntry.setText(str(0.2))
-    self.recWidthEntry.setText(str(2.5))
+    self.recHeigthEntry.setText(str(float(height)))
+    self.recWidthEntry.setText(str(float(width)))
     self.middleXEntry.setText(str(float(self.middleX)))
     self.middleYEntry.setText(str(float(self.middleY)))
     self.defineRectangle()
     self.drawRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
+    self.holdHorizontal.setChecked(False)
 
 
-def findSpecular(self):
+def find_specular(self):
     if settings.get_config("mapping") == "Angular":
-        self.y0 = 0.22
-        self.y1 = 0.32
+        self.y0 = 0.255
+        self.y1 = 0.275
         self.x0 = -1.2
         self.x1 = 1.2
     if settings.get_config("mapping") == "Pixels":
-        self.y0 = 397
-        self.y1 = 308
-        self.x0 = self.middleX - 410
-        self.x1 = self.middleX + 410
-    else:
-        self.y0 = 0.0073
-        self.y1 = 0.0080
+        self.y0 = 306
+        self.y1 = 295
+        self.x0 = 600
+        self.x1 = 1140
+    if settings.get_config("mapping") == "q-space":
+        self.y0 = 0.075
+        self.y1 = 0.078
         self.x0 = -0.12
         self.x1 = 0.12
-
-    self.middleY = (self.y0 + self.y1) / 2
-    self.middleX = (self.x0 + self.x1) / 2
     self.defineRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
     peakindex = gisaxs.detectPeak(self, self.sampledata.horizontal_scan_y)[0]
     self.middleX = self.sampledata.horizontal_scan_x[peakindex]
-
-
-def scanX(self):
-    findSpecular(self)
-    if settings.get_config("mapping") == "Angular":
-        self.y0 = 0.22
-        self.y1 = 0.32
-        self.x0 = -1.25
-        self.x1 = 1.25
-    if settings.get_config("mapping") == "Pixels":
-        self.y0 = 397
-        self.y1 = 308
-        self.x0 = self.middleX - 410
-        self.x1 = self.middleX + 410
-    else:
-        self.y0 = 0.073
-        self.y1 = 0.080
-        self.x0 = -0.12
-        self.x1 = 0.12
-    heigth = self.y1 - self.y0
-    width = self.middleX
-    self.defineRectangle(width=width, heigth=heigth)
-    self.clearLayout(self.graphlayout)
-    calcOffSpec(self)
 
 
 def calcOffSpec(self):
@@ -303,6 +277,7 @@ def removeZeroes(self, intensity_list, coordinatelist):
 
 
 def find_peak_in_range(self, position, xdata, ydata):
+    found_peak = False
     max_x = max(xdata)
     min_x = min(xdata)
 
@@ -318,11 +293,16 @@ def find_peak_in_range(self, position, xdata, ydata):
 
     chosen_Yrange = ydata[chosen_index - check_range:chosen_index + check_range]
     chosen_Xrange = xdata[chosen_index - check_range:chosen_index + check_range]
-
-    peakindex = gisaxs.detectPeak(self, chosen_Yrange, prominence=1)[0]
-    for index in range(len(xdata)):
-        if xdata[index] == chosen_Xrange[peakindex]:
-            total_index = index
+    try:
+        peakindex = gisaxs.detectPeak(self, chosen_Yrange, prominence=1)[0]
+        found_peak = True
+    except IndexError:
+        print("Could not find a peak at this position")
+        total_index = None
+    if found_peak:
+        for index in range(len(xdata)):
+            if xdata[index] == chosen_Xrange[peakindex]:
+                total_index = index
     return total_index
 
 
@@ -339,38 +319,40 @@ def find_FWHM(self, position, scan_type="vertical"):
         figure = self.verticalscanfig[0]
         axes = figure.axes[0]
     peak_position = find_peak_in_range(self, position, xdata, ydata)
+    if peak_position is not None:
+        half_intensity = ydata[peak_position] / 2
+        # Find left boundary:
 
-    half_intensity = ydata[peak_position] / 2
-    # Find left boundary:
+        xs = np.sort(xdata)
+        ys = np.array(ydata)[np.argsort(xdata)]
+        start_position = peak_position
+        peak_coordinate = xdata[start_position]
 
-    xs = np.sort(xdata)
-    ys = np.array(ydata)[np.argsort(xdata)]
-    start_position = peak_position
-    peak_coordinate = xdata[start_position]
+        found_left = False
+        found_right = False
+        mesh_step = 1000000
 
-    found_left = False
-    found_right = False
-    mesh_step = 1000000
+        # Will optimize this a bit
+        for index in range(mesh_step):
+            index = index / (mesh_step / 200)
+            y_value_left = np.interp(peak_coordinate - index, xs, ys)
+            y_value_right = np.interp(peak_coordinate + index, xs, ys)
+            if found_left == False and y_value_left <= half_intensity:
+                left_boundary_value = peak_coordinate - index
+                found_left = True
+            if found_right == False and y_value_right <= half_intensity:
+                right_boundary_value = peak_coordinate + index
+                found_right = True
+            if found_left == True and found_right == True:
+                break
 
-    # Will optimize this a bit
-    for index in range(mesh_step):
-        index = index / (mesh_step / 200)
-        y_value_left = np.interp(peak_coordinate - index, xs, ys)
-        y_value_right = np.interp(peak_coordinate + index, xs, ys)
-        if found_left == False and y_value_left <= half_intensity:
-            left_boundary_value = peak_coordinate - index
-            found_left = True
-        if found_right == False and y_value_right <= half_intensity:
-            right_boundary_value = peak_coordinate + index
-            found_right = True
-        if found_left == True and found_right == True:
-            break
-
-    FWHM = right_boundary_value - left_boundary_value
-    if hasattr(self, 'hline'):
-        self.hline.remove()
-    step_size = abs(xdata[1] - xdata[0])
-    self.hline = axes.hlines(y=ydata[peak_position] / 2, xmin=left_boundary_value, xmax=right_boundary_value, color='r')
-    self.verticalscanfig[1].draw()
-    self.horizontalscanfig[1].draw()
+        FWHM = right_boundary_value - left_boundary_value
+        if hasattr(self, 'hline'):
+            self.hline.remove()
+        step_size = abs(xdata[1] - xdata[0])
+        self.hline = axes.hlines(y=ydata[peak_position] / 2, xmin=left_boundary_value, xmax=right_boundary_value, color='r')
+        self.verticalscanfig[1].draw()
+        self.horizontalscanfig[1].draw()
+    else:
+        FWHM = 0
     return FWHM

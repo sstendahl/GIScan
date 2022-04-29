@@ -71,12 +71,14 @@ def loadMap(self, file):
         self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
         self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
         self.figurecanvas[0].ax = plt.gca()
+        scan.find_specular(self)
 
         # TODO: Automatic scanning when loading a sample is broken entirely right now. Will re-write these functions
         #       from the ground up to accommodate for all available mapping options. Also give options here.
         #
-        #scan.scanX(self)
-        #scan.YonedaScan(self)
+        scan.detector_scan(self)
+        self.holdHorizontal.setChecked(False)
+        scan.YonedaScan(self)
         self.firstRun = False
 
 
