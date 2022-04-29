@@ -218,12 +218,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         filename = path[0]
         mapping = settings.get_config("mapping")
         if mapping == "Angular":
-            horizontal_scan = self.sampledata.get_x_angular()
-            vertical_scan = self.sampledata.get_y_angular()
-        elif mapping == "q-space":
+            horizontal = self.sampledata.get_x_angular()
+            vertical = self.sampledata.get_y_angular()
+        if mapping == "q-space":
             horizontal = self.sampledata.get_z_qspace()
             vertical = self.sampledata.get_y_qspace()
-        elif mapping == "Pixels":
+        if mapping == "Pixels":
             horizontal = self.sampledata.get_x_pixels()
             vertical = self.sampledata.get_y_pixels()
 
