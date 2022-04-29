@@ -2,7 +2,8 @@ from matplotlib.colors import LogNorm
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-import scanning_tools
+
+import gisaxs
 import settings
 
 def plotGraphOnCanvas(self, layout, X, Y, xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", title = "", scale="log", marker = None, revert = False):
@@ -27,10 +28,11 @@ def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log"
     canvas.theplot.set_yscale(scale)
 
 def singlePlotonCanvas(self, layout, data, ylabel = "", xlim=None, title = "GISAXS Data"):
-    canvas = PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Out-of-plane scattering angle $\\alpha{_f}$ (°)",
+    in_plane_label, out_of_plane_label = gisaxs.get_labels()
+    canvas = PlotWidget(xlabel=in_plane_label, ylabel=out_of_plane_label,
                         title = title)
     figure = canvas.figure
-    plotFigure(data, canvas, title = title)
+    plotFigure(self, data, canvas, title = title)
     layout.addWidget(canvas)
     figurecanvas = [figure, canvas]
     self.toolbar = NavigationToolbar(canvas, self)
@@ -40,20 +42,29 @@ def singlePlotonCanvas(self, layout, data, ylabel = "", xlim=None, title = "GISA
 def test():
     pass
 
-def plotFigure(data, canvas, filename="", xlim=None, title="", scale="linear",marker=None, linestyle="solid"):
+def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="linear",marker=None, linestyle="solid"):
     fig = canvas.theplot
     y_array = list(range(0, len(data)))
     data = data[::-1]
     x_array = list(range(0, len(data[0])))
-    x_theta_f = scanning_tools.convert_x(x_array)
-    y_alpha_f = scanning_tools.convert_y(y_array)
-    x_min = min(x_theta_f)
-    x_max = max(x_theta_f)
-    y_min = min(y_alpha_f)
-    y_max = max(y_alpha_f)
-    cmap = settings.get_cmap()
-    fig.imshow(data, cmap=cmap, norm=LogNorm(), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
-
+    if self.sampledata.mapping == "Angular":
+        x_array = self.sampledata.get_x_angular()
+        y_array = self.sampledata.get_y_angular()
+    if self.sampledata.mapping == "q-space":
+        x_array = self.sampledata.get_y_qspace()
+        y_array = self.sampledata.get_z_qspace()
+    else:
+        pass
+    x_min = min(x_array)
+    x_max = max(x_array)
+    y_min = min(y_array)
+    y_max = max(y_array)
+    cbar = settings.get_config("colorbar")
+    cmap = settings.get_config("cmap")
+    gisaxs_map = fig.imshow(data, cmap=cmap, norm=LogNorm(), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
+    if cbar:
+        pos = settings.get_config("cbar_pos").lower()
+        canvas.figure.colorbar(gisaxs_map, location=pos)
 
 
 class PlotWidget(FigureCanvas):

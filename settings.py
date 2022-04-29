@@ -1,10 +1,8 @@
 import CallUI
 import json
 import sys
+import scanning_tools as scan
 import os
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QTableWidgetItem
-
 import gisaxs
 
 
@@ -36,18 +34,49 @@ def openSettingsdialog(self):
                  'gist_rainbow', 'rainbow', 'jet', 'turbo', 'nipy_spectral',
                  'gist_ncar'])]
 
-
-
-
     for cmap_category, cmap_list in cmaps:
         self.settingsdialog.cmap_category_widget.addItem(cmap_category)
+
+    for index in range(self.settingsdialog.mapping_widget.count()):
+        item = self.settingsdialog.mapping_widget.itemText(index)
+        if item == config["mapping"]:
+            self.settingsdialog.mapping_widget.setCurrentIndex(index)
+
+    for index in range(self.settingsdialog.cbar_pos_widget.count()):
+        item = self.settingsdialog.cbar_pos_widget.itemText(index)
+        if item == config["cbar_pos"]:
+            self.settingsdialog.cbar_pos_widget.setCurrentIndex(index)
 
     self.settingsdialog.cmap_category_widget.activated.connect(lambda: populate_cmaplist(self, config, cmaps))
     select_current_cmap(self, cmaps, config)
     populate_cmaplist(self, config, cmaps)
     select_current_cmap(self, cmaps, config)
+    check_cbar = config["colorbar"]
+    self.settingsdialog.cbar_check.setChecked(check_cbar)
     self.settingsdialog.show()
-    self.settingsdialog.accepted.connect(lambda: writeConfig(self))
+    self.settingsdialog.accepted.connect(lambda: write_config(self))
+
+
+def set_experimental_parameters(self):
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    config["ai"] = float(self.settingsdialog.ai_line.displayText())
+    config["sdd"] = float(self.settingsdialog.sdd_line.displayText())
+    config["db_x"] = float(self.settingsdialog.dbx_line.displayText())
+    config["db_y"] = float(self.settingsdialog.dby_line.displayText())
+    config["ps_x"] = float(self.settingsdialog.ps_x_line.displayText())
+    config["ps_y"] = float(self.settingsdialog.ps_y_line.displayText())
+    config["mapping"] = str(self.settingsdialog.mapping_widget.currentText())
+    config["cbar_pos"] = str(self.settingsdialog.cbar_pos_widget.currentText())
+    if self.settingsdialog.cbar_check.isChecked():
+        cbar = 1
+    else:
+        cbar = 0
+    config["colorbar"] = cbar
+    self.sampledata.mapping = config["mapping"]
+    with open('config.json', 'w') as f:
+        json.dump(config, f)
+
 
 def select_current_cmap(self, cmaps, config):
     current_cat = config["cmap_cat"]
@@ -65,27 +94,33 @@ def select_current_cmap(self, cmaps, config):
                     cmap_index = index
                 index += 1
 
-
     self.settingsdialog.cmap_category_widget.setCurrentIndex(cat_index)
     self.settingsdialog.cmap_list_widget.setCurrentIndex(cmap_index)
 
+
 def populate_cmaplist(self, config, cmaps):
-    index = 0
-    cmapindex = 0
     current_index = self.settingsdialog.cmap_category_widget.currentIndex()
     self.settingsdialog.cmap_list_widget.clear()
-    current_cmap = config["cmap"]
     for map in cmaps[current_index][1]:
         self.settingsdialog.cmap_list_widget.addItem(map)
-        if map == current_cmap:
-            cmapindex = index
         self.settingsdialog.cmap_list_widget.addItem(f"{map}_r")
-        index += 1
-        if f"{map}_r" == current_cmap:
-            cmapindex = index
-        index += 1
 
 
+def write_config(self):
+    set_experimental_parameters(self)
+    set_cmap(self)
+    gisaxs.loadMap(self, self.sampledata.path)
+    scan.detector_scan(self)
+    self.holdHorizontal.setChecked(False)
+    scan.YonedaScan(self)
+
+
+def get_config(key):
+    os.chdir(sys.path[0])
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    item = config[key]
+    return item
 
 def get_cmap():
     os.chdir(sys.path[0])
@@ -94,7 +129,8 @@ def get_cmap():
     cmap = config["cmap"]
     return cmap
 
-def writeConfig(self):
+
+def set_cmap(self):
     with open('config.json', 'r') as f:
         config = json.load(f)
 
@@ -105,10 +141,3 @@ def writeConfig(self):
 
     with open('config.json', 'w') as f:
         json.dump(config, f)
-    print(self.sampledata.path)
-    gisaxs.loadMap(self, self.sampledata.path)
-
-def showAbout(self):
-    self.aboutWindow = CallUI.aboutWindow()
-    self.aboutWindow.show()
-

@@ -9,14 +9,29 @@ from matplotlib.patches import Rectangle
 from scipy.signal import find_peaks
 import scanning_tools as scan
 import plottingtools
+import settings
+
+def get_labels():
+    mapping = settings.get_config("mapping")
+    if mapping == "Angular":
+        in_plane_label = "In-plane scattering angle 2$\phi{_f}$ (°)"
+        out_of_plane_label = "Out-of-plane scattering angle $\\alpha{_f}$ (°)"
+    if mapping == "q-space":
+        in_plane_label = "In-plane scattering vector q${_z}$ (Å$^{-1}$)"
+        out_of_plane_label = "Out-of-plane scattering vector q${_y}$ (Å$^{-1}$)"
+    if mapping == "Pixels":
+        in_plane_label = "Horizontal detector position (pixels)"
+        out_of_plane_label = "Vertical detector position (pixels)"
+    return in_plane_label, out_of_plane_label
 
 def loadEmpty(self):
-    gisaxsmap_canvas = plottingtools.PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Out-of-plane scattering angle $\\alpha{_f}$ (°)",
+    in_plane_label, out_of_plane_label = get_labels()
+    gisaxsmap_canvas = plottingtools.PlotWidget(xlabel=in_plane_label, ylabel=out_of_plane_label,
                         title = "GISAXS data")
 
-    horizontalscan_canvas = plottingtools.PlotWidget(xlabel="In-plane scattering angle 2$\phi{_f}$ (°)", ylabel="Intensity (arb. u)",
+    horizontalscan_canvas = plottingtools.PlotWidget(xlabel=in_plane_label, ylabel="Intensity (arb. u)",
                         title = "Horizontal scan")
-    verticalscan_canvas = plottingtools.PlotWidget(xlabel="Out-of-plane scattering angle $\\alpha{_f}$ (°)", ylabel="Intensity (arb. u)",
+    verticalscan_canvas = plottingtools.PlotWidget(xlabel=out_of_plane_label, ylabel="Intensity (arb. u)",
                         title = "Vertical scan")
     create_layout(self, gisaxsmap_canvas, self.maplayout)
     create_layout(self, horizontalscan_canvas, self.graphlayout)
@@ -56,7 +71,13 @@ def loadMap(self, file):
         self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
         self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
         self.figurecanvas[0].ax = plt.gca()
-        scan.scanX(self)
+        scan.find_specular(self)
+
+        # TODO: Automatic scanning when loading a sample is broken entirely right now. Will re-write these functions
+        #       from the ground up to accommodate for all available mapping options. Also give options here.
+        #
+        scan.detector_scan(self)
+        self.holdHorizontal.setChecked(False)
         scan.YonedaScan(self)
         self.firstRun = False
 
