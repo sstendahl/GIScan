@@ -216,12 +216,23 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def saveFile(self, horizontal = True):
         path = self.saveFileDialog()
         filename = path[0]
+        mapping = settings.get_config("mapping")
+        if mapping == "Angular":
+            horizontal_scan = self.sampledata.get_x_angular()
+            vertical_scan = self.sampledata.get_y_angular()
+        elif mapping == "q-space":
+            horizontal = self.sampledata.get_z_qspace()
+            vertical = self.sampledata.get_y_qspace()
+        elif mapping == "Pixels":
+            horizontal = self.sampledata.get_x_pixels()
+            vertical = self.sampledata.get_y_pixels()
+
         if filename[-4:] != ".txt":
             filename = filename + ".txt"
         if horizontal == True:
-            array = np.stack([self.sampledata.horizontal_scan_x, self.sampledata.horizontal_scan_y], axis=1)
+            array = np.stack([horizontal, self.sampledata.horizontal_scan_y], axis=1)
         else:
-            array = np.stack([self.sampledata.vertical_scan_x, self.sampledata.vertical_scan_y], axis=1)
+            array = np.stack([vertical, self.sampledata.vertical_scan_y], axis=1)
         np.savetxt(filename, array, delimiter="\t")
 
 

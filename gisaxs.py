@@ -73,7 +73,7 @@ def loadMap(self, file):
         self.figurecanvas[0].ax = plt.gca()
 
         # TODO: Automatic scanning when loading a sample is broken entirely right now. Will re-write these functions
-        #       from the ground up to accomodate for all available mapping options. Also give options here.
+        #       from the ground up to accommodate for all available mapping options. Also give options here.
         #
         #scan.scanX(self)
         #scan.YonedaScan(self)
