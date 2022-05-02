@@ -51,6 +51,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.dragButton.clicked.connect(self.press_drag_button)
         self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
         self.findFWHM_button.clicked.connect(self.press_FWHM_button)
+        self.ROI_button.clicked.connect(self.press_ROI_button)
 
     def press_drag_button(self):
         if self.dragButton.isChecked():
@@ -118,6 +119,15 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         ax = figure.axes[0]
         ax.add_patch(self.rect)
         self.figurecanvas[1].draw()
+
+    def press_ROI_button(self):
+        if self.ROI_button.isChecked():
+            self.rect.set_visible(True)
+        else:
+            self.rect.set_visible(False)
+        self.drawRectangle()
+
+
 
     def on_press(self, event):
         self.clicked = True
