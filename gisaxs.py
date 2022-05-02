@@ -87,6 +87,6 @@ def detectPeak(self, data, scan="horizontal", prominence = 2):
 def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
     options = QFileDialog.Options()
     options |= QFileDialog.DontUseNativeDialog
-    path = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "",documenttype, options=options)[0]
+    path = QFileDialog.getOpenFileName(self,"Open GISAXS data file", "",documenttype, options=options)[0]
     return path
 
