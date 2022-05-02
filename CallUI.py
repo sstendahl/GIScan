@@ -210,15 +210,18 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.figurecanvas[1].draw()
 
 
-    def saveFileDialog(self, documenttype="Text file (*.txt)"):
+    def saveFileDialog(self, documenttype="Text file (*.txt)", title = "Save file"):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", self.filename[:-4],
+        fileName = QFileDialog.getSaveFileName(self, title, self.filename[:-4],
                                                documenttype, options=options)
         return fileName
 
     def saveFile(self, horizontal = True):
-        path = self.saveFileDialog()
+        if horizontal:
+            path = self.saveFileDialog(title = "Save horizontal scan")
+        elif not horizontal:
+            path = self.saveFileDialog(title = "Save vertical scan")
         filename = path[0]
         if filename[-4:] != ".txt":
             filename = filename + ".txt"
