@@ -14,11 +14,11 @@ import settings
 def get_labels():
     mapping = settings.get_config("mapping")
     if mapping == "Angular":
-        in_plane_label = "In-plane scattering angle 2$\phi{_f}$ (°)"
+        in_plane_label = "In-plane scattering angle $\phi{_f}$ (°)"
         out_of_plane_label = "Out-of-plane scattering angle $\\alpha{_f}$ (°)"
     if mapping == "q-space":
-        in_plane_label = "In-plane scattering vector q${_z}$ (Å$^{-1}$)"
-        out_of_plane_label = "Out-of-plane scattering vector q${_y}$ (Å$^{-1}$)"
+        in_plane_label = "In-plane scattering vector q${_y}$ (Å$^{-1}$)"
+        out_of_plane_label = "Out-of-plane scattering vector q${_z}$ (Å$^{-1}$)"
     if mapping == "Pixels":
         in_plane_label = "Horizontal detector position (pixels)"
         out_of_plane_label = "Vertical detector position (pixels)"
@@ -72,10 +72,6 @@ def loadMap(self, file):
         self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
         self.figurecanvas[0].ax = plt.gca()
         scan.find_specular(self)
-
-        # TODO: Automatic scanning when loading a sample is broken entirely right now. Will re-write these functions
-        #       from the ground up to accommodate for all available mapping options. Also give options here.
-        #
         scan.detector_scan(self)
         self.holdHorizontal.setChecked(False)
         scan.YonedaScan(self)

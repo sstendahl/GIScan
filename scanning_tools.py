@@ -50,8 +50,8 @@ def detector_scan(self):
     self.holdHorizontal.setChecked(True)
     self.firstRun = True
     if settings.get_config("mapping") == "Angular":
-        self.x0 = -0.05
-        self.x1 = 0.05
+        self.x0 = -0.022
+        self.x1 = 0.022
         self.y0 = -0.3
         self.y1 = 2.4
 
@@ -64,8 +64,8 @@ def detector_scan(self):
     if settings.get_config("mapping") == "q-space":
         self.y0 = 0
         self.y1 = 0.33
-        self.x0 = -0.004
-        self.x1 = 0.004
+        self.x0 = -0.0033
+        self.x1 = 0.0033
     self.middleX = (self.x0 + self.x1) / 2
     self.middleY = (self.y0 + self.y1) / 2
     self.clearLayout(self.graphlayout)
@@ -249,7 +249,6 @@ def find_startstop(self):
             found_start = True
         if element > max([start, stop]) and not found_stop:
             stopx = index
-            found_stop = True
             break
     found_start = False
 
