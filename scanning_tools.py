@@ -50,24 +50,25 @@ def detector_scan(self):
     self.holdHorizontal.setChecked(True)
     self.firstRun = True
     if settings.get_config("mapping") == "Angular":
-        self.x0 = -0.022
-        self.x1 = 0.022
-        self.y0 = -0.3
-        self.y1 = 2.4
+        self.ROI_scan.x0 = -0.022
+        self.ROI_scan.x1 = 0.022
+        self.ROI_scan.y0 = -0.3
+        self.ROI_scan.y1 = 2.4
 
     if settings.get_config("mapping") == "Pixels":
-        self.x0 = 860
-        self.x1 = 877
-        self.y0 = 90
-        self.y1 = 1100
+        self.ROI_scan.x0 = 860
+        self.ROI_scan.x1 = 877
+        self.ROI_scan.y0 = 90
+        self.ROI_scan.y1 = 1100
 
     if settings.get_config("mapping") == "q-space":
-        self.y0 = 0
-        self.y1 = 0.33
-        self.x0 = -0.0033
-        self.x1 = 0.0033
-    self.middleX = (self.x0 + self.x1) / 2
-    self.middleY = (self.y0 + self.y1) / 2
+        self.ROI_scan.x0 = 0
+        self.ROI_scan.x1 = 0.33
+        self.ROI_scan.y0 = -0.0033
+        self.ROI_scan.y1 = 0.0033
+
+    self.middleX = (self.ROI_scan.x0 + self.ROI_scan.x1) / 2
+    self.middleY = (self.ROI_scan.y0 + self.ROI_scan.y1) / 2
     self.clearLayout(self.graphlayout)
     scan.calcOffSpec(self)
     self.defineRectangle()
@@ -79,24 +80,24 @@ def detector_scan(self):
 def YonedaScan(self):
     self.holdVertical.setChecked(True)
     if settings.get_config("mapping") == "Angular":
-        self.y0 = 0.255
-        self.y1 = 0.275
-        self.x0 = -1.2
-        self.x1 = 1.2
+        self.ROI_scan.y0 = 0.255
+        self.ROI_scan.y1 = 0.275
+        self.ROI_scan.x0 = -1.2
+        self.ROI_scan.x1 = 1.2
     if settings.get_config("mapping") == "Pixels":
-        self.y0 = 306
-        self.y1 = 295
-        self.x0 = 600
-        self.x1 = 1140
+        self.ROI_scan.y0 = 306
+        self.ROI_scan.y1 = 295
+        self.ROI_scan.x0 = 600
+        self.ROI_scan.x1 = 1140
     if settings.get_config("mapping") == "q-space":
-        self.y0 = 0.075
-        self.y1 = 0.078
-        self.x0 = -0.12
-        self.x1 = 0.12
-    height = self.y1 - self.y0
-    width = self.x1 - self.x0
-    self.middleY = (self.y0 + self.y1) / 2
-    self.middleX = (self.x0 + self.x1) / 2
+        self.ROI_scan.y0 = 0.075
+        self.ROI_scan.y1 = 0.078
+        self.ROI_scan.x0 = -0.12
+        self.ROI_scan.x1 = 0.12
+    height = self.ROI_scan.y1 - self.ROI_scan.y0
+    width = self.ROI_scan.x1 - self.ROI_scan.x0
+    self.middleY = (self.ROI_scan.y0 + self.ROI_scan.y1) / 2
+    self.middleX = (self.ROI_scan.x0 + self.ROI_scan.x1) / 2
     self.recHeigthEntry.setText(str(float(height)))
     self.recWidthEntry.setText(str(float(width)))
     self.middleXEntry.setText(str(float(self.middleX)))
@@ -110,20 +111,20 @@ def YonedaScan(self):
 
 def find_specular(self):
     if settings.get_config("mapping") == "Angular":
-        self.y0 = 0.255
-        self.y1 = 0.275
-        self.x0 = -1.2
-        self.x1 = 1.2
+        self.ROI_scan.y0 = 0.255
+        self.ROI_scan.y1 = 0.275
+        self.ROI_scan.x0 = -1.2
+        self.ROI_scan.x1 = 1.2
     if settings.get_config("mapping") == "Pixels":
-        self.y0 = 306
-        self.y1 = 295
-        self.x0 = 600
-        self.x1 = 1140
+        self.ROI_scan.y0 = 306
+        self.ROI_scan.y1 = 295
+        self.ROI_scan.x0 = 600
+        self.ROI_scan.x1 = 1140
     if settings.get_config("mapping") == "q-space":
-        self.y0 = 0.075
-        self.y1 = 0.078
-        self.x0 = -0.12
-        self.x1 = 0.12
+        self.ROI_scan.y0 = 0.075
+        self.ROI_scan.y1 = 0.078
+        self.ROI_scan.x0 = -0.12
+        self.ROI_scan.x1 = 0.12
     self.defineRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
@@ -140,16 +141,12 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
     in_plane_label, out_of_plane_label = gisaxs.get_labels()
 
     if self.firstRun == False:
-        self.x0 = float(self.middleX - float(self.recWidthEntry.displayText()) / 2)
-        self.y0 = float(self.middleY - float(self.recHeigthEntry.displayText()) / 2)
-        self.x1 = float(self.middleX + float(self.recWidthEntry.displayText()) / 2)
-        self.y1 = float(self.middleY + float(self.recHeigthEntry.displayText()) / 2)
+        self.ROI_scan.x0 = float(self.middleX - float(self.recWidthEntry.displayText()) / 2)
+        self.ROI_scan.y0 = float(self.middleY - float(self.recHeigthEntry.displayText()) / 2)
+        self.ROI_scan.x1 = float(self.middleX + float(self.recWidthEntry.displayText()) / 2)
+        self.ROI_scan.y1 = float(self.middleY + float(self.recHeigthEntry.displayText()) / 2)
 
-    startstop = find_startstop(self)
-    startx = startstop[0]
-    stopx = startstop[1]
-    starty = startstop[2]
-    stopy = startstop[3]
+    startx, stopx, starty, stopy = find_startstop(self)
     intensity_list = calc_cut(self, startx, stopx, starty, stopy, horizontal=horizontal)
     mapping = self.sampledata.mapping
     if horizontal:
@@ -167,14 +164,22 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
         else:
             coordinatelist = self.sampledata.get_y_pixels()[starty:stopy]
 
-    data = removeZeroes(self, intensity_list, coordinatelist)
 
     if horizontal and not hold_horizontal:
-        self.sampledata.horizontal_scan_x = data[1]
-        self.sampledata.horizontal_scan_y = data[0]
+        self.sampledata.horizontal_scan_x = coordinatelist
+        self.sampledata.horizontal_scan_y = intensity_list
+        height = abs(starty - stopy)
+        self.sampledata.remove_background(height)
+        self.sampledata.remove_zeroes()
+
+
     if not horizontal and not hold_vertical:
-        self.sampledata.vertical_scan_x = data[1]
-        self.sampledata.vertical_scan_y = data[0]
+        self.sampledata.vertical_scan_x = coordinatelist
+        self.sampledata.vertical_scan_y = intensity_list
+        height = abs(startx - stopx)
+        self.sampledata.remove_background(height, horizontal = False)
+        self.sampledata.remove_zeroes()
+
 
     layout = self.graphlayout
 
@@ -200,6 +205,8 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
     figure[1].canvas.mpl_connect('button_press_event', self.pressVline)
     figure[1].canvas.mpl_connect('button_release_event',
                                  lambda event: self.releaseVline(event, scan_type=scan_type))
+
+
 
 
 def calc_cut(self, startx, stopx, starty, stopy, horizontal=True):
@@ -228,9 +235,25 @@ def calc_cut(self, startx, stopx, starty, stopy, horizontal=True):
     return intensity_list
 
 
-def find_startstop(self):
-    start = float(self.x0)
-    stop = float(self.x1)
+def get_average(self, type_of_ROI = "bg"):
+    startx, stopx, starty, stopy = find_startstop(self, type_of_ROI)
+    total_intensity = 0
+    total_datapoints = 0
+    for i in range(startx, stopx):
+        for j in range(starty, stopy):
+                total_intensity += self.sampledata.gisaxs_data[::-1][j][i]
+                total_datapoints += 1
+    average = total_intensity / total_datapoints
+    print(average)
+    return average
+
+def find_startstop(self, type_of_ROI="scan"):
+    if type_of_ROI == "scan":
+        ROI = self.ROI_scan
+    if type_of_ROI == "bg":
+        ROI = self.ROI_background
+    start = ROI.x0
+    stop = ROI.x1
     found_start = False
     found_stop = False
     if self.sampledata.mapping == "Angular":
@@ -252,8 +275,8 @@ def find_startstop(self):
             break
     found_start = False
 
-    start = float(self.y1)
-    stop = float(self.y0)
+    start = ROI.y1
+    stop = ROI.y0
 
     for index, element in enumerate(y_array):
         if element > min([start, stop]) and not found_start:
@@ -262,17 +285,7 @@ def find_startstop(self):
         if element > max([start, stop]):
             stopy = index
             break
-    return [startx, stopx, starty, stopy]
-
-
-def removeZeroes(self, intensity_list, coordinatelist):
-    new_list = []
-    new_coordinatelist = []
-    for index in range(len(intensity_list)):
-        if intensity_list[index] > intensity_list[-1] / 3:
-            new_list.append(intensity_list[index])
-            new_coordinatelist.append(coordinatelist[index])
-    return [new_list, new_coordinatelist]
+    return startx, stopx, starty, stopy
 
 
 def find_peak_in_range(self, position, xdata, ydata):
@@ -349,7 +362,8 @@ def find_FWHM(self, position, scan_type="vertical"):
         if hasattr(self, 'hline'):
             self.hline.remove()
         step_size = abs(xdata[1] - xdata[0])
-        self.hline = axes.hlines(y=ydata[peak_position] / 2, xmin=left_boundary_value, xmax=right_boundary_value, color='r')
+        self.hline = axes.hlines(y=ydata[peak_position] / 2, xmin=left_boundary_value, xmax=right_boundary_value,
+                                 color='r')
         self.verticalscanfig[1].draw()
         self.horizontalscanfig[1].draw()
     else:

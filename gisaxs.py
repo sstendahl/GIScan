@@ -5,11 +5,12 @@ import numpy as np
 import cbf
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.patches import Rectangle
 from scipy.signal import find_peaks
 import scanning_tools as scan
+from sample import Sample
 import plottingtools
 import settings
+from roi import ROI
 
 def get_labels():
     mapping = settings.get_config("mapping")
@@ -48,12 +49,13 @@ def loadMap_from_file_picker(self):
 
 def loadMap(self, file):
     self.firstRun = True
-    self.rect = None
     self.holdVertical.setChecked(False)
     self.holdHorizontal.setChecked(False)
-    self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
-
+    self.ROI_scan = ROI((0, 0), 1, 1, alpha=1, fill=None, color="red")
+    self.ROI_background = ROI((0, 0), 1, 1, alpha=1, fill=None, color="yellow")
+    self.sampledata = Sample()
+    self.ROI_background.set_visible(False)
 
     if file != "":
         path = os.path.dirname(file)
