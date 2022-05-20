@@ -25,6 +25,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon('logo.png'))
         self.setupUi(self)
         self.connectActions()
+        self.sampledata = None
         self.clicked = False
         self.middleX = None
         self.middleY = None
@@ -137,6 +138,9 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def press_bg_ROI_button(self):
         if self.bg_ROI_button.isChecked():
             self.ROI_background.set_visible(True)
+            self.ROI_button.setChecked(False)
+            self.ROI_scan.set_visible(False)
+
         else:
             self.ROI_background.set_visible(False)
         self.drawRectangle()
@@ -144,6 +148,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def press_ROI_button(self):
         if self.ROI_button.isChecked():
             self.ROI_scan.set_visible(True)
+            self.bg_ROI_button.setChecked(False)
+            self.ROI_background.set_visible(False)
         else:
             self.ROI_scan.set_visible(False)
         self.drawRectangle()

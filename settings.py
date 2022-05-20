@@ -109,10 +109,11 @@ def populate_cmaplist(self, config, cmaps):
 def write_config(self):
     set_experimental_parameters(self)
     set_cmap(self)
-    gisaxs.loadMap(self, self.sampledata.path)
-    scan.detector_scan(self)
-    self.holdHorizontal.setChecked(False)
-    scan.YonedaScan(self)
+    if self.sampledata != None:
+        gisaxs.loadMap(self, self.sampledata.path)
+        scan.detector_scan(self)
+        self.holdHorizontal.setChecked(False)
+        scan.YonedaScan(self)
 
 
 def get_config(key):

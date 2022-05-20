@@ -62,10 +62,10 @@ def detector_scan(self):
         self.ROI_scan.y1 = 1100
 
     if settings.get_config("mapping") == "q-space":
-        self.ROI_scan.x0 = 0
-        self.ROI_scan.x1 = 0.33
-        self.ROI_scan.y0 = -0.0033
-        self.ROI_scan.y1 = 0.0033
+        self.ROI_scan.y0 = 0
+        self.ROI_scan.y1 = 0.33
+        self.ROI_scan.x0 = -0.0033
+        self.ROI_scan.x1 = 0.0033
 
     self.middleX = (self.ROI_scan.x0 + self.ROI_scan.x1) / 2
     self.middleY = (self.ROI_scan.y0 + self.ROI_scan.y1) / 2
@@ -123,8 +123,8 @@ def find_specular(self):
     if settings.get_config("mapping") == "q-space":
         self.ROI_scan.y0 = 0.075
         self.ROI_scan.y1 = 0.078
-        self.ROI_scan.x0 = -0.12
-        self.ROI_scan.x1 = 0.12
+        self.ROI_scan.x0 = -0.10
+        self.ROI_scan.x1 = 0.10
     self.defineRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
@@ -244,7 +244,6 @@ def get_average(self, type_of_ROI = "bg"):
                 total_intensity += self.sampledata.gisaxs_data[::-1][j][i]
                 total_datapoints += 1
     average = total_intensity / total_datapoints
-    print(average)
     return average
 
 def find_startstop(self, type_of_ROI="scan"):
@@ -272,6 +271,7 @@ def find_startstop(self, type_of_ROI="scan"):
             found_start = True
         if element > max([start, stop]) and not found_stop:
             stopx = index
+            found_stop = True
             break
     found_start = False
 
