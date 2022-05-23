@@ -13,7 +13,7 @@ GIScan is a simple tool to open and analyze existing GISAXS data as obtained at 
 
 Selected data is automatically converted in a mapping of choice as selected in the setting menu, supported mapping types are detector positions in pixels, angular space and q-space. By default, a scan detector-scan is made over the Qy = 0 position as well as an out-of-plane scan near the critical angle of a Ni/Ti multilayer.  
 
-The region of interest (ROI) over which the scans are made can be moved using either the obtained in-plane or the out-of-plane scans. Alternatively a region can be selected by the mouse, or entered manually using the coordinate positions in the bottom-left corner. Using the Background selection, an ROI can be chosen for the background as well and the average background intensity will be substracted from the scans that are made. Both the vertical and the horizontal scan can be exported in plain .txt files for further analysis. 
+The region of interest (ROI) over which the scans are made can be moved by selecting the required position in the obtained in-plane or the out-of-plane scans. Alternatively a region can be selected by dragging the mouse over the GISAXS mapping, or entered manually using the coordinate positions in the bottom-left corner. Using the Background selection function, an ROI can be chosen for the background as well and the average background intensity will be substracted from the scans that are made. Both the vertical and the horizontal scan can be exported in plain .txt files for further analysis. 
 
 Furthermore, the full-width-half-maximum (FWHM) of a peak can be obtained as well using a dedicated button. Given time in the future I may implement a simple fitting functionality to seperate the specular and off-specular signal in the in-plane scans from each other so that these corresponding values can be obtained as well.
 
@@ -22,4 +22,4 @@ The software is very functional at the moment, but is still considered to be in 
 For any support or other questions, please contact me at info@sjoerd.se. Keep in mind that this program comes with 
 absolutely no warranty or formal support, but I will try my best to be of assistance. 
 
-Note: This tool is in no official way affiliated with Petra III or DESY. This software started as a tool to analyze my own data obtained at this beamline and is mostly developed during my own free time.
+**Note**: This tool is in no official way affiliated with Petra III or DESY. This software started as a tool to analyze my own data obtained at this beamline and is mostly developed during my own free time.
