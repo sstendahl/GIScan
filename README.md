@@ -21,3 +21,5 @@ The software is very functional at the moment, but is still considered to be in 
 
 For any support or other questions, please contact me at info@sjoerd.se. Keep in mind that this program comes with 
 absolutely no warranty or formal support, but I will try my best to be of assistance. 
+
+Note: This tool is in no official way affiliated with Petra III or DESY. This software started as a tool to analyze my own data obtained at this beamline and is mostly developed during my own free time.
