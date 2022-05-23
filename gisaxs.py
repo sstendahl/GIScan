@@ -5,7 +5,6 @@ import numpy as np
 import cbf
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from scipy.signal import find_peaks
 import scanning_tools as scan
 from sample import Sample
 import plottingtools
@@ -13,6 +12,8 @@ import settings
 from roi import ROI
 
 def get_labels():
+    """Retreive label names for current mapping"""
+
     mapping = settings.get_config("mapping")
     if mapping == "Angular":
         in_plane_label = "In-plane scattering angle $\phi{_f}$ (°)"
@@ -26,6 +27,8 @@ def get_labels():
     return in_plane_label, out_of_plane_label
 
 def loadEmpty(self):
+    """Load empty graphs without any data for initial setup."""
+
     in_plane_label, out_of_plane_label = get_labels()
     gisaxsmap_canvas = plottingtools.PlotWidget(xlabel=in_plane_label, ylabel=out_of_plane_label,
                         title = "GISAXS data")
@@ -81,13 +84,6 @@ def loadMap(self, file):
         except:
             print("Error doing preset runs")
         self.firstRun = False
-
-
-
-def detectPeak(self, data, scan="horizontal", prominence = 2):
-    if scan == "horizontal":
-        peakindex = find_peaks(np.log(data), prominence=prominence)[0]
-    return peakindex
 
 def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
     options = QFileDialog.Options()

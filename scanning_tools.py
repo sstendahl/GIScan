@@ -4,20 +4,24 @@ import plottingtools
 import json
 import os
 import sys
-
+from scipy.signal import find_peaks
 import scanning_tools as scan
 import settings
 
 
 def ttheta_f(pp_x, db_x, ps_x, sdd):
+    """Convert single horizontal pixel coordinate to angular coordinates"""
     return np.degrees(np.arctan((pp_x - db_x) * ps_x / sdd))
 
 
 def alpha_f(pp_y, db_y, ps_y, sdd, a_i):
+    """Convert single vertical pixel coordinate to angular coordinates"""
+
     return np.degrees(np.arctan((pp_y - db_y) * ps_y / sdd)) - a_i
 
 
 def convert_x(pp_x):
+    """Convert horizontal pixel positions to angular coordinates"""
     os.chdir(sys.path[0])
     with open('config.json', 'r') as f:
         config = json.load(f)
@@ -32,6 +36,7 @@ def convert_x(pp_x):
 
 
 def convert_y(pp_y):
+    """Convert vertical pixel positions to angular coordinates"""
     os.chdir(sys.path[0])
     with open('config.json', 'r') as f:
         config = json.load(f)
@@ -47,8 +52,13 @@ def convert_y(pp_y):
 
 
 def detector_scan(self):
+    """Does a pre-set vertical scan over the qy=0 position at preset coordinates"""
+
     self.holdHorizontal.setChecked(True)
     self.firstRun = True
+
+    # Note: will probably change these preset values to be relative to the total map limits, in order to avoid
+    # out-of-bound issues.
     if settings.get_config("mapping") == "Angular":
         self.ROI_scan.x0 = -0.022
         self.ROI_scan.x1 = 0.022
@@ -78,6 +88,8 @@ def detector_scan(self):
 
 
 def YonedaScan(self):
+    """Does a pre-set horizontal scan near the critical angle for Ni, at preset coordinates"""
+
     self.holdVertical.setChecked(True)
     if settings.get_config("mapping") == "Angular":
         self.ROI_scan.y0 = 0.255
@@ -128,7 +140,7 @@ def find_specular(self):
     self.defineRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
-    peaks = gisaxs.detectPeak(self, self.sampledata.horizontal_scan_y)
+    peaks = find_peaks(np.log(self.sampledata.horizontal_scan_y), prominence=2)[0]
     if len(peaks > 0):
         peakindex = peaks[0]
     else:
@@ -313,7 +325,7 @@ def find_peak_in_range(self, position, xdata, ydata):
     chosen_Yrange = ydata[chosen_index - check_range:chosen_index + check_range]
     chosen_Xrange = xdata[chosen_index - check_range:chosen_index + check_range]
     try:
-        peakindex = gisaxs.detectPeak(self, chosen_Yrange, prominence=1)[0]
+        peakindex = find_peaks(np.log(self.chosen_Yrange), prominence=1)[0]
         found_peak = True
     except IndexError:
         print("Could not find a peak at this position")

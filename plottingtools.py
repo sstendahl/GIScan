@@ -38,9 +38,6 @@ def singlePlotonCanvas(self, layout, data, ylabel = "", xlim=None, title = "GISA
     layout.addWidget(self.toolbar)
     return figurecanvas
 
-def test():
-    pass
-
 def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="linear",marker=None, linestyle="solid"):
     fig = canvas.theplot
     y_array = list(range(0, len(data)))

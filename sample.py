@@ -5,6 +5,8 @@ import json
 
 @dataclass
 class Sample:
+    """Class containing information for the sample currently being analysed. Also contains some class methods
+     that are specific to the current dataset."""
     path: str = ""
     gisaxs_data: np.ndarray = field(default_factory=list)
     vertical_scan_x: list = field(default_factory=list)

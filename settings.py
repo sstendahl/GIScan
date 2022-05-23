@@ -7,50 +7,12 @@ import gisaxs
 
 
 def openSettingsdialog(self):
+    """Opens settings dialog."""
+
     self.settingsdialog = CallUI.settingsUI()
     with open('config.json', 'r') as f:
         config = json.load(f)
-    cmaps = [('Perceptually Uniform Sequential', [
-        'viridis', 'plasma', 'inferno', 'magma', 'cividis']),
-             ('Sequential', [
-                 'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
-                 'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
-                 'GnBu', 'PuBu', 'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn']),
-             ('Sequential (2)', [
-                 'binary', 'gist_yarg', 'gist_gray', 'gray', 'bone', 'pink',
-                 'spring', 'summer', 'autumn', 'winter', 'cool', 'Wistia',
-                 'hot', 'afmhot', 'gist_heat', 'copper']),
-             ('Diverging', [
-                 'PiYG', 'PRGn', 'BrBG', 'PuOr', 'RdGy', 'RdBu',
-                 'RdYlBu', 'RdYlGn', 'Spectral', 'coolwarm', 'bwr', 'seismic']),
-             ('Cyclic', ['twilight', 'twilight_shifted', 'hsv']),
-             ('Qualitative', [
-                 'Pastel1', 'Pastel2', 'Paired', 'Accent',
-                 'Dark2', 'Set1', 'Set2', 'Set3',
-                 'tab10', 'tab20', 'tab20b', 'tab20c']),
-             ('Miscellaneous', [
-                 'flag', 'prism', 'ocean', 'gist_earth', 'terrain', 'gist_stern',
-                 'gnuplot', 'gnuplot2', 'CMRmap', 'cubehelix', 'brg',
-                 'gist_rainbow', 'rainbow', 'jet', 'turbo', 'nipy_spectral',
-                 'gist_ncar'])]
-
-    for cmap_category, cmap_list in cmaps:
-        self.settingsdialog.cmap_category_widget.addItem(cmap_category)
-
-    for index in range(self.settingsdialog.mapping_widget.count()):
-        item = self.settingsdialog.mapping_widget.itemText(index)
-        if item == config["mapping"]:
-            self.settingsdialog.mapping_widget.setCurrentIndex(index)
-
-    for index in range(self.settingsdialog.cbar_pos_widget.count()):
-        item = self.settingsdialog.cbar_pos_widget.itemText(index)
-        if item == config["cbar_pos"]:
-            self.settingsdialog.cbar_pos_widget.setCurrentIndex(index)
-
-    self.settingsdialog.cmap_category_widget.activated.connect(lambda: populate_cmaplist(self, config, cmaps))
-    select_current_cmap(self, cmaps, config)
-    populate_cmaplist(self, config, cmaps)
-    select_current_cmap(self, cmaps, config)
+    load_cmaplist(self)
     self.settingsdialog.ai_line.setText(str(config["ai"]))
     self.settingsdialog.wavelength_line.setText(str(config["wavelength"]))
     self.settingsdialog.sdd_line.setText(str(config["sdd"]))
@@ -110,6 +72,50 @@ def select_current_cmap(self, cmaps, config):
     self.settingsdialog.cmap_category_widget.setCurrentIndex(cat_index)
     self.settingsdialog.cmap_list_widget.setCurrentIndex(cmap_index)
 
+def load_cmaplist(self):
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    cmaps = [('Perceptually Uniform Sequential', [
+        'viridis', 'plasma', 'inferno', 'magma', 'cividis']),
+             ('Sequential', [
+                 'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
+                 'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
+                 'GnBu', 'PuBu', 'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn']),
+             ('Sequential (2)', [
+                 'binary', 'gist_yarg', 'gist_gray', 'gray', 'bone', 'pink',
+                 'spring', 'summer', 'autumn', 'winter', 'cool', 'Wistia',
+                 'hot', 'afmhot', 'gist_heat', 'copper']),
+             ('Diverging', [
+                 'PiYG', 'PRGn', 'BrBG', 'PuOr', 'RdGy', 'RdBu',
+                 'RdYlBu', 'RdYlGn', 'Spectral', 'coolwarm', 'bwr', 'seismic']),
+             ('Cyclic', ['twilight', 'twilight_shifted', 'hsv']),
+             ('Qualitative', [
+                 'Pastel1', 'Pastel2', 'Paired', 'Accent',
+                 'Dark2', 'Set1', 'Set2', 'Set3',
+                 'tab10', 'tab20', 'tab20b', 'tab20c']),
+             ('Miscellaneous', [
+                 'flag', 'prism', 'ocean', 'gist_earth', 'terrain', 'gist_stern',
+                 'gnuplot', 'gnuplot2', 'CMRmap', 'cubehelix', 'brg',
+                 'gist_rainbow', 'rainbow', 'jet', 'turbo', 'nipy_spectral',
+                 'gist_ncar'])]
+
+    for cmap_category, cmap_list in cmaps:
+        self.settingsdialog.cmap_category_widget.addItem(cmap_category)
+
+    for index in range(self.settingsdialog.mapping_widget.count()):
+        item = self.settingsdialog.mapping_widget.itemText(index)
+        if item == config["mapping"]:
+            self.settingsdialog.mapping_widget.setCurrentIndex(index)
+
+    for index in range(self.settingsdialog.cbar_pos_widget.count()):
+        item = self.settingsdialog.cbar_pos_widget.itemText(index)
+        if item == config["cbar_pos"]:
+            self.settingsdialog.cbar_pos_widget.setCurrentIndex(index)
+
+    self.settingsdialog.cmap_category_widget.activated.connect(lambda: populate_cmaplist(self, config, cmaps))
+    select_current_cmap(self, cmaps, config)
+    populate_cmaplist(self, config, cmaps)
+    select_current_cmap(self, cmaps, config)
 
 def populate_cmaplist(self, config, cmaps):
     current_index = self.settingsdialog.cmap_category_widget.currentIndex()
