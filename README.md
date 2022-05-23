@@ -9,7 +9,7 @@ To be more specific: you must share the source code under the same license.
 For details see https://www.gnu.org/licenses/gpl-3.0.html
 
 # GIScan
-GIScan is a simple tool to open and analyze existing GISAXS data as obtained at the DESY Synchrotron at PETRA III in Hamburg. The accepted input data is in .cbf format, any other data type is unsupported.
+GIScan is a simple tool to open and analyze existing GISAXS data as obtained at the beamline P03 of PETRA III at the DESY Synchrotron in Hamburg. This tool handles raw data directly and does not need any prior data reduction. The accepted input data is in .cbf format, any other data type is unsupported.
 
 Selected data is automatically converted in a mapping of choice as selected in the setting menu, supported mapping types are detector positions in pixels, angular space and q-space. By default, a scan detector-scan is made over the Qy = 0 position as well as an out-of-plane scan near the critical angle of a Ni/Ti multilayer.  
 
