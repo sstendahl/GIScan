@@ -122,6 +122,10 @@ def YonedaScan(self):
 
 
 def find_specular(self):
+    """Does a hori<ontal scan in order to find where the specular signal is located in the qy-plane
+    Sets the middleX coordinate to this position (I feel this function is redundant, will take another look at this)
+    ."""
+
     if settings.get_config("mapping") == "Angular":
         self.ROI_scan.y0 = 0.255
         self.ROI_scan.y1 = 0.275
@@ -145,16 +149,21 @@ def find_specular(self):
         peakindex = peaks[0]
     else:
         peakindex = 0
-    print(self.sampledata.horizontal_scan_x)
     self.middleX = self.sampledata.horizontal_scan_x[peakindex]
 
 
 def calcOffSpec(self):
+    """Perform an off-specular scan in both horizontal and vertical direction"""
+
     start_offspec(self, self.holdHorizontal.isChecked(), self.holdVertical.isChecked(), horizontal=True)
     start_offspec(self, self.holdHorizontal.isChecked(), self.holdVertical.isChecked(), horizontal=False)
 
 
 def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
+    """Perform the actual off-specular scan in both directions
+    Note this function is way too long and should be rewritten probably
+    """
+
     in_plane_label, out_of_plane_label = gisaxs.get_labels()
 
     if self.firstRun == False:
@@ -184,22 +193,24 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
 
     if horizontal and not hold_horizontal:
         self.sampledata.horizontal_scan_x = coordinatelist
-        self.sampledata.horizontal_scan_y = intensity_list
         height = abs(starty - stopy)
-        self.sampledata.remove_background(height)
+        intensity_list = [value/height for value in intensity_list]
+        self.sampledata.horizontal_scan_y = intensity_list
+        self.sampledata.remove_background()
         self.sampledata.remove_zeroes()
 
 
     if not horizontal and not hold_vertical:
         self.sampledata.vertical_scan_x = coordinatelist
-        self.sampledata.vertical_scan_y = intensity_list
         height = abs(startx - stopx)
-        self.sampledata.remove_background(height, horizontal = False)
+        intensity_list = [value/height for value in intensity_list]
+        self.sampledata.vertical_scan_y = intensity_list
+        self.sampledata.remove_background(horizontal = False)
         self.sampledata.remove_zeroes()
 
 
+    # Now the figures are defined and plotted
     layout = self.graphlayout
-
     if horizontal:
         scan_type = "horizontal"
         title = "Horizontal scan"
@@ -252,7 +263,7 @@ def calc_cut(self, startx, stopx, starty, stopy, horizontal=True):
     return intensity_list
 
 
-def get_average(self, type_of_ROI = "bg"):
+def get_average_background(self, type_of_ROI = "bg"):
     startx, stopx, starty, stopy = find_startstop(self, type_of_ROI)
     total_intensity = 0
     total_datapoints = 0
