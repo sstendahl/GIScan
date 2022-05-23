@@ -7,7 +7,6 @@ import numpy as np
 import settings
 import gisaxs
 from PyQt5 import QtGui
-from sample import Sample
 import scanning_tools as scan
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
 Ui_settingsDialog, settingsDialogClass = uic.loadUiType("settingsdialog.ui")
@@ -25,15 +24,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setWindowIcon(QtGui.QIcon('logo.png'))
         self.setupUi(self)
-        self.sampledata = Sample()
         self.connectActions()
+        self.sampledata = None
         self.clicked = False
-        self.x0 = None
-        self.y0 = None
         self.middleX = None
         self.middleY = None
-        self.x1 = None
-        self.y1 = None
         gisaxs.loadEmpty(self)
 
     def loadMap(self):
@@ -52,6 +47,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
         self.findFWHM_button.clicked.connect(self.press_FWHM_button)
         self.ROI_button.clicked.connect(self.press_ROI_button)
+        self.bg_ROI_button.clicked.connect(self.press_bg_ROI_button)
+
 
     def press_drag_button(self):
         if self.dragButton.isChecked():
@@ -65,31 +62,37 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def setRectangleFromEntry(self):
         width = float(self.recWidthEntry.displayText())
-        heigth = float(self.recHeigthEntry.displayText())
+        height = float(self.recHeigthEntry.displayText())
+
+        middle_x = float(self.middleXEntry.displayText())
+        middle_y = float(self.middleYEntry.displayText())
+        self.ROI_scan.x0 = middle_x - width / 2
+        self.ROI_scan.x1 = middle_x + width / 2
+        self.ROI_scan.y0 = middle_y - height / 2
+        self.ROI_scan.y1 = middle_y + height / 2
+
+
+
         self.middleX = float(self.middleXEntry.displayText())
         self.middleY = float(self.middleYEntry.displayText())
-        y0 = float(abs((self.y1 + self.y0)) / 2 - heigth/2)
-        y1 = float(abs((self.y1 + self.y0)) / 2 + heigth/2)
-        self.y0 = y0
-        self.y1 = y1
-        x0 = float(abs((self.x1 + self.x0)) / 2 - width/2)
-        x1 = float(abs((self.x1 + self.x0)) / 2 + width/2)
-        self.x0 = x0
-        self.x1 = x1
-        self.defineRectangle(width=width, heigth=heigth)
+        self.defineRectangle(width=width, heigth=height)
         self.drawRectangle()
         self.clearLayout(self.graphlayout)
         scan.calcOffSpec(self)
 
-    def defineRectangle(self, y0 = None, y1 = None, x0 = None, x1 = None, width = None, heigth = None):
+    def defineRectangle(self, y0 = None, y1 = None, x0 = None, x1 = None, width = None, heigth = None, type = "scan"):
+        if type == "scan":
+            ROI = self.ROI_scan
+        else:
+            ROI = self.ROI_background
         if y0 == None:
-            y0 = self.y0
+            y0 = ROI.y0
         if y1 == None:
-            y1 = self.y1
+            y1 = ROI.y1
         if x0 == None:
-            x0 = self.x0
+            x0 = ROI.x0
         if x1 == None:
-            x1 = self.x1
+            x1 = ROI.x1
         if width == None:
             width = x1 - x0
         if heigth == None:
@@ -101,48 +104,86 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.middleY = (y0+y1)/2
 
 
-        self.rect.set_width(width)
-        self.rect.set_height(heigth)
-        self.rect.set_xy((self.middleX - (width / 2), self.middleY - (heigth / 2)))
         if settings.get_config("mapping") == "q-space":
             rounding = 4
         else:
             rounding = 2
-        self.recHeigthEntry.setText(str(abs(round(float(heigth), rounding))))
-        self.recWidthEntry.setText(str(abs(round(float(width),rounding))))
-        self.middleXEntry.setText(str(round(float(self.middleX),rounding)))
-        self.middleYEntry.setText(str(round(float(self.middleY),rounding)))
+
+        if type == "scan":
+            self.recHeigthEntry.setText(str(abs(round(float(heigth), rounding))))
+            self.recWidthEntry.setText(str(abs(round(float(width),rounding))))
+            self.middleXEntry.setText(str(round(float(self.middleX),rounding)))
+            self.middleYEntry.setText(str(round(float(self.middleY),rounding)))
+
+        ROI.x0 = self.middleX - width / 2
+        ROI.x1 = self.middleX + width / 2
+        ROI.y0 = self.middleY - heigth / 2
+        ROI.y1 = self.middleY + heigth / 2
+
+        ROI.set_width(width)
+        ROI.set_height(heigth)
+        ROI.set_xy((self.middleX - (width / 2), self.middleY - (heigth / 2)))
+        ROI.set_visible(True)
 
 
     def drawRectangle(self):
         figure = self.figurecanvas[0]
         ax = figure.axes[0]
-        ax.add_patch(self.rect)
+        [patch.remove() for patch in ax.patches]
+        ax.add_patch(self.ROI_scan)
+        ax.add_patch(self.ROI_background)
         self.figurecanvas[1].draw()
+
+
+    def press_bg_ROI_button(self):
+        if self.bg_ROI_button.isChecked():
+            self.ROI_background.set_visible(True)
+            self.ROI_button.setChecked(False)
+            self.ROI_scan.set_visible(False)
+
+        else:
+            self.ROI_background.set_visible(False)
+        self.drawRectangle()
 
     def press_ROI_button(self):
         if self.ROI_button.isChecked():
-            self.rect.set_visible(True)
+            self.ROI_scan.set_visible(True)
+            self.bg_ROI_button.setChecked(False)
+            self.ROI_background.set_visible(False)
         else:
-            self.rect.set_visible(False)
+            self.ROI_scan.set_visible(False)
         self.drawRectangle()
 
 
 
     def on_press(self, event):
         self.clicked = True
-        self.x0 = float(event.xdata)
-        self.y0 = float(event.ydata)
+        if self.ROI_button.isChecked():
+            self.ROI_scan.x0 = float(event.xdata)
+            self.ROI_scan.y0 = float(event.ydata)
+        if self.bg_ROI_button.isChecked():
+            self.ROI_background.x0 = float(event.xdata)
+            self.ROI_background.y0 = float(event.ydata)
+
 
 
     def on_hover(self, event):
-        if self.clicked == True and self.ROI_button.isChecked():
-            self.x1 = float(event.xdata)
-            self.y1 = float(event.ydata)
-            self.middleX = float((self.x0 + self.x1) / 2)
-            self.middleY = float((self.y0 + self.y1) / 2)
+        if self.clicked and self.ROI_button.isChecked():
+            self.ROI_scan.x1 = float(event.xdata)
+            self.ROI_scan.y1 = float(event.ydata)
+            self.middleX = float((self.ROI_scan.x0 + self.ROI_scan.x1) / 2)
+            self.middleY = float((self.ROI_scan.y0 + self.ROI_scan.y1) / 2)
             self.defineRectangle()
             self.drawRectangle()
+        if self.clicked and self.bg_ROI_button.isChecked():
+            self.ROI_background.x1 = float(event.xdata)
+            self.ROI_background.y1 = float(event.ydata)
+            self.middleX = float((self.ROI_background.x0 + self.ROI_background.x1) / 2)
+            self.middleY = float((self.ROI_background.y0 + self.ROI_background.y1) / 2)
+
+            self.defineRectangle(type="bg")
+            self.drawRectangle()
+
 
 
     def on_release(self, event):
@@ -152,6 +193,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.drawRectangle()
             self.clearLayout(self.graphlayout)
             scan.calcOffSpec(self)
+
+        if self.bg_ROI_button.isChecked():
+            self.defineRectangle(type="bg")
+            self.drawRectangle()
+            scan.get_average(self)
+            self.sampledata.average_bg = scan.get_average(self)
 
 
 
@@ -198,7 +245,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
         if self.findFWHM_button.isChecked():
             FWHM = scan.find_FWHM(self, event.xdata, scan_type=scan_type)
-            self.FWHM_entry.setText(str(round(FWHM,4)))
+            self.FWHM_entry.setText(str(round(FWHM,6)))
 
         if self.dragButton.isChecked():
             if hasattr(self, 'vline'):

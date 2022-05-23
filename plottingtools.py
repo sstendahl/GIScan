@@ -1,8 +1,7 @@
-from matplotlib.colors import LogNorm
 from matplotlib.figure import Figure
+import matplotlib.colors as colors
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-
 import gisaxs
 import settings
 
@@ -39,9 +38,6 @@ def singlePlotonCanvas(self, layout, data, ylabel = "", xlim=None, title = "GISA
     layout.addWidget(self.toolbar)
     return figurecanvas
 
-def test():
-    pass
-
 def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="linear",marker=None, linestyle="solid"):
     fig = canvas.theplot
     y_array = list(range(0, len(data)))
@@ -61,7 +57,8 @@ def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="line
     y_max = max(y_array)
     cbar = settings.get_config("colorbar")
     cmap = settings.get_config("cmap")
-    gisaxs_map = fig.imshow(data, cmap=cmap, norm=LogNorm(), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
+    #gisaxs_map = fig.contour(data, levels=200, cmap= cmap, locator=ticker.LogLocator(base=2), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
+    gisaxs_map = fig.imshow(data, cmap=cmap, norm=colors.SymLogNorm(linthresh=5, base=2), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
     if cbar:
         pos = settings.get_config("cbar_pos").lower()
         canvas.figure.colorbar(gisaxs_map, location=pos)

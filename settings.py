@@ -7,7 +7,72 @@ import gisaxs
 
 
 def openSettingsdialog(self):
+    """Opens settings dialog."""
+
     self.settingsdialog = CallUI.settingsUI()
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    load_cmaplist(self)
+    self.settingsdialog.ai_line.setText(str(config["ai"]))
+    self.settingsdialog.wavelength_line.setText(str(config["wavelength"]))
+    self.settingsdialog.sdd_line.setText(str(config["sdd"]))
+    self.settingsdialog.dbx_line.setText(str(config["db_x"]))
+    self.settingsdialog.dby_line.setText(str(config["db_y"]))
+    self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
+    self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
+    # self.settingsdialog.mapping_widget.setText(config["mapping"])
+    # self.settingsdialog.cbar_pos_widget.setText(config["cbar_pos"])
+    check_cbar = config["colorbar"]
+    self.settingsdialog.cbar_check.setChecked(check_cbar)
+    self.settingsdialog.show()
+    self.settingsdialog.accepted.connect(lambda: write_config(self))
+
+
+def set_experimental_parameters(self):
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    config["ai"] = float(self.settingsdialog.ai_line.displayText())
+    config["wavelength"] = float(self.settingsdialog.wavelength_line.displayText())
+    config["sdd"] = float(self.settingsdialog.sdd_line.displayText())
+    config["db_x"] = float(self.settingsdialog.dbx_line.displayText())
+    config["db_y"] = float(self.settingsdialog.dby_line.displayText())
+    config["ps_x"] = float(self.settingsdialog.ps_x_line.displayText())
+    config["ps_y"] = float(self.settingsdialog.ps_y_line.displayText())
+    config["mapping"] = str(self.settingsdialog.mapping_widget.currentText())
+    config["cbar_pos"] = str(self.settingsdialog.cbar_pos_widget.currentText())
+    if self.settingsdialog.cbar_check.isChecked():
+        cbar = 1
+    else:
+        cbar = 0
+    config["colorbar"] = cbar
+    try:
+        self.sampledata.mapping = config["mapping"]
+    except:
+        print("No sample loaded yet")
+    with open('config.json', 'w') as f:
+        json.dump(config, f)
+
+
+def select_current_cmap(self, cmaps, config):
+    current_cat = config["cmap_cat"]
+    current_cmap = config["cmap"]
+
+    for index, category in enumerate(cmaps):
+        if category[0] == current_cat:
+            cat_index = index
+            index = 0
+            for cmap in category[1]:
+                if cmap == current_cmap:
+                    cmap_index = index
+                index += 1
+                if f"{cmap}_r" == current_cmap:
+                    cmap_index = index
+                index += 1
+
+    self.settingsdialog.cmap_category_widget.setCurrentIndex(cat_index)
+    self.settingsdialog.cmap_list_widget.setCurrentIndex(cmap_index)
+
+def load_cmaplist(self):
     with open('config.json', 'r') as f:
         config = json.load(f)
     cmaps = [('Perceptually Uniform Sequential', [
@@ -51,52 +116,6 @@ def openSettingsdialog(self):
     select_current_cmap(self, cmaps, config)
     populate_cmaplist(self, config, cmaps)
     select_current_cmap(self, cmaps, config)
-    check_cbar = config["colorbar"]
-    self.settingsdialog.cbar_check.setChecked(check_cbar)
-    self.settingsdialog.show()
-    self.settingsdialog.accepted.connect(lambda: write_config(self))
-
-
-def set_experimental_parameters(self):
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-    config["ai"] = float(self.settingsdialog.ai_line.displayText())
-    config["sdd"] = float(self.settingsdialog.sdd_line.displayText())
-    config["db_x"] = float(self.settingsdialog.dbx_line.displayText())
-    config["db_y"] = float(self.settingsdialog.dby_line.displayText())
-    config["ps_x"] = float(self.settingsdialog.ps_x_line.displayText())
-    config["ps_y"] = float(self.settingsdialog.ps_y_line.displayText())
-    config["mapping"] = str(self.settingsdialog.mapping_widget.currentText())
-    config["cbar_pos"] = str(self.settingsdialog.cbar_pos_widget.currentText())
-    if self.settingsdialog.cbar_check.isChecked():
-        cbar = 1
-    else:
-        cbar = 0
-    config["colorbar"] = cbar
-    self.sampledata.mapping = config["mapping"]
-    with open('config.json', 'w') as f:
-        json.dump(config, f)
-
-
-def select_current_cmap(self, cmaps, config):
-    current_cat = config["cmap_cat"]
-    current_cmap = config["cmap"]
-
-    for index, category in enumerate(cmaps):
-        if category[0] == current_cat:
-            cat_index = index
-            index = 0
-            for cmap in category[1]:
-                if cmap == current_cmap:
-                    cmap_index = index
-                index += 1
-                if f"{cmap}_r" == current_cmap:
-                    cmap_index = index
-                index += 1
-
-    self.settingsdialog.cmap_category_widget.setCurrentIndex(cat_index)
-    self.settingsdialog.cmap_list_widget.setCurrentIndex(cmap_index)
-
 
 def populate_cmaplist(self, config, cmaps):
     current_index = self.settingsdialog.cmap_category_widget.currentIndex()
@@ -109,10 +128,11 @@ def populate_cmaplist(self, config, cmaps):
 def write_config(self):
     set_experimental_parameters(self)
     set_cmap(self)
-    gisaxs.loadMap(self, self.sampledata.path)
-    scan.detector_scan(self)
-    self.holdHorizontal.setChecked(False)
-    scan.YonedaScan(self)
+    if self.sampledata != None:
+        gisaxs.loadMap(self, self.sampledata.path)
+        scan.detector_scan(self)
+        self.holdHorizontal.setChecked(False)
+        scan.YonedaScan(self)
 
 
 def get_config(key):
@@ -121,6 +141,7 @@ def get_config(key):
         config = json.load(f)
     item = config[key]
     return item
+
 
 def get_cmap():
     os.chdir(sys.path[0])

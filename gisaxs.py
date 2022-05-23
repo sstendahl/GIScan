@@ -5,13 +5,15 @@ import numpy as np
 import cbf
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.patches import Rectangle
-from scipy.signal import find_peaks
 import scanning_tools as scan
+from sample import Sample
 import plottingtools
 import settings
+from roi import ROI
 
 def get_labels():
+    """Retreive label names for current mapping"""
+
     mapping = settings.get_config("mapping")
     if mapping == "Angular":
         in_plane_label = "In-plane scattering angle $\phi{_f}$ (°)"
@@ -25,6 +27,8 @@ def get_labels():
     return in_plane_label, out_of_plane_label
 
 def loadEmpty(self):
+    """Load empty graphs without any data for initial setup."""
+
     in_plane_label, out_of_plane_label = get_labels()
     gisaxsmap_canvas = plottingtools.PlotWidget(xlabel=in_plane_label, ylabel=out_of_plane_label,
                         title = "GISAXS data")
@@ -48,12 +52,13 @@ def loadMap_from_file_picker(self):
 
 def loadMap(self, file):
     self.firstRun = True
-    self.rect = None
     self.holdVertical.setChecked(False)
     self.holdHorizontal.setChecked(False)
-    self.rect = Rectangle((0, 0), 1, 1, alpha=1, fill=None, color="red")
     self.figurecanvas = None
-
+    self.ROI_scan = ROI((0, 0), 0, 0, alpha=1, fill=None, color="red")
+    self.ROI_background = ROI((0, 0), 0, 0, alpha=1, fill=None, color="yellow")
+    self.ROI_background.set_visible(False)
+    self.sampledata = Sample()
 
     if file != "":
         path = os.path.dirname(file)
@@ -71,18 +76,14 @@ def loadMap(self, file):
         self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
         self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
         self.figurecanvas[0].ax = plt.gca()
-        scan.find_specular(self)
-        scan.detector_scan(self)
-        self.holdHorizontal.setChecked(False)
-        scan.YonedaScan(self)
+        try:
+            scan.find_specular(self)
+            scan.detector_scan(self)
+            self.holdHorizontal.setChecked(False)
+            scan.YonedaScan(self)
+        except:
+            print("Error doing preset runs")
         self.firstRun = False
-
-
-
-def detectPeak(self, data, scan="horizontal", prominence = 2):
-    if scan == "horizontal":
-        peakindex = find_peaks(np.log(data), prominence=prominence)[0]
-    return peakindex
 
 def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
     options = QFileDialog.Options()
