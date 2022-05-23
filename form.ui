@@ -396,7 +396,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Set</string>
+           <string>Perform scan</string>
           </property>
          </widget>
         </item>

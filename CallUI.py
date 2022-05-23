@@ -197,8 +197,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         if self.bg_ROI_button.isChecked():
             self.defineRectangle(type="bg")
             self.drawRectangle()
-            scan.get_average(self)
-            self.sampledata.average_bg = scan.get_average(self)
+            self.sampledata.average_bg = scan.get_average_background(self)
 
 
 
