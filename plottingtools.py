@@ -1,9 +1,7 @@
-from matplotlib.colors import LogNorm
 from matplotlib.figure import Figure
 import matplotlib.colors as colors
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib import ticker
 import gisaxs
 import settings
 

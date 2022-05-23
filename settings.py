@@ -51,6 +51,15 @@ def openSettingsdialog(self):
     select_current_cmap(self, cmaps, config)
     populate_cmaplist(self, config, cmaps)
     select_current_cmap(self, cmaps, config)
+    self.settingsdialog.ai_line.setText(str(config["ai"]))
+    self.settingsdialog.wavelength_line.setText(str(config["wavelength"]))
+    self.settingsdialog.sdd_line.setText(str(config["sdd"]))
+    self.settingsdialog.dbx_line.setText(str(config["db_x"]))
+    self.settingsdialog.dby_line.setText(str(config["db_y"]))
+    self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
+    self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
+    # self.settingsdialog.mapping_widget.setText(config["mapping"])
+    # self.settingsdialog.cbar_pos_widget.setText(config["cbar_pos"])
     check_cbar = config["colorbar"]
     self.settingsdialog.cbar_check.setChecked(check_cbar)
     self.settingsdialog.show()
@@ -61,6 +70,7 @@ def set_experimental_parameters(self):
     with open('config.json', 'r') as f:
         config = json.load(f)
     config["ai"] = float(self.settingsdialog.ai_line.displayText())
+    config["wavelength"] = float(self.settingsdialog.wavelength_line.displayText())
     config["sdd"] = float(self.settingsdialog.sdd_line.displayText())
     config["db_x"] = float(self.settingsdialog.dbx_line.displayText())
     config["db_y"] = float(self.settingsdialog.dby_line.displayText())
@@ -73,7 +83,10 @@ def set_experimental_parameters(self):
     else:
         cbar = 0
     config["colorbar"] = cbar
-    self.sampledata.mapping = config["mapping"]
+    try:
+        self.sampledata.mapping = config["mapping"]
+    except:
+        print("No sample loaded yet")
     with open('config.json', 'w') as f:
         json.dump(config, f)
 
@@ -122,6 +135,7 @@ def get_config(key):
         config = json.load(f)
     item = config[key]
     return item
+
 
 def get_cmap():
     os.chdir(sys.path[0])

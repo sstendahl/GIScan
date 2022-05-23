@@ -73,10 +73,13 @@ def loadMap(self, file):
         self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
         self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
         self.figurecanvas[0].ax = plt.gca()
-        scan.find_specular(self)
-        scan.detector_scan(self)
-        self.holdHorizontal.setChecked(False)
-        scan.YonedaScan(self)
+        try:
+            scan.find_specular(self)
+            scan.detector_scan(self)
+            self.holdHorizontal.setChecked(False)
+            scan.YonedaScan(self)
+        except:
+            print("Error doing preset runs")
         self.firstRun = False
 
 

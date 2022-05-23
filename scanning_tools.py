@@ -128,7 +128,12 @@ def find_specular(self):
     self.defineRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
-    peakindex = gisaxs.detectPeak(self, self.sampledata.horizontal_scan_y)[0]
+    peaks = gisaxs.detectPeak(self, self.sampledata.horizontal_scan_y)
+    if len(peaks > 0):
+        peakindex = peaks[0]
+    else:
+        peakindex = 0
+    print(self.sampledata.horizontal_scan_x)
     self.middleX = self.sampledata.horizontal_scan_x[peakindex]
 
 
@@ -247,6 +252,8 @@ def get_average(self, type_of_ROI = "bg"):
     return average
 
 def find_startstop(self, type_of_ROI="scan"):
+    startx, stopx, starty, stopy = 0, 0, 0, 0
+
     if type_of_ROI == "scan":
         ROI = self.ROI_scan
     if type_of_ROI == "bg":

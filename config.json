@@ -1,1 +1,1 @@
-{"cbar_pos": "Top", "colorbar": 0, "cmap_cat": "Diverging", "cmap": "Spectral_r", "ai": 0.4, "sdd": 3850.0, "dbx": 869.0, "dby": 40.0, "ps_x": 0.172, "ps_y": 0.172, "db_x": 869.0, "db_y": 40.0, "mapping": "q-space"}
+{"cbar_pos": "Top", "colorbar": 0, "cmap_cat": "Diverging", "cmap": "Spectral_r", "ai": 0.4, "sdd": 3850.0, "dbx": 869.0, "dby": 40.0, "ps_x": 0.172, "ps_y": 0.172, "db_x": 869.0, "db_y": 40.0, "mapping": "Angular", "wavelength": 0.96}
