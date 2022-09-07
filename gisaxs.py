@@ -5,7 +5,6 @@ import numpy as np
 import cbf
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.widgets import RectangleSelector
 import scanning_tools as scan
 from sample import Sample
 import plottingtools
@@ -51,32 +50,6 @@ def loadMap_from_file_picker(self):
     path = getPath(self)
     loadMap(self, path)
 
-def toggle_selector(event):
-    print(' Key pressed.')
-    if event.key in ['Q', 'q'] and toggle_selector.RS.active:
-        print(' RectangleSelector deactivated.')
-        toggle_selector.RS.set_active(False)
-    if event.key in ['A', 'a'] and not toggle_selector.RS.active:
-        print(' RectangleSelector activated.')
-        toggle_selector.RS.set_active(True)
-
-def passy(eclick, erelease):
-    'eclick and erelease are the press and release events'
-    x1, y1 = eclick.xdata, eclick.ydata
-    x2, y2 = erelease.xdata, erelease.ydata
-    print("(%3.2f, %3.2f) --> (%3.2f, %3.2f)" % (x1, y1, x2, y2))
-    print(" The button you used were: %s %s" % (eclick.button, erelease.button))
-
-def line_select_callback(eclick, erelease):
-    'eclick and erelease are the press and release events'
-    x1, y1 = eclick.xdata, eclick.ydata
-    x2, y2 = erelease.xdata, erelease.ydata
-    print("(%3.2f, %3.2f) --> (%3.2f, %3.2f)" % (x1, y1, x2, y2))
-    print(x1)
-    print(x2)
-    print(" The button you used were: %s %s" % (eclick.button, erelease.button))
-
-
 def loadMap(self, file):
     self.firstRun = True
     self.holdVertical.setChecked(False)
@@ -100,21 +73,13 @@ def loadMap(self, file):
         self.clearLayout(self.maplayout)
         self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title = filename)
 
-        # self.ROI_scan_rect = RectangleSelector(self.figurecanvas[0].axes[0], line_select_callback,
-        #                                        drawtype='box', useblit=False,
-        #                                        button=[1],  # don't use middle button
-        #                                        minspanx=0.1, minspany=0.1,
-        #                                        spancoords='pixels',
-        #                                        interactive=True)
         self.figurecanvas[1].canvas.mpl_connect('button_press_event', self.on_press)
         self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
         self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
-
         gisaxs_figure = self.figurecanvas[0]
         ax = gisaxs_figure.axes[0]
-        ax.add_patch(self.ROI_scan)
-        ax.add_patch(self.ROI_background)
         self.background = gisaxs_figure.canvas.copy_from_bbox(ax.bbox)
+        self.define_rectangle()
         self.figurecanvas[0].ax = plt.gca()
         try:
             scan.find_specular(self)

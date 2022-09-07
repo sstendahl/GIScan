@@ -2,6 +2,7 @@
 import sys
 from PyQt5 import QtWidgets, uic
 import matplotlib.pyplot as plt
+from matplotlib.widgets import RectangleSelector
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
 import settings
@@ -127,10 +128,26 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def drawRectangle(self):
         figure = self.figurecanvas[0]
-        figure.canvas.restore_region(self.background)
         ax = figure.axes[0]
+        print(self.ROI_scan_rect.canvas)
+        ax.draw_artist(ax)
+        print("blitting")
         figure.canvas.blit(ax.bbox)
         self.figurecanvas[1].draw()
+
+    def line_select_callback(self, eclick, erelease):
+        x1, y1 = eclick.xdata, eclick.ydata
+        x2, y2 = erelease.xdata, erelease.ydata
+        print("(%3.2f, %3.2f) --> (%3.2f, %3.2f)" % (x1, y1, x2, y2))
+        print(" The button you used were: %s %s" % (eclick.button, erelease.button))
+
+    def define_rectangle(self):
+        self.ROI_scan_rect = RectangleSelector(self.figurecanvas[0].axes[0], self.line_select_callback,
+                                                drawtype='box', useblit=False,
+                                                button=[1],  # don't use middle button
+                                                minspanx=0.1, minspany=0.1,
+                                                spancoords='pixels',
+                                                interactive=True)
 
 
     def press_bg_ROI_button(self):
@@ -152,8 +169,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.ROI_scan.set_visible(False)
         self.drawRectangle()
 
-
-
     def on_press(self, event):
         self.clicked = True
         if self.ROI_button.isChecked():
@@ -167,11 +182,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def on_hover(self, event):
         if self.clicked and self.ROI_button.isChecked():
-            self.ROI_scan.x1 = float(event.xdata)
-            self.ROI_scan.y1 = float(event.ydata)
-            self.middleX = float((self.ROI_scan.x0 + self.ROI_scan.x1) / 2)
-            self.middleY = float((self.ROI_scan.y0 + self.ROI_scan.y1) / 2)
-            self.defineRectangle()
+            # self.ROI_scan.x1 = float(event.xdata)
+            # self.ROI_scan.y1 = float(event.ydata)
+            # self.middleX = float((self.ROI_scan.x0 + self.ROI_scan.x1) / 2)
+            # self.middleY = float((self.ROI_scan.y0 + self.ROI_scan.y1) / 2)
+          #  self.defineRectangle()
             self.drawRectangle()
         if self.clicked and self.bg_ROI_button.isChecked():
             self.ROI_background.x1 = float(event.xdata)
