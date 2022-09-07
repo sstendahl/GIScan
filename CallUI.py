@@ -233,6 +233,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def releaseVline(self, event, scan_type = ""):
         self.clicked = False
+
+        if self.findFWHM_button.isChecked():
+            FWHM = scan.find_FWHM(self, event.xdata, scan_type=scan_type)
+            self.FWHM_entry.setText(str(round(FWHM,6)))
+
         if hasattr(self, 'vline'):
             try:
                 self.vline.remove()

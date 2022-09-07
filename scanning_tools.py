@@ -113,7 +113,6 @@ def YonedaScan(self):
     width = x1 - x0
     middleY = (y0 + y1) / 2
     middleX = (x0 + x1) / 2
-    print("About to set the entry")
     self.set_entry(height, width, middleX, middleY)
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
@@ -146,7 +145,6 @@ def find_specular(self):
     width = x1 - x0
     middleY = (y0 + y1) / 2
     middleX = (x0 + x1) / 2
-    print("About to set the entry")
     self.set_entry(height, width, middleX, middleY)
     calcOffSpec(self)
     peaks = find_peaks(np.log(self.sampledata.horizontal_scan_y), prominence=2)[0]
@@ -359,6 +357,7 @@ def find_FWHM(self, position, scan_type="vertical"):
         figure = self.verticalscanfig[0]
         axes = figure.axes[0]
     peak_position = find_peak_in_range(self, position, xdata, ydata)
+    print(f"Peak position is {peak_position}")
     if peak_position is not None:
         half_intensity = ydata[peak_position] / 2
         # Find left boundary:
