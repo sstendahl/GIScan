@@ -1,4 +1,4 @@
-#CallUI.py
+# CallUI.py
 import sys
 from PyQt5 import QtWidgets, uic
 import matplotlib.pyplot as plt
@@ -12,6 +12,7 @@ import settings
 import gisaxs
 from PyQt5 import QtGui
 import scanning_tools as scan
+
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
 Ui_settingsDialog, settingsDialogClass = uic.loadUiType("settingsdialog.ui")
 
@@ -60,16 +61,13 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.ROI_button.clicked.connect(self.press_ROI_button)
         self.bg_ROI_button.clicked.connect(self.press_bg_ROI_button)
 
-
     def press_drag_button(self):
         if self.dragButton.isChecked():
             self.findFWHM_button.setChecked(False)
 
-
     def press_FWHM_button(self):
         if self.findFWHM_button.isChecked():
             self.dragButton.setChecked(False)
-
 
     def setRectangleFromEntry(self):
         width = float(self.recWidthEntry.displayText())
@@ -92,32 +90,30 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.recWidthEntry.setText(str(abs(round(float(width), rounding))))
         self.middleXEntry.setText(str(round(float(x), rounding)))
         self.middleYEntry.setText(str(round(float(y), rounding)))
-        extends = [(x - width/2), x + width/2, y-height/2, y + height/2]
+        extends = [(x - width / 2), x + width / 2, y - height / 2, y + height / 2]
         self.ROI_scan_rect.to_draw.set_visible(True)
         self.ROI_scan_rect.extents = extends
 
-
     def define_rectangle(self):
         self.ROI_scan_rect = RectangleSelector(self.figurecanvas[0].axes[0], self.on_release,
-                                                drawtype='box', useblit=True,
-                                                button=[1],  # don't use middle button
-                                                minspanx=0.1, minspany=0.1,
-                                                spancoords='pixels',
-                                                interactive=True,
-                                                rectprops=dict(linestyle='-', color='red', alpha=0.2, linewidth = 2))
+                                               drawtype='box', useblit=True,
+                                               button=[1],  # don't use middle button
+                                               minspanx=0.1, minspany=0.1,
+                                               spancoords='pixels',
+                                               interactive=True,
+                                               rectprops=dict(linestyle='-', color='red', alpha=0.2, linewidth=2))
 
         self.ROI_background_rect = RectangleSelector(self.figurecanvas[0].axes[0], self.on_release,
-                                                drawtype='box', useblit=True,
-                                                button=[1],  # don't use middle button
-                                                minspanx=0.1, minspany=0.1,
-                                                spancoords='pixels',
-                                                interactive=True,
-                                                rectprops=dict(linestyle='-', color='yellow', alpha=0.2, linewidth = 2))
-        self.ROI_background_rect.extents = [0,0,0,0]
+                                                     drawtype='box', useblit=True,
+                                                     button=[1],  # don't use middle button
+                                                     minspanx=0.1, minspany=0.1,
+                                                     spancoords='pixels',
+                                                     interactive=True,
+                                                     rectprops=dict(linestyle='-', color='yellow', alpha=0.2,
+                                                                    linewidth=2))
+        self.ROI_background_rect.extents = [0, 0, 0, 0]
         self.ROI_background_rect.set_visible(False)
         self.ROI_background_rect.set_active(False)
-
-
 
     def press_bg_ROI_button(self):
         if self.bg_ROI_button.isChecked():
@@ -134,7 +130,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.ROI_background_rect.set_active(False)
             self.figurecanvas[1].draw()
 
-
     def press_ROI_button(self):
         if self.ROI_button.isChecked():
             self.ROI_scan_rect.set_visible(True)
@@ -148,8 +143,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.ROI_scan_rect.set_visible(False)
             self.ROI_scan_rect.set_active(False)
             self.figurecanvas[1].draw()
-
-
 
     def on_press(self, event):
         self.clicked = True
@@ -170,25 +163,22 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         if self.ROI_button.isChecked():
             width = abs(eclick.xdata - erelease.xdata)
             heigth = abs(eclick.ydata - erelease.ydata)
-            middleX = (eclick.xdata + erelease.xdata)/2
-            middleY = (eclick.ydata + erelease.ydata)/2
+            middleX = (eclick.xdata + erelease.xdata) / 2
+            middleY = (eclick.ydata + erelease.ydata) / 2
             rounding = 3
 
             self.recHeigthEntry.setText(str(abs(round(float(heigth), rounding))))
-            self.recWidthEntry.setText(str(abs(round(float(width),rounding))))
-            self.middleXEntry.setText(str(round(float(middleX),rounding)))
-            self.middleYEntry.setText(str(round(float(middleY),rounding)))
+            self.recWidthEntry.setText(str(abs(round(float(width), rounding))))
+            self.middleXEntry.setText(str(round(float(middleX), rounding)))
+            self.middleYEntry.setText(str(round(float(middleY), rounding)))
 
             self.clearLayout(self.graphlayout)
             scan.calcOffSpec(self)
 
-
-
-
-    def dragVline(self, event, scan_type = "vertical"):
+    def dragVline(self, event, scan_type="vertical"):
         if self.clicked == True and self.dragButton.isChecked():
 
-            #Remove old vertical line
+            # Remove old vertical line
             if hasattr(self, 'vline'):
                 try:
                     self.vline.remove()
@@ -202,16 +192,16 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 figure = self.verticalscanfig[0]
                 canvas = self.verticalscanfig[1]
 
-            #Draw vertical line
+            # Draw vertical line
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
             canvas.draw()
 
-            #Move ROI
+            # Move ROI
             xmin, xmax, ymin, ymax = self.ROI_scan_rect.extents
-            middleY = (ymin + ymax)/2
-            middleX = (xmin + xmax)/2
+            middleY = (ymin + ymax) / 2
+            middleX = (xmin + xmax) / 2
             if scan_type == "vertical":
                 y_shift = (event.xdata - middleY)
                 ymin += y_shift
@@ -227,16 +217,15 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 self.ROI_scan_rect.to_draw.set_visible(True)
                 self.ROI_scan_rect.extents = extents
 
-
     def pressVline(self, event):
         self.clicked = True
 
-    def releaseVline(self, event, scan_type = ""):
+    def releaseVline(self, event, scan_type=""):
         self.clicked = False
 
         if self.findFWHM_button.isChecked():
             FWHM = scan.find_FWHM(self, event.xdata, scan_type=scan_type)
-            self.FWHM_entry.setText(str(round(FWHM,6)))
+            self.FWHM_entry.setText(str(round(FWHM, 6)))
 
         if hasattr(self, 'vline'):
             try:
@@ -244,28 +233,28 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             except:
                 print("Couldn't remove vline")
 
-        x0, x1, y0, y1 = self.ROI_scan_rect.extents
-        height = y1 - y0
-        width = x1 - x0
-        middleY = (y0 + y1) / 2
-        middleX = (x0 + x1) / 2
-        self.set_entry(height, width, middleX, middleY)
-        self.clearLayout(self.graphlayout)
-        scan.calcOffSpec(self)
+        if self.dragButton.isChecked():
+            x0, x1, y0, y1 = self.ROI_scan_rect.extents
+            height = y1 - y0
+            width = x1 - x0
+            middleY = (y0 + y1) / 2
+            middleX = (x0 + x1) / 2
+            self.set_entry(height, width, middleX, middleY)
+            self.clearLayout(self.graphlayout)
+            scan.calcOffSpec(self)
 
-
-    def saveFileDialog(self, documenttype="Text file (*.txt)", title = "Save file"):
+    def saveFileDialog(self, documenttype="Text file (*.txt)", title="Save file"):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName = QFileDialog.getSaveFileName(self, title, self.filename[:-4],
                                                documenttype, options=options)
         return fileName
 
-    def saveFile(self, horizontal = True):
+    def saveFile(self, horizontal=True):
         if horizontal:
-            path = self.saveFileDialog(title = "Save horizontal scan")
+            path = self.saveFileDialog(title="Save horizontal scan")
         elif not horizontal:
-            path = self.saveFileDialog(title = "Save vertical scan")
+            path = self.saveFileDialog(title="Save vertical scan")
         filename = path[0]
         if filename[-4:] != ".txt":
             filename = filename + ".txt"
@@ -281,9 +270,9 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             if child.widget():
                 child.widget().deleteLater()
 
+
 def setUpWindow():
     app = QtWidgets.QApplication(sys.argv)
     nowWindow = CallUI()
     nowWindow.showMaximized()
     sys.exit(app.exec_())
-
