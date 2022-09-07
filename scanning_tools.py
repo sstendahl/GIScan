@@ -3,7 +3,6 @@ import numpy as np
 import plottingtools
 import json
 import os
-import sys
 from scipy.signal import find_peaks
 import scanning_tools as scan
 import settings
@@ -62,29 +61,29 @@ def detector_scan(self):
     # Note: will probably change these preset values to be relative to the total map limits, in order to avoid
     # out-of-bound issues.
     if settings.get_config("mapping") == "Angular":
-        self.ROI_scan.x0 = -0.022
-        self.ROI_scan.x1 = 0.022
-        self.ROI_scan.y0 = -0.3
-        self.ROI_scan.y1 = 2.4
+        x0 = -0.022
+        x1 = 0.022
+        y0 = -0.3
+        y1 = 2.4
 
     if settings.get_config("mapping") == "Pixels":
-        self.ROI_scan.x0 = 860
-        self.ROI_scan.x1 = 877
-        self.ROI_scan.y0 = 90
-        self.ROI_scan.y1 = 1100
+        x0 = 860
+        x1 = 877
+        y0 = 90
+        y1 = 1100
 
     if settings.get_config("mapping") == "q-space":
-        self.ROI_scan.y0 = 0
-        self.ROI_scan.y1 = 0.33
-        self.ROI_scan.x0 = -0.0033
-        self.ROI_scan.x1 = 0.0033
+        y0 = 0
+        y1 = 0.33
+        x0 = -0.0033
+        x1 = 0.0033
 
-    self.middleX = (self.ROI_scan.x0 + self.ROI_scan.x1) / 2
-    self.middleY = (self.ROI_scan.y0 + self.ROI_scan.y1) / 2
-    height = self.ROI_scan.y1 - self.ROI_scan.y0
-    width = self.ROI_scan.x1 - self.ROI_scan.x0
+    middleX = (x0 + x1) / 2
+    middleY = (y0 + y1) / 2
+    height = y1 - y0
+    width = x1 - x0
 
-    self.set_entry(height, width, self.middleX, self.middleY)
+    self.set_entry(height, width, middleX, middleY)
     self.clearLayout(self.graphlayout)
     scan.calcOffSpec(self)
     self.holdVertical.setChecked(False)
@@ -96,26 +95,26 @@ def YonedaScan(self):
 
     self.holdVertical.setChecked(True)
     if settings.get_config("mapping") == "Angular":
-        self.ROI_scan.y0 = 0.255
-        self.ROI_scan.y1 = 0.275
-        self.ROI_scan.x0 = -1.2
-        self.ROI_scan.x1 = 1.2
+        y0 = 0.255
+        y1 = 0.275
+        x0 = -1.2
+        x1 = 1.2
     if settings.get_config("mapping") == "Pixels":
-        self.ROI_scan.y0 = 306
-        self.ROI_scan.y1 = 295
-        self.ROI_scan.x0 = 600
-        self.ROI_scan.x1 = 1140
+        y0 = 306
+        y1 = 295
+        x0 = 600
+        x1 = 1140
     if settings.get_config("mapping") == "q-space":
-        self.ROI_scan.y0 = 0.075
-        self.ROI_scan.y1 = 0.078
-        self.ROI_scan.x0 = -0.12
-        self.ROI_scan.x1 = 0.12
-    height = self.ROI_scan.y1 - self.ROI_scan.y0
-    width = self.ROI_scan.x1 - self.ROI_scan.x0
-    self.middleY = (self.ROI_scan.y0 + self.ROI_scan.y1) / 2
-    self.middleX = (self.ROI_scan.x0 + self.ROI_scan.x1) / 2
+        y0 = 0.075
+        y1 = 0.078
+        x0 = -0.12
+        x1 = 0.12
+    height = y1 - y0
+    width = x1 - x0
+    middleY = (y0 + y1) / 2
+    middleX = (x0 + x1) / 2
     print("About to set the entry")
-    self.set_entry(height, width, self.middleX, self.middleY)
+    self.set_entry(height, width, middleX, middleY)
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
     self.holdHorizontal.setChecked(False)
@@ -128,28 +127,34 @@ def find_specular(self):
 
 
     if settings.get_config("mapping") == "Angular":
-        self.ROI_scan.y0 = 0.255
-        self.ROI_scan.y1 = 0.275
-        self.ROI_scan.x0 = -1.2
-        self.ROI_scan.x1 = 1.2
+        y0 = 0.255
+        y1 = 0.275
+        x0 = -1.2
+        x1 = 1.2
     if settings.get_config("mapping") == "Pixels":
-        self.ROI_scan.y0 = 306
-        self.ROI_scan.y1 = 295
-        self.ROI_scan.x0 = 600
-        self.ROI_scan.x1 = 1140
+        y0 = 306
+        y1 = 295
+        x0 = 600
+        x1 = 1140
     if settings.get_config("mapping") == "q-space":
-        self.ROI_scan.y0 = 0.075
-        self.ROI_scan.y1 = 0.078
-        self.ROI_scan.x0 = -0.10
-        self.ROI_scan.x1 = 0.10
+        y0 = 0.075
+        y1 = 0.078
+        x0 = -0.10
+        x1 = 0.10
     self.clearLayout(self.graphlayout)
+    height = y1 - y0
+    width = x1 - x0
+    middleY = (y0 + y1) / 2
+    middleX = (x0 + x1) / 2
+    print("About to set the entry")
+    self.set_entry(height, width, middleX, middleY)
     calcOffSpec(self)
     peaks = find_peaks(np.log(self.sampledata.horizontal_scan_y), prominence=2)[0]
     if len(peaks > 0):
         peakindex = peaks[0]
     else:
         peakindex = 0
-    self.middleX = self.sampledata.horizontal_scan_x[peakindex]
+    middleX = self.sampledata.horizontal_scan_x[peakindex]
 
 
 def calcOffSpec(self):
@@ -165,13 +170,6 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
     """
 
     in_plane_label, out_of_plane_label = gisaxs.get_labels()
-
-    if self.firstRun == False:
-        self.ROI_scan.x0 = float(self.middleX - float(self.recWidthEntry.displayText()) / 2)
-        self.ROI_scan.y0 = float(self.middleY - float(self.recHeigthEntry.displayText()) / 2)
-        self.ROI_scan.x1 = float(self.middleX + float(self.recWidthEntry.displayText()) / 2)
-        self.ROI_scan.y1 = float(self.middleY + float(self.recHeigthEntry.displayText()) / 2)
-
     startx, stopx, starty, stopy = find_startstop(self)
     intensity_list = calc_cut(self, startx, stopx, starty, stopy, horizontal=horizontal)
     mapping = self.sampledata.mapping
@@ -279,17 +277,7 @@ def find_startstop(self, type_of_ROI="scan"):
 
     if type_of_ROI == "scan":
         x0, x1, y0, y1 = self.ROI_scan_rect.extents
-        ROI = self.ROI_scan
-        print(ROI.x0)
-        print(ROI.x1)
-        print(ROI.y0)
-        print(ROI.y1)
-        x0 = ROI.x0
-        x1 = ROI.x1
-        y0 = ROI.y0
-        y1 = ROI.y1
     if type_of_ROI == "bg":
-        ROI = self.ROI_background
         x0, x1, y0, y1 = self.ROI_background_rect.extents
     start = x0
     stop = x1
@@ -401,7 +389,6 @@ def find_FWHM(self, position, scan_type="vertical"):
         FWHM = right_boundary_value - left_boundary_value
         if hasattr(self, 'hline'):
             self.hline.remove()
-        step_size = abs(xdata[1] - xdata[0])
         self.hline = axes.hlines(y=ydata[peak_position] / 2, xmin=left_boundary_value, xmax=right_boundary_value,
                                  color='r')
         self.verticalscanfig[1].draw()
