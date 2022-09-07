@@ -2,8 +2,12 @@
 import sys
 from PyQt5 import QtWidgets, uic
 import matplotlib.pyplot as plt
+from matplotlib.widgets import RectangleSelector
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
+import os
+import shutil
+import platform
 import settings
 import gisaxs
 from PyQt5 import QtGui
@@ -29,6 +33,15 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clicked = False
         self.middleX = None
         self.middleY = None
+
+        config_path = settings.get_path()
+        if not os.path.isfile(config_path + "config.json"):
+            if platform.system() == "Windows":
+                shutil.copy("config.json", config_path + "\config.json")
+            else:
+                shutil.copy("config.json", config_path + "/config.json")
+            print(f"Saved config file in {config_path}")
+
         gisaxs.loadEmpty(self)
 
     def loadMap(self):
@@ -63,96 +76,76 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def setRectangleFromEntry(self):
         width = float(self.recWidthEntry.displayText())
         height = float(self.recHeigthEntry.displayText())
-
         middle_x = float(self.middleXEntry.displayText())
         middle_y = float(self.middleYEntry.displayText())
-        self.ROI_scan.x0 = middle_x - width / 2
-        self.ROI_scan.x1 = middle_x + width / 2
-        self.ROI_scan.y0 = middle_y - height / 2
-        self.ROI_scan.y1 = middle_y + height / 2
-
-
-
-        self.middleX = float(self.middleXEntry.displayText())
-        self.middleY = float(self.middleYEntry.displayText())
-        self.defineRectangle(width=width, heigth=height)
-        self.drawRectangle()
+        xmin = middle_x - width / 2
+        xmax = middle_x + width / 2
+        ymin = middle_y - height / 2
+        ymax = middle_y + height / 2
+        extents = [xmin, xmax, ymin, ymax]
+        # self.ROI_scan_rect.draw_shape(coords)
+        self.ROI_scan_rect.extents = extents
         self.clearLayout(self.graphlayout)
         scan.calcOffSpec(self)
 
-    def defineRectangle(self, y0 = None, y1 = None, x0 = None, x1 = None, width = None, heigth = None, type = "scan"):
-        if type == "scan":
-            ROI = self.ROI_scan
-        else:
-            ROI = self.ROI_background
-        if y0 == None:
-            y0 = ROI.y0
-        if y1 == None:
-            y1 = ROI.y1
-        if x0 == None:
-            x0 = ROI.x0
-        if x1 == None:
-            x1 = ROI.x1
-        if width == None:
-            width = x1 - x0
-        if heigth == None:
-            heigth = y1 - y0
-
-        if self.middleX == None:
-            self.middleX = (x0 + x1)/2
-        if self.middleY == None:
-            self.middleY = (y0+y1)/2
+    def set_entry(self, height, width, x, y):
+        rounding = 3
+        self.recHeigthEntry.setText(str(abs(round(float(height), rounding))))
+        self.recWidthEntry.setText(str(abs(round(float(width), rounding))))
+        self.middleXEntry.setText(str(round(float(x), rounding)))
+        self.middleYEntry.setText(str(round(float(y), rounding)))
+        extends = [(x - width/2), x + width/2, y-height/2, y + height/2]
+        self.ROI_scan_rect.to_draw.set_visible(True)
+        self.ROI_scan_rect.extents = extends
 
 
-        if settings.get_config("mapping") == "q-space":
-            rounding = 4
-        else:
-            rounding = 2
+    def define_rectangle(self):
+        self.ROI_scan_rect = RectangleSelector(self.figurecanvas[0].axes[0], self.on_release,
+                                                drawtype='box', useblit=True,
+                                                button=[1],  # don't use middle button
+                                                minspanx=0.1, minspany=0.1,
+                                                spancoords='pixels',
+                                                interactive=True)
 
-        if type == "scan":
-            self.recHeigthEntry.setText(str(abs(round(float(heigth), rounding))))
-            self.recWidthEntry.setText(str(abs(round(float(width),rounding))))
-            self.middleXEntry.setText(str(round(float(self.middleX),rounding)))
-            self.middleYEntry.setText(str(round(float(self.middleY),rounding)))
+        self.ROI_background_rect = RectangleSelector(self.figurecanvas[0].axes[0], self.on_release,
+                                                drawtype='box', useblit=True,
+                                                button=[1],  # don't use middle button
+                                                minspanx=0.1, minspany=0.1,
+                                                spancoords='pixels',
+                                                interactive=True, rectprops=dict(facecolor='yellow', alpha=0.35))
+        self.ROI_background_rect.set_active(False)
 
-        ROI.x0 = self.middleX - width / 2
-        ROI.x1 = self.middleX + width / 2
-        ROI.y0 = self.middleY - heigth / 2
-        ROI.y1 = self.middleY + heigth / 2
-
-        ROI.set_width(width)
-        ROI.set_height(heigth)
-        ROI.set_xy((self.middleX - (width / 2), self.middleY - (heigth / 2)))
-        ROI.set_visible(True)
-
-
-    def drawRectangle(self):
-        figure = self.figurecanvas[0]
-        ax = figure.axes[0]
-        [patch.remove() for patch in ax.patches]
-        ax.add_patch(self.ROI_scan)
-        ax.add_patch(self.ROI_background)
-        self.figurecanvas[1].draw()
 
 
     def press_bg_ROI_button(self):
         if self.bg_ROI_button.isChecked():
-            self.ROI_background.set_visible(True)
+            self.ROI_background_rect.set_visible(True)
+            self.ROI_background_rect.set_active(True)
             self.ROI_button.setChecked(False)
-            self.ROI_scan.set_visible(False)
+            self.ROI_scan_rect.set_visible(False)
+            self.ROI_scan_rect.set_active(False)
+            self.figurecanvas[1].draw()
+
 
         else:
-            self.ROI_background.set_visible(False)
-        self.drawRectangle()
+            self.ROI_background_rect.set_visible(False)
+            self.ROI_background_rect.set_active(False)
+            self.figurecanvas[1].draw()
+
 
     def press_ROI_button(self):
         if self.ROI_button.isChecked():
-            self.ROI_scan.set_visible(True)
+            self.ROI_scan_rect.set_visible(True)
+            self.ROI_scan_rect.set_active(True)
             self.bg_ROI_button.setChecked(False)
-            self.ROI_background.set_visible(False)
+            self.ROI_background_rect.set_visible(False)
+            self.ROI_background_rect.set_active(False)
+            self.figurecanvas[1].draw()
+
         else:
-            self.ROI_scan.set_visible(False)
-        self.drawRectangle()
+            self.ROI_scan_rect.set_visible(False)
+            self.ROI_scan_rect.set_active(False)
+            self.figurecanvas[1].draw()
 
 
 
@@ -165,38 +158,24 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.ROI_background.x0 = float(event.xdata)
             self.ROI_background.y0 = float(event.ydata)
 
-
-
-    def on_hover(self, event):
-        if self.clicked and self.ROI_button.isChecked():
-            self.ROI_scan.x1 = float(event.xdata)
-            self.ROI_scan.y1 = float(event.ydata)
-            self.middleX = float((self.ROI_scan.x0 + self.ROI_scan.x1) / 2)
-            self.middleY = float((self.ROI_scan.y0 + self.ROI_scan.y1) / 2)
-            self.defineRectangle()
-            self.drawRectangle()
-        if self.clicked and self.bg_ROI_button.isChecked():
-            self.ROI_background.x1 = float(event.xdata)
-            self.ROI_background.y1 = float(event.ydata)
-            self.middleX = float((self.ROI_background.x0 + self.ROI_background.x1) / 2)
-            self.middleY = float((self.ROI_background.y0 + self.ROI_background.y1) / 2)
-
-            self.defineRectangle(type="bg")
-            self.drawRectangle()
-
-
-
-    def on_release(self, event):
+    def on_release(self, eclick, erelease):
         self.clicked = False
         if self.ROI_button.isChecked():
-            self.defineRectangle()
-            self.drawRectangle()
+            width = abs(eclick.xdata - erelease.xdata)
+            heigth = abs(eclick.ydata - erelease.ydata)
+            self.middleX = (eclick.xdata + erelease.xdata)/2
+            self.middleY = (eclick.ydata + erelease.ydata)/2
+            rounding = 3
+
+            self.recHeigthEntry.setText(str(abs(round(float(heigth), rounding))))
+            self.recWidthEntry.setText(str(abs(round(float(width),rounding))))
+            self.middleXEntry.setText(str(round(float(self.middleX),rounding)))
+            self.middleYEntry.setText(str(round(float(self.middleY),rounding)))
+
             self.clearLayout(self.graphlayout)
             scan.calcOffSpec(self)
 
         if self.bg_ROI_button.isChecked():
-            self.defineRectangle(type="bg")
-            self.drawRectangle()
             self.sampledata.average_bg = scan.get_average_background(self)
 
 
@@ -219,12 +198,29 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
             canvas.draw()
-            if self.performanceButton.isChecked():
-                pass
-            else:
-                #self.fitRectange()
-                self.defineRectangle()
-                self.drawRectangle()
+            xmin, xmax, ymin, ymax = self.ROI_scan_rect.extents
+            extents = [xmin, xmax, ymin, ymax]
+
+            middleY = (ymin + ymax)/2
+            middleX = (xmin + xmax)/2
+            if scan_type == "vertical":
+                y_shift = (event.xdata - middleY)
+                ymin += y_shift
+                ymax += y_shift
+                extents = [xmin, xmax, ymin, ymax]
+                self.ROI_scan_rect.to_draw.set_visible(True)
+                self.ROI_scan_rect.extents = extents
+            if scan_type == "horizontal":
+                x_shift = (event.xdata - middleX)
+                xmin += x_shift
+                xmax += x_shift
+                extents = [xmin, xmax, ymin, ymax]
+                self.ROI_scan_rect.to_draw.set_visible(True)
+                self.ROI_scan_rect.extents = extents
+
+ #           coords = [xmin, xmax, ymin, ymax]
+#            self.ROI_scan_rect.draw_shape(coords)
+
 
 
     def pressVline(self, event):
@@ -251,19 +247,24 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 self.vline.remove()
 
             #Will find a more elegant solution to seperate these two cases hesre
+            xmin, xmax, ymin, ymax = self.ROI_scan_rect.extents
+            extents = [xmin, xmax, ymin, ymax]
+            middleY = (ymin + ymax)/2
+            middleX = (xmin + xmax)/2
             if scan_type == "vertical":
-                self.middleY = event.xdata
+                y_shift = (event.xdata - middleY)
+                ymin += y_shift
+                ymax += y_shift
             if scan_type == "horizontal":
-                self.middleX = event.xdata
+                x_shift = (event.xdata - middleX)
+                xmin += x_shift
+                xmax += x_shift
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
             canvas.draw()
             self.clearLayout(self.graphlayout)
             scan.calcOffSpec(self)
-            self.defineRectangle()
-            self.drawRectangle()
-            self.figurecanvas[1].draw()
 
 
     def saveFileDialog(self, documenttype="Text file (*.txt)", title = "Save file"):
@@ -286,18 +287,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         else:
             array = np.stack([self.sampledata.vertical_scan_x, self.sampledata.vertical_scan_y], axis=1)
         np.savetxt(filename, array, delimiter="\t")
-
-
-
-
-    def plotFigure(self, x, y, title=""):
-        plt.figure()
-        plt.plot(x, y)
-        plt.yscale('log')
-        plt.title(title)
-        plt.show()
-
-
 
     def clearLayout(self, layout):
         while layout.count():

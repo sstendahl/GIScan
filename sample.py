@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 import numpy as np
 import scanning_tools
 import json
+import os
+import settings
 
 @dataclass
 class Sample:
@@ -16,7 +18,9 @@ class Sample:
     average_bg: int = 0
 
     def __init__(self):
-        with open('config.json', 'r') as f:
+        config_path = settings.get_path()
+        os.chdir(config_path)
+        with open("config.json", 'r') as f:
             config = json.load(f)
         self.mapping = config["mapping"]
         self.ai = config["ai"]
@@ -62,7 +66,9 @@ class Sample:
         return y_array
 
     def get_wavelength(self):
-        with open('config.json', 'r') as f:
+        config_path = settings.get_path()
+        os.chdir(config_path)
+        with open("config.json", 'r') as f:
             config = json.load(f)
         return float(config["wavelength"])
 

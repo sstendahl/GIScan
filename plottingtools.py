@@ -18,13 +18,13 @@ def plotGraphOnCanvas(self, layout, X, Y, xlabel="In-plane scattering angle 2$\p
 
 def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log",marker=None, linestyle="solid",
                      revert = False):
-    fig = canvas.theplot
+    fig = canvas.ax
     fig.plot(X, Y, label=filename, linestyle=linestyle, marker=marker)
     if revert:
         fig.invert_xaxis()
-    canvas.theplot.set_title(title)
-    canvas.theplot.set_xlim(xlim)
-    canvas.theplot.set_yscale(scale)
+    canvas.ax.set_title(title)
+    canvas.ax.set_xlim(xlim)
+    canvas.ax.set_yscale(scale)
 
 def singlePlotonCanvas(self, layout, data, ylabel = "", xlim=None, title = "GISAXS Data"):
     in_plane_label, out_of_plane_label = gisaxs.get_labels()
@@ -39,7 +39,7 @@ def singlePlotonCanvas(self, layout, data, ylabel = "", xlim=None, title = "GISA
     return figurecanvas
 
 def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="linear",marker=None, linestyle="solid"):
-    fig = canvas.theplot
+    fig = canvas.ax
     y_array = list(range(0, len(data)))
     data = data[::-1]
     x_array = list(range(0, len(data[0])))
@@ -66,13 +66,12 @@ def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="line
 
 class PlotWidget(FigureCanvas):
     def __init__(self, parent=None, xlabel="", ylabel="", title="", scale="linear"):
-        super(PlotWidget, self).__init__(Figure())
-        self.setParent(parent)
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
-        self.theplot = self.figure.add_subplot(111)
-        self.theplot.set_title(title)
+        self.ax = self.figure.add_subplot(111)
+        self.ax.set_title(title)
         self.figure.set_tight_layout(True)
-        self.theplot.set_xlabel(xlabel)
-        self.theplot.set_ylabel(ylabel)
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(ylabel)
+        super(PlotWidget, self).__init__(self.figure)
 

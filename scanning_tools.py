@@ -22,8 +22,9 @@ def alpha_f(pp_y, db_y, ps_y, sdd, a_i):
 
 def convert_x(pp_x):
     """Convert horizontal pixel positions to angular coordinates"""
-    os.chdir(sys.path[0])
-    with open('config.json', 'r') as f:
+    config_path = settings.get_path()
+    os.chdir(config_path)
+    with open("config.json", 'r') as f:
         config = json.load(f)
     db_x = config["db_x"]
     ps_x = config["ps_x"]
@@ -37,8 +38,9 @@ def convert_x(pp_x):
 
 def convert_y(pp_y):
     """Convert vertical pixel positions to angular coordinates"""
-    os.chdir(sys.path[0])
-    with open('config.json', 'r') as f:
+    config_path = settings.get_path()
+    os.chdir(config_path)
+    with open("config.json", 'r') as f:
         config = json.load(f)
     db_y = config["db_y"]
     ps_y = config["ps_y"]
@@ -79,10 +81,12 @@ def detector_scan(self):
 
     self.middleX = (self.ROI_scan.x0 + self.ROI_scan.x1) / 2
     self.middleY = (self.ROI_scan.y0 + self.ROI_scan.y1) / 2
+    height = self.ROI_scan.y1 - self.ROI_scan.y0
+    width = self.ROI_scan.x1 - self.ROI_scan.x0
+
+    self.set_entry(height, width, self.middleX, self.middleY)
     self.clearLayout(self.graphlayout)
     scan.calcOffSpec(self)
-    self.defineRectangle()
-    self.drawRectangle()
     self.holdVertical.setChecked(False)
     self.firstRun = False
 
@@ -110,12 +114,8 @@ def YonedaScan(self):
     width = self.ROI_scan.x1 - self.ROI_scan.x0
     self.middleY = (self.ROI_scan.y0 + self.ROI_scan.y1) / 2
     self.middleX = (self.ROI_scan.x0 + self.ROI_scan.x1) / 2
-    self.recHeigthEntry.setText(str(float(height)))
-    self.recWidthEntry.setText(str(float(width)))
-    self.middleXEntry.setText(str(float(self.middleX)))
-    self.middleYEntry.setText(str(float(self.middleY)))
-    self.defineRectangle()
-    self.drawRectangle()
+    print("About to set the entry")
+    self.set_entry(height, width, self.middleX, self.middleY)
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
     self.holdHorizontal.setChecked(False)
@@ -125,6 +125,7 @@ def find_specular(self):
     """Does a hori<ontal scan in order to find where the specular signal is located in the qy-plane
     Sets the middleX coordinate to this position (I feel this function is redundant, will take another look at this)
     ."""
+
 
     if settings.get_config("mapping") == "Angular":
         self.ROI_scan.y0 = 0.255
@@ -141,7 +142,6 @@ def find_specular(self):
         self.ROI_scan.y1 = 0.078
         self.ROI_scan.x0 = -0.10
         self.ROI_scan.x1 = 0.10
-    self.defineRectangle()
     self.clearLayout(self.graphlayout)
     calcOffSpec(self)
     peaks = find_peaks(np.log(self.sampledata.horizontal_scan_y), prominence=2)[0]
@@ -278,11 +278,21 @@ def find_startstop(self, type_of_ROI="scan"):
     startx, stopx, starty, stopy = 0, 0, 0, 0
 
     if type_of_ROI == "scan":
+        x0, x1, y0, y1 = self.ROI_scan_rect.extents
         ROI = self.ROI_scan
+        print(ROI.x0)
+        print(ROI.x1)
+        print(ROI.y0)
+        print(ROI.y1)
+        x0 = ROI.x0
+        x1 = ROI.x1
+        y0 = ROI.y0
+        y1 = ROI.y1
     if type_of_ROI == "bg":
         ROI = self.ROI_background
-    start = ROI.x0
-    stop = ROI.x1
+        x0, x1, y0, y1 = self.ROI_background_rect.extents
+    start = x0
+    stop = x1
     found_start = False
     found_stop = False
     if self.sampledata.mapping == "Angular":
@@ -305,8 +315,8 @@ def find_startstop(self, type_of_ROI="scan"):
             break
     found_start = False
 
-    start = ROI.y1
-    stop = ROI.y0
+    start = y1
+    stop = y0
 
     for index, element in enumerate(y_array):
         if element > min([start, stop]) and not found_start:
@@ -336,7 +346,7 @@ def find_peak_in_range(self, position, xdata, ydata):
     chosen_Yrange = ydata[chosen_index - check_range:chosen_index + check_range]
     chosen_Xrange = xdata[chosen_index - check_range:chosen_index + check_range]
     try:
-        peakindex = find_peaks(np.log(self.chosen_Yrange), prominence=1)[0]
+        peakindex = find_peaks(np.log(chosen_Yrange), prominence=1)[0][0]
         found_peak = True
     except IndexError:
         print("Could not find a peak at this position")

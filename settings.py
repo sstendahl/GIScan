@@ -1,16 +1,31 @@
 import CallUI
 import json
-import sys
 import scanning_tools as scan
 import os
+import shutil
 import gisaxs
+from pathlib import Path
+import platform
+
+def get_path() -> str:
+    if platform.system() == "Windows":
+        return os.path.join(os.getenv("appdata"), "GIScan")
+    elif platform.system() == "Darwin":
+        return os.path.join(str(Path.home()), "Library", "Application Support", "GIScan")
+    else:
+        if os.getenv("XDG_DATA_HOME"):
+            return os.path.join(os.getenv("XDG_DATA_HOME"), "GIScan")
+        else:
+            return os.path.join(str(Path.home()), ".local", "share", "GIScan")
 
 
 def openSettingsdialog(self):
     """Opens settings dialog."""
-
     self.settingsdialog = CallUI.settingsUI()
-    with open('config.json', 'r') as f:
+    config_path = get_path()
+    os.chdir(config_path)
+
+    with open("config.json", 'r') as f:
         config = json.load(f)
     load_cmaplist(self)
     self.settingsdialog.ai_line.setText(str(config["ai"]))
@@ -20,8 +35,6 @@ def openSettingsdialog(self):
     self.settingsdialog.dby_line.setText(str(config["db_y"]))
     self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
     self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
-    # self.settingsdialog.mapping_widget.setText(config["mapping"])
-    # self.settingsdialog.cbar_pos_widget.setText(config["cbar_pos"])
     check_cbar = config["colorbar"]
     self.settingsdialog.cbar_check.setChecked(check_cbar)
     self.settingsdialog.show()
@@ -29,7 +42,9 @@ def openSettingsdialog(self):
 
 
 def set_experimental_parameters(self):
-    with open('config.json', 'r') as f:
+    config_path = get_path()
+    os.chdir(config_path)
+    with open("config.json", 'r') as f:
         config = json.load(f)
     config["ai"] = float(self.settingsdialog.ai_line.displayText())
     config["wavelength"] = float(self.settingsdialog.wavelength_line.displayText())
@@ -49,7 +64,9 @@ def set_experimental_parameters(self):
         self.sampledata.mapping = config["mapping"]
     except:
         print("No sample loaded yet")
-    with open('config.json', 'w') as f:
+    config_path = get_path()
+    os.chdir(config_path)
+    with open("config.json", 'w') as f:
         json.dump(config, f)
 
 
@@ -73,7 +90,9 @@ def select_current_cmap(self, cmaps, config):
     self.settingsdialog.cmap_list_widget.setCurrentIndex(cmap_index)
 
 def load_cmaplist(self):
-    with open('config.json', 'r') as f:
+    config_path = get_path()
+    os.chdir(config_path)
+    with open("config.json", 'r') as f:
         config = json.load(f)
     cmaps = [('Perceptually Uniform Sequential', [
         'viridis', 'plasma', 'inferno', 'magma', 'cividis']),
@@ -136,23 +155,27 @@ def write_config(self):
 
 
 def get_config(key):
-    os.chdir(sys.path[0])
-    with open('config.json', 'r') as f:
+    config_path = get_path()
+    os.chdir(config_path)
+    with open("config.json", 'r') as f:
         config = json.load(f)
     item = config[key]
     return item
 
 
 def get_cmap():
-    os.chdir(sys.path[0])
-    with open('config.json', 'r') as f:
+    config_path = get_path()
+    os.chdir(config_path)
+    with open("config.json", 'r') as f:
         config = json.load(f)
     cmap = config["cmap"]
     return cmap
 
 
 def set_cmap(self):
-    with open('config.json', 'r') as f:
+    config_path = get_path()
+    os.chdir(config_path)
+    with open("config.json", 'r') as f:
         config = json.load(f)
 
     cmap = str(self.settingsdialog.cmap_list_widget.currentText())
@@ -160,5 +183,7 @@ def set_cmap(self):
     cmap_cat = str(self.settingsdialog.cmap_category_widget.currentText())
     config["cmap_cat"] = cmap_cat
 
-    with open('config.json', 'w') as f:
+    config_path = get_path()
+    os.chdir(config_path)
+    with open("config.json", 'w') as f:
         json.dump(config, f)

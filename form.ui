@@ -123,7 +123,7 @@
        </layout>
       </item>
       <item row="10" column="0">
-       <layout class="QVBoxLayout" name="checkable_buttons" stretch="0,0,0,0">
+       <layout class="QVBoxLayout" name="checkable_buttons" stretch="0,0,0">
         <property name="spacing">
          <number>10</number>
         </property>
@@ -131,19 +131,6 @@
          <widget class="QPushButton" name="dragButton">
           <property name="text">
            <string>Drag mode</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="performanceButton">
-          <property name="text">
-           <string>Performance mode</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
