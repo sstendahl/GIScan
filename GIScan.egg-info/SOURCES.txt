@@ -1,0 +1,10 @@
+CallUI.py
+LICENSE
+README.md
+gisax.py
+main.py
+setup.py
+GIScan.egg-info/PKG-INFO
+GIScan.egg-info/SOURCES.txt
+GIScan.egg-info/dependency_links.txt
+GIScan.egg-info/top_level.txt

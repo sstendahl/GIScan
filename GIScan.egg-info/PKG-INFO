@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: GIScan
+Version: 0.5
+Summary:  Simple tool to read and analyze existing GISAXS data 
+Home-page: https://github.com/SjoerdB93/GIScan
+Author: Sjoerd Broekhuijsen
+Author-email: info@sjoerd.se
+License: GPL-3.0
+Platform: UNKNOWN
+License-File: LICENSE
+
+UNKNOWN
+
