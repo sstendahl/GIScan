@@ -31,11 +31,9 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.connectActions()
         self.sampledata = None
         self.clicked = False
-        self.middleX = None
-        self.middleY = None
 
         config_path = settings.get_path()
-        if not os.path.isfile(config_path + "config.json"):
+        if not os.path.isfile(config_path + "/config.json") or os.path.isfile(config_path + "\config.json"):
             if platform.system() == "Windows":
                 shutil.copy("config.json", config_path + "\config.json")
             else:
@@ -105,14 +103,18 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                                                 button=[1],  # don't use middle button
                                                 minspanx=0.1, minspany=0.1,
                                                 spancoords='pixels',
-                                                interactive=True)
+                                                interactive=True,
+                                                rectprops=dict(linestyle='-', color='red', alpha=0.2, linewidth = 2))
 
         self.ROI_background_rect = RectangleSelector(self.figurecanvas[0].axes[0], self.on_release,
                                                 drawtype='box', useblit=True,
                                                 button=[1],  # don't use middle button
                                                 minspanx=0.1, minspany=0.1,
                                                 spancoords='pixels',
-                                                interactive=True, rectprops=dict(facecolor='yellow', alpha=0.35))
+                                                interactive=True,
+                                                rectprops=dict(linestyle='-', color='yellow', alpha=0.2, linewidth = 2))
+        self.ROI_background_rect.extents = [0,0,0,0]
+        self.ROI_background_rect.set_visible(False)
         self.ROI_background_rect.set_active(False)
 
 
@@ -160,47 +162,54 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def on_release(self, eclick, erelease):
         self.clicked = False
+        if self.bg_ROI_button.isChecked():
+            self.sampledata.average_bg = scan.get_average_background(self)
+            self.clearLayout(self.graphlayout)
+            scan.calcOffSpec(self)
+
         if self.ROI_button.isChecked():
             width = abs(eclick.xdata - erelease.xdata)
             heigth = abs(eclick.ydata - erelease.ydata)
-            self.middleX = (eclick.xdata + erelease.xdata)/2
-            self.middleY = (eclick.ydata + erelease.ydata)/2
+            middleX = (eclick.xdata + erelease.xdata)/2
+            middleY = (eclick.ydata + erelease.ydata)/2
             rounding = 3
 
             self.recHeigthEntry.setText(str(abs(round(float(heigth), rounding))))
             self.recWidthEntry.setText(str(abs(round(float(width),rounding))))
-            self.middleXEntry.setText(str(round(float(self.middleX),rounding)))
-            self.middleYEntry.setText(str(round(float(self.middleY),rounding)))
+            self.middleXEntry.setText(str(round(float(middleX),rounding)))
+            self.middleYEntry.setText(str(round(float(middleY),rounding)))
 
             self.clearLayout(self.graphlayout)
             scan.calcOffSpec(self)
 
-        if self.bg_ROI_button.isChecked():
-            self.sampledata.average_bg = scan.get_average_background(self)
 
 
 
     def dragVline(self, event, scan_type = "vertical"):
         if self.clicked == True and self.dragButton.isChecked():
+
+            #Remove old vertical line
             if hasattr(self, 'vline'):
-                self.vline.remove()
+                try:
+                    self.vline.remove()
+                except:
+                    print("Couldn't remove vline")
 
             if scan_type == "horizontal":
                 figure = self.horizontalscanfig[0]
                 canvas = self.horizontalscanfig[1]
-                self.middleX = event.xdata
             if scan_type == "vertical":
                 figure = self.verticalscanfig[0]
                 canvas = self.verticalscanfig[1]
-                self.middleY = event.xdata
 
+            #Draw vertical line
             axle = figure.axes[0]
             self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
                                        linestyle='--'))  # Change the line in the list to new selected line
             canvas.draw()
-            xmin, xmax, ymin, ymax = self.ROI_scan_rect.extents
-            extents = [xmin, xmax, ymin, ymax]
 
+            #Move ROI
+            xmin, xmax, ymin, ymax = self.ROI_scan_rect.extents
             middleY = (ymin + ymax)/2
             middleX = (xmin + xmax)/2
             if scan_type == "vertical":
@@ -217,54 +226,27 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 extents = [xmin, xmax, ymin, ymax]
                 self.ROI_scan_rect.to_draw.set_visible(True)
                 self.ROI_scan_rect.extents = extents
-
- #           coords = [xmin, xmax, ymin, ymax]
-#            self.ROI_scan_rect.draw_shape(coords)
-
 
 
     def pressVline(self, event):
         self.clicked = True
 
-
     def releaseVline(self, event, scan_type = ""):
         self.clicked = False
-
-        if scan_type == "vertical":
-            figure = self.verticalscanfig[0]
-            canvas = self.verticalscanfig[1]
-        if scan_type == "horizontal":
-            figure = self.horizontalscanfig[0]
-            canvas = self.horizontalscanfig[1]
-
-
-        if self.findFWHM_button.isChecked():
-            FWHM = scan.find_FWHM(self, event.xdata, scan_type=scan_type)
-            self.FWHM_entry.setText(str(round(FWHM,6)))
-
-        if self.dragButton.isChecked():
-            if hasattr(self, 'vline'):
+        if hasattr(self, 'vline'):
+            try:
                 self.vline.remove()
+            except:
+                print("Couldn't remove vline")
 
-            #Will find a more elegant solution to seperate these two cases hesre
-            xmin, xmax, ymin, ymax = self.ROI_scan_rect.extents
-            extents = [xmin, xmax, ymin, ymax]
-            middleY = (ymin + ymax)/2
-            middleX = (xmin + xmax)/2
-            if scan_type == "vertical":
-                y_shift = (event.xdata - middleY)
-                ymin += y_shift
-                ymax += y_shift
-            if scan_type == "horizontal":
-                x_shift = (event.xdata - middleX)
-                xmin += x_shift
-                xmax += x_shift
-            axle = figure.axes[0]
-            self.vline = (axle.axvline(event.xdata, color='k', linewidth=1.0,
-                                       linestyle='--'))  # Change the line in the list to new selected line
-            canvas.draw()
-            self.clearLayout(self.graphlayout)
-            scan.calcOffSpec(self)
+        x0, x1, y0, y1 = self.ROI_scan_rect.extents
+        height = y1 - y0
+        width = x1 - x0
+        middleY = (y0 + y1) / 2
+        middleX = (x0 + x1) / 2
+        self.set_entry(height, width, middleX, middleY)
+        self.clearLayout(self.graphlayout)
+        scan.calcOffSpec(self)
 
 
     def saveFileDialog(self, documenttype="Text file (*.txt)", title = "Save file"):

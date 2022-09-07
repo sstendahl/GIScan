@@ -55,12 +55,6 @@ def loadMap(self, file):
     self.holdVertical.setChecked(False)
     self.holdHorizontal.setChecked(False)
     self.figurecanvas = None
-
-    #legacy, need to remove these two
-    self.ROI_scan = ROI((0, 0), 0, 0, alpha=1, fill=None, color="red")
-    self.ROI_background = ROI((0, 0), 0, 0, alpha=1, fill=None, color="yellow")
-
-    self.ROI_background.set_visible(False)
     self.sampledata = Sample()
 
     if file != "":
@@ -72,13 +66,10 @@ def loadMap(self, file):
         data = contents.data
         self.sampledata.gisaxs_data = data
         self.sampledata.path = file
+
         layout = self.maplayout
         self.clearLayout(self.maplayout)
         self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title = filename)
-        gisaxs_figure = self.figurecanvas[0]
-        ax = gisaxs_figure.axes[0]
-        self.background = gisaxs_figure.canvas.copy_from_bbox(ax.bbox)
-        self.figurecanvas[0].ax = plt.gca()
         try:
             self.define_rectangle()
             scan.find_specular(self)
