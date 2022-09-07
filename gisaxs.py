@@ -55,8 +55,11 @@ def loadMap(self, file):
     self.holdVertical.setChecked(False)
     self.holdHorizontal.setChecked(False)
     self.figurecanvas = None
+
+    #legacy, need to remove these two
     self.ROI_scan = ROI((0, 0), 0, 0, alpha=1, fill=None, color="red")
     self.ROI_background = ROI((0, 0), 0, 0, alpha=1, fill=None, color="yellow")
+
     self.ROI_background.set_visible(False)
     self.sampledata = Sample()
 
@@ -72,16 +75,12 @@ def loadMap(self, file):
         layout = self.maplayout
         self.clearLayout(self.maplayout)
         self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title = filename)
-
-        self.figurecanvas[1].canvas.mpl_connect('button_press_event', self.on_press)
-        self.figurecanvas[1].canvas.mpl_connect('motion_notify_event', self.on_hover)
-        self.figurecanvas[1].canvas.mpl_connect('button_release_event', self.on_release)
         gisaxs_figure = self.figurecanvas[0]
         ax = gisaxs_figure.axes[0]
         self.background = gisaxs_figure.canvas.copy_from_bbox(ax.bbox)
-        self.define_rectangle()
         self.figurecanvas[0].ax = plt.gca()
         try:
+            self.define_rectangle()
             scan.find_specular(self)
             scan.detector_scan(self)
             self.holdHorizontal.setChecked(False)

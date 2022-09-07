@@ -1,5 +1,6 @@
 pybind11
 pip==22.2.2
+shutil
 scikit-build
 Cython==0.29.32
 setuptools

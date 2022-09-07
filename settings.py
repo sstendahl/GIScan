@@ -1,8 +1,8 @@
 import CallUI
 import json
-import sys
 import scanning_tools as scan
 import os
+import shutil
 import gisaxs
 from pathlib import Path
 import platform
@@ -24,6 +24,7 @@ def openSettingsdialog(self):
     self.settingsdialog = CallUI.settingsUI()
     config_path = get_path()
     os.chdir(config_path)
+
     with open("config.json", 'r') as f:
         config = json.load(f)
     load_cmaplist(self)
@@ -34,8 +35,6 @@ def openSettingsdialog(self):
     self.settingsdialog.dby_line.setText(str(config["db_y"]))
     self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
     self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
-    # self.settingsdialog.mapping_widget.setText(config["mapping"])
-    # self.settingsdialog.cbar_pos_widget.setText(config["cbar_pos"])
     check_cbar = config["colorbar"]
     self.settingsdialog.cbar_check.setChecked(check_cbar)
     self.settingsdialog.show()
