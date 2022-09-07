@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>main</class>
+ <widget class="QMainWindow" name="main">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1589</width>
+    <height>1002</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>GIScan</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QGridLayout" name="sidebar" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
+      <property name="verticalSpacing">
+       <number>8</number>
+      </property>
+      <item row="2" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="holdHorizontal">
+          <property name="text">
+           <string>Hold Horizontal</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="holdVertical">
+          <property name="text">
+           <string>Hold Vertical</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="Line" name="line_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="7" column="0">
+       <layout class="QVBoxLayout" name="scans">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="yoneda_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Yoneda scan</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="detector_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Detector scan</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="10" column="0">
+       <layout class="QVBoxLayout" name="checkable_buttons" stretch="0,0,0,0">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="dragButton">
+          <property name="text">
+           <string>Drag mode</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="performanceButton">
+          <property name="text">
+           <string>Performance mode</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="ROI_button">
+          <property name="text">
+           <string>Select ROI</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bg_ROI_button">
+          <property name="text">
+           <string>Select background</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <layout class="QVBoxLayout" name="save_data">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
+        <item alignment="Qt::AlignTop">
+         <widget class="QPushButton" name="saveHorizontal">
+          <property name="text">
+           <string>Save horizontal cut as txt</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignTop">
+         <widget class="QPushButton" name="saveVertical">
+          <property name="text">
+           <string>Save vertical cut as txt</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="settings" stretch="0,0,0">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
+        <item alignment="Qt::AlignTop">
+         <widget class="QPushButton" name="load_button">
+          <property name="text">
+           <string>Load data</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="settings_button">
+          <property name="text">
+           <string>Settings</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="8" column="0">
+       <layout class="QVBoxLayout" name="FWHM" stretch="0,0,0,0">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="Line" name="line_6">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="findFWHM_button">
+          <property name="text">
+           <string>Find FWHM</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="FWHM_entry">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="12" column="0">
+       <layout class="QVBoxLayout" name="roi_settings">
+        <property name="spacing">
+         <number>7</number>
+        </property>
+        <item alignment="Qt::AlignBottom">
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Rectangle height</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignTop">
+         <widget class="QLineEdit" name="recHeigthEntry">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignBottom">
+         <widget class="QLabel" name="label">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Rectangle Width</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignTop">
+         <widget class="QLineEdit" name="recWidthEntry">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignBottom">
+         <widget class="QLabel" name="label_4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Middle x coordinate</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignTop">
+         <widget class="QLineEdit" name="middleXEntry">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignBottom">
+         <widget class="QLabel" name="label_5">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Middle y coordinate</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignTop">
+         <widget class="QLineEdit" name="middleYEntry">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="setRec">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>20</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Perform scan</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_8">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="11" column="0">
+       <widget class="Line" name="line_7">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <item row="0" column="1">
+       <layout class="QVBoxLayout" name="graphlayout">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="maplayout">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <action name="actionOpen_SampleDB">
+   <property name="text">
+    <string>Open SampleDB</string>
+   </property>
+   <property name="shortcut">
+    <string comment="test" extracomment="test"/>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionOff_specular">
+   <property name="text">
+    <string>Off-specular</string>
+   </property>
+  </action>
+  <action name="actionNeutrons">
+   <property name="text">
+    <string>Neutrons</string>
+   </property>
+  </action>
+  <action name="actionX_Rays">
+   <property name="text">
+    <string>X-Rays</string>
+   </property>
+  </action>
+  <action name="actionOpen_single_specular_file">
+   <property name="text">
+    <string>Open single specular file</string>
+   </property>
+  </action>
+  <action name="actionSpecular_X_ray">
+   <property name="text">
+    <string>Specular X-ray</string>
+   </property>
+  </action>
+  <action name="menuXraySource">
+   <property name="text">
+    <string>X-rays</string>
+   </property>
+  </action>
+  <action name="menuNeutronSource">
+   <property name="text">
+    <string>Neutrons</string>
+   </property>
+  </action>
+  <action name="actionSpecular_neutron">
+   <property name="text">
+    <string>Specular neutron</string>
+   </property>
+  </action>
+  <action name="actionOff_specular_neutron">
+   <property name="text">
+    <string>Off-specular neutron</string>
+   </property>
+  </action>
+  <action name="actionData_tools">
+   <property name="text">
+    <string>General analysis</string>
+   </property>
+  </action>
+  <action name="actionDetect_peaks">
+   <property name="text">
+    <string>Detect peaks</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

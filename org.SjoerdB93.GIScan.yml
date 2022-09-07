@@ -1,0 +1,67 @@
+app-id: org.SjoerdB93.GIScan
+runtime: org.kde.Platform
+runtime-version: '5.15-21.08'
+sdk: org.kde.Sdk
+sdk-extensions: org.freedesktop.Sdk.Extension.gfortran-62
+base: com.riverbankcomputing.PyQt.BaseApp
+base-version: "5.15-21.08"
+command: runner.sh
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --share=network
+  - --filesystem=xdg-documents
+  - --device=dri
+  
+modules:  
+
+  - python3-requirements.json
+        
+  - name: GIScan
+    sources:
+      - type: file
+        path: org.SjoerdB93.GIScan.desktop
+      - type: file
+        path: org.SjoerdB93.GIScan.png
+      - type: file
+        path: main.py
+      - type: file
+        path: CallUI.py
+      - type: file
+        path: plottingtools.py
+      - type: file
+        path: gisaxs.py
+      - type: file
+        path: config.json
+      - type: file
+        path: form.ui
+      - type: file
+        path: roi.py
+      - type: file
+        path: sample.py
+      - type: file
+        path: scanning_tools.py
+      - type: file
+        path: settingsdialog.ui
+      - type: file
+        path: settings.py
+      - type: file
+        path: runner.sh
+        
+    buildsystem: simple
+    build-commands:
+      - install -D org.SjoerdB93.GIScan.desktop /app/share/applications/org.SjoerdB93.GIScan.desktop
+      - install -D main.py /app/bin/main.py
+      - install -D settings.py /app/bin/settings.py
+      - install -D org.SjoerdB93.GIScan.png /app/share/icons/hicolor/128x128/apps/org.SjoerdB93.GIScan.png
+      - install -D roi.py /app/bin/roi.py
+      - install -D CallUI.py /app/bin/CallUI.py
+      - install -D scanning_tools.py /app/bin/scanning_tools.py      
+      - install -D sample.py /app/bin/sample.py      
+      - install -D plottingtools.py /app/bin/plottingtools.py
+      - install -D gisaxs.py /app/bin/gisaxs.py
+      - install -D config.json /app/bin/config.json
+      - install form.ui /app/bin/form.ui
+      - install settingsdialog.ui /app/bin/settingsdialog.ui
+      - install -D runner.sh /app/bin/runner.sh   
