@@ -38,8 +38,8 @@ def loadEmpty(self):
     verticalscan_canvas = plottingtools.PlotWidget(xlabel=out_of_plane_label, ylabel="Intensity (arb. u)",
                         title = "Vertical scan")
     create_layout(self, gisaxsmap_canvas, self.maplayout)
-    create_layout(self, horizontalscan_canvas, self.graphlayout)
-    create_layout(self, verticalscan_canvas, self.graphlayout)
+    create_layout(self, horizontalscan_canvas, self.horizontal_layout)
+    create_layout(self, verticalscan_canvas, self.vertical_layout)
 
 def create_layout(self, canvas, layout):
     toolbar = NavigationToolbar(canvas, self)
