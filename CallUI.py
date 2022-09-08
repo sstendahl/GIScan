@@ -27,18 +27,21 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def __init__(self):
         QtBaseClass.__init__(self)
         Ui_MainWindow.__init__(self)
-        self.setWindowIcon(QtGui.QIcon('logo.png'))
+        self.setWindowIcon\
+            (QtGui.QIcon('logo.png'))
         self.setupUi(self)
         self.connectActions()
         self.sampledata = None
         self.clicked = False
+        self.ROI_scan_rect = None
+        self.ROI_background_rect = None
 
         config_path = settings.get_path()
-        if not os.path.isfile(config_path + "/config.json") or os.path.isfile(config_path + "\config.json"):
-            if platform.system() == "Windows":
-                shutil.copy("config.json", config_path + "\config.json")
-            else:
-                shutil.copy("config.json", config_path + "/config.json")
+        if not os.path.isfile(f"{config_path}/config.json"):
+            if not os.path.isdir(config_path):
+                os.mkdir(config_path)
+            path = config_path + "/config.json"
+            shutil.copy("config.json", path)
             print(f"Saved config file in {config_path}")
 
         gisaxs.loadEmpty(self)
