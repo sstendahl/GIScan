@@ -81,8 +81,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         extents = [xmin, xmax, ymin, ymax]
         # self.ROI_scan_rect.draw_shape(coords)
         self.ROI_scan_rect.extents = extents
-        self.clearLayout(self.graphlayout)
+        self.clearLayout(self.horizontal_layout)
+        self.clearLayout(self.vertical_layout)
         scan.calcOffSpec(self)
+
+
 
     def set_entry(self, height, width, x, y):
         rounding = 3
@@ -157,7 +160,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clicked = False
         if self.bg_ROI_button.isChecked():
             self.sampledata.average_bg = scan.get_average_background(self)
-            self.clearLayout(self.graphlayout)
+            self.clearLayout(self.horizontal_layout)
+            self.clearLayout(self.vertical_layout)
             scan.calcOffSpec(self)
 
         if self.ROI_button.isChecked():
@@ -172,7 +176,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             self.middleXEntry.setText(str(round(float(middleX), rounding)))
             self.middleYEntry.setText(str(round(float(middleY), rounding)))
 
-            self.clearLayout(self.graphlayout)
+            self.clearLayout(self.horizontal_layout)
+            self.clearLayout(self.vertical_layout)
             scan.calcOffSpec(self)
 
     def dragVline(self, event, scan_type="vertical"):
@@ -240,8 +245,17 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             middleY = (y0 + y1) / 2
             middleX = (x0 + x1) / 2
             self.set_entry(height, width, middleX, middleY)
-            self.clearLayout(self.graphlayout)
-            scan.calcOffSpec(self)
+            if scan_type == "horizontal" and self.holdHorizontal.isChecked():
+                self.clearLayout(self.vertical_layout)
+                scan.calcOffSpec(self, scan = "vertical")
+            if scan_type == "vertical" and self.holdVertical.isChecked():
+                self.clearLayout(self.horizontal_layout)
+                scan.calcOffSpec(self, scan = "horizontal")
+            else:
+                self.clearLayout(self.horizontal_layout)
+                self.clearLayout(self.vertical_layout)
+                scan.calcOffSpec(self, scan = "both")
+
 
     def saveFileDialog(self, documenttype="Text file (*.txt)", title="Save file"):
         options = QFileDialog.Options()

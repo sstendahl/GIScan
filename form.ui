@@ -410,18 +410,21 @@
       <property name="spacing">
        <number>2</number>
       </property>
-      <item row="0" column="1">
-       <layout class="QVBoxLayout" name="graphlayout">
-        <property name="spacing">
-         <number>1</number>
-        </property>
-       </layout>
-      </item>
       <item row="0" column="0">
        <layout class="QVBoxLayout" name="maplayout">
         <property name="spacing">
          <number>1</number>
         </property>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QVBoxLayout" name="graphs_layout">
+        <item>
+         <layout class="QVBoxLayout" name="horizontal_layout"/>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="vertical_layout"/>
+        </item>
        </layout>
       </item>
      </layout>

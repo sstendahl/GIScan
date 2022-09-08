@@ -84,9 +84,11 @@ def detector_scan(self):
     width = x1 - x0
 
     self.set_entry(height, width, middleX, middleY)
-    self.clearLayout(self.graphlayout)
-    scan.calcOffSpec(self)
+    self.clearLayout(self.horizontal_layout)
+    self.clearLayout(self.vertical_layout)
     self.holdVertical.setChecked(False)
+    calcOffSpec(self)
+    self.setRectangleFromEntry()
     self.firstRun = False
 
 
@@ -114,9 +116,11 @@ def YonedaScan(self):
     middleY = (y0 + y1) / 2
     middleX = (x0 + x1) / 2
     self.set_entry(height, width, middleX, middleY)
-    self.clearLayout(self.graphlayout)
-    calcOffSpec(self)
+    self.clearLayout(self.horizontal_layout)
+    self.clearLayout(self.vertical_layout)
     self.holdHorizontal.setChecked(False)
+    calcOffSpec(self)
+    self.setRectangleFromEntry()
 
 
 def find_specular(self):
@@ -140,7 +144,8 @@ def find_specular(self):
         y1 = 0.078
         x0 = -0.10
         x1 = 0.10
-    self.clearLayout(self.graphlayout)
+    self.clearLayout(self.horizontal_layout)
+    self.clearLayout(self.vertical_layout)
     height = y1 - y0
     width = x1 - x0
     middleY = (y0 + y1) / 2
@@ -152,14 +157,18 @@ def find_specular(self):
         peakindex = peaks[0]
     else:
         peakindex = 0
-    middleX = self.sampledata.horizontal_scan_x[peakindex]
 
 
-def calcOffSpec(self):
+def calcOffSpec(self, scan = "both"):
     """Perform an off-specular scan in both horizontal and vertical direction"""
+    if scan == "both":
+        start_offspec(self, self.holdHorizontal.isChecked(), self.holdVertical.isChecked(), horizontal=True)
+        start_offspec(self, self.holdHorizontal.isChecked(), self.holdVertical.isChecked(), horizontal=False)
+    elif scan == "vertical":
+        start_offspec(self, self.holdHorizontal.isChecked(), self.holdVertical.isChecked(), horizontal=False)
+    elif scan == "horizontal":
+        start_offspec(self, self.holdHorizontal.isChecked(), self.holdVertical.isChecked(), horizontal=True)
 
-    start_offspec(self, self.holdHorizontal.isChecked(), self.holdVertical.isChecked(), horizontal=True)
-    start_offspec(self, self.holdHorizontal.isChecked(), self.holdVertical.isChecked(), horizontal=False)
 
 
 def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
@@ -206,11 +215,10 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
 
 
     # Now the figures are defined and plotted
-    layout = self.graphlayout
     if horizontal:
         scan_type = "horizontal"
         title = "Horizontal scan"
-        figure = plottingtools.plotGraphOnCanvas(self, layout, self.sampledata.horizontal_scan_x,
+        figure = plottingtools.plotGraphOnCanvas(self, self.horizontal_layout, self.sampledata.horizontal_scan_x,
                                                  self.sampledata.horizontal_scan_y, xlabel=in_plane_label, title=title)
         self.horizontalscanfig = figure
 
@@ -218,7 +226,7 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
         scan_type = "vertical"
         title = "Vertical scan"
 
-        figure = plottingtools.plotGraphOnCanvas(self, layout, self.sampledata.vertical_scan_x,
+        figure = plottingtools.plotGraphOnCanvas(self, self.vertical_layout, self.sampledata.vertical_scan_x,
                                                  self.sampledata.vertical_scan_y,
                                                  xlabel=out_of_plane_label, title=title,
                                                  revert=False)
