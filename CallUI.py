@@ -181,7 +181,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             scan.calcOffSpec(self)
 
     def dragVline(self, event, scan_type="vertical"):
-        if self.clicked == True and self.dragButton.isChecked():
+        if self.clicked == True and self.dragButton.isChecked() and self.ROI_button.isChecked():
 
             # Remove old vertical line
             if hasattr(self, 'vline'):
@@ -238,7 +238,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             except:
                 print("Couldn't remove vline")
 
-        if self.dragButton.isChecked():
+        if self.dragButton.isChecked() and self.ROI_button.isChecked():
             x0, x1, y0, y1 = self.ROI_scan_rect.extents
             height = y1 - y0
             width = x1 - x0
