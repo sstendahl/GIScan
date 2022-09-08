@@ -82,7 +82,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         ymin = middle_y - height / 2
         ymax = middle_y + height / 2
         extents = [xmin, xmax, ymin, ymax]
-        # self.ROI_scan_rect.draw_shape(coords)
         self.ROI_scan_rect.extents = extents
         self.clearLayout(self.horizontal_layout)
         self.clearLayout(self.vertical_layout)
