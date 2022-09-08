@@ -122,33 +122,35 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.ROI_background_rect.set_active(False)
 
     def press_bg_ROI_button(self):
-        if self.bg_ROI_button.isChecked():
-            self.ROI_background_rect.set_visible(True)
-            self.ROI_background_rect.set_active(True)
-            self.ROI_button.setChecked(False)
-            self.ROI_scan_rect.set_visible(False)
-            self.ROI_scan_rect.set_active(False)
-            self.figurecanvas[1].draw()
+        if self.ROI_scan_rect is not None:
+            if self.bg_ROI_button.isChecked():
+                self.ROI_background_rect.set_visible(True)
+                self.ROI_background_rect.set_active(True)
+                self.ROI_button.setChecked(False)
+                self.ROI_scan_rect.set_visible(False)
+                self.ROI_scan_rect.set_active(False)
+                self.figurecanvas[1].draw()
 
 
-        else:
-            self.ROI_background_rect.set_visible(False)
-            self.ROI_background_rect.set_active(False)
-            self.figurecanvas[1].draw()
+            else:
+                self.ROI_background_rect.set_visible(False)
+                self.ROI_background_rect.set_active(False)
+                self.figurecanvas[1].draw()
 
     def press_ROI_button(self):
-        if self.ROI_button.isChecked():
-            self.ROI_scan_rect.set_visible(True)
-            self.ROI_scan_rect.set_active(True)
-            self.bg_ROI_button.setChecked(False)
-            self.ROI_background_rect.set_visible(False)
-            self.ROI_background_rect.set_active(False)
-            self.figurecanvas[1].draw()
-
-        else:
-            self.ROI_scan_rect.set_visible(False)
-            self.ROI_scan_rect.set_active(False)
-            self.figurecanvas[1].draw()
+        if self.ROI_scan_rect is not None:
+            if self.ROI_button.isChecked():
+                self.ROI_scan_rect.set_visible(True)
+                self.ROI_scan_rect.set_active(True)
+                self.bg_ROI_button.setChecked(False)
+                self.ROI_background_rect.set_visible(False)
+                self.ROI_background_rect.set_active(False)
+                self.figurecanvas[1].draw()
+    
+            else:
+                self.ROI_scan_rect.set_visible(False)
+                self.ROI_scan_rect.set_active(False)
+                self.figurecanvas[1].draw()
 
     def on_press(self, event):
         self.clicked = True
