@@ -9,7 +9,6 @@ import scanning_tools as scan
 from sample import Sample
 import plottingtools
 import settings
-from roi import ROI
 
 def get_labels():
     """Retreive label names for current mapping"""
