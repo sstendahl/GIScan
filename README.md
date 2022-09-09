@@ -9,17 +9,29 @@ To be more specific: you must share the source code under the same license.
 For details see https://www.gnu.org/licenses/gpl-3.0.html
 
 # GIScan
-GIScan is a simple tool to open and analyze existing GISAXS data as obtained at the beamline P03 of PETRA III at the DESY Synchrotron in Hamburg. This tool handles raw data directly and does not need any prior data reduction, all data reduction is done by this tool seperately. The accepted input data is in .cbf format, any other data type is unsupported.
+GIScan is a simple tool to open and analyze data stored in cbf (Crystallographic Binary Format) files. While
+GIScan is primarily developed with the analyis of GISAXS data in mind, as obtained by the P03 beamline of PETRA
+III at the DESY Synchrotron in Hamburg, Germany, it should be compatible with any arbitrary cbf data.
 
-Selected data is automatically converted in a mapping of choice as selected in the setting menu, supported mapping types are detector positions in pixels, angular space and q-space. By default, a scan detector-scan is made over the Qy = 0 position as well as an out-of-plane scan near the critical angle of a Ni/Ti multilayer.  
-
+GIScan handles raw data directly and doesn't need any a-priori data reduction. It supports features such as
+background subtraction, line scans along the Qy and Qz axis, detection of the full-width at half-maximum (FWHM)
+of diffraction peaks and coordinate conversion from pixels to reciprocal or angular space
+      
 The region of interest (ROI) over which the scans are made can be moved by selecting the required position in the obtained in-plane or the out-of-plane scans. Alternatively a region can be selected by dragging the mouse over the GISAXS mapping, or entered manually using the coordinate positions in the bottom-left corner. Using the Background selection function, an ROI can be chosen for the background as well and the average background intensity will be substracted from the scans that are made. Both the vertical and the horizontal scan can be exported in plain .txt files for further analysis. 
 
-Furthermore, the full-width-half-maximum (FWHM) of a peak can be obtained as well using a dedicated button. Given time in the future I may implement a simple fitting functionality to seperate the specular and off-specular signal in the in-plane scans from each other so that these corresponding values can be obtained as well.
-
-The software is very functional at the moment, but is still considered to be in beta stage. A proper code clean up needs to be done and documentation is rather limited at the moment. Testing is primarily done on Fedora Silverblue (Linux), but it should be cross-compatible with any modern version of Linux, MacOS or Windows. In the near future I will release packaged versions for both Linux and Windows. The plan is to release this as RPM and hopefully as Flatpak for Linux and as a standalone executable in Windows.
-
+GIScan is mostly developed with the analysis of multilayers in mind but can be used for any arbitrary data stored
+in cbf format. If a beamline or datatype (be it GISAXS or GISANS) is not supported and you would like to use this
+tool, please submit an issue on the Github page so this can be arranged.
+      
 For any support or other questions, please contact me at info@sjoerd.se. Keep in mind that this program comes with 
-absolutely no warranty or formal support, but I will try my best to be of assistance. 
+absolutely no warranty or formal support, but I will try my best to be of assistance.  
+
+# How to install: 
+
+**Windows:** An executable file can be found on the releases page on the right-hand side of the Github page at https://github.com/SjoerdB93/GIScan. 
+
+**Linux:** GIScan is currently under the submission process as an application on Flathub. Once that is approved, this is the officially recommended method to install GIScan. In the meantime it can be run directly from source by executing main.py in Python. 
+
+**MacOS:** This tool has only been tested on Linux and Windows, and MacOS is not officially supported. Nevertheless, it *should* work on MacOS by executing the main.py from the terminal using Python. 
 
 **Note**: This tool is in no official way affiliated with Petra III or DESY. This software started as a tool to analyze my own data obtained at this beamline and is mostly developed during my own free time.
