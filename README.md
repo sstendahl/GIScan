@@ -34,4 +34,5 @@ absolutely no warranty or formal support, but I will try my best to be of assist
 
 **MacOS:** This tool has only been tested on Linux and Windows, and MacOS is not officially supported. Nevertheless, it *should* work on MacOS by executing the main.py from the terminal using Python. 
 
+------------------------------------------------------------
 **Note**: This tool is in no official way affiliated with Petra III or DESY. This software started as a tool to analyze my own data obtained at this beamline and is mostly developed during my own free time.
