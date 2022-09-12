@@ -31,7 +31,7 @@ absolutely no warranty or formal support, but I will try my best to be of assist
 
 # How to install: 
 
-**Linux:** The officially recommended method to install GIScan is through Flathub: https://flathub.org/apps/details/se.sjoerd.GIScan. This can either be done graphically through your software manager of choice, or through the commandline using 'flatpak install flathub se.sjoerd.GIScan'. Make sure to enable the Flathub repositories beforehand, as further described here: https://flatpak.org/setup/. Alternatively, it is possible to run directly from source by executing main.py using Python. 
+**Linux:** The officially recommended method to install GIScan is through Flathub: https://flathub.org/apps/details/se.sjoerd.GIScan. This can either be done graphically through your software manager of choice, or through the commandline using `flatpak install flathub se.sjoerd.GIScan`. Make sure to enable the Flathub repositories beforehand, as further described here: https://flatpak.org/setup/. Alternatively, it is possible to run directly from source by executing main.py using Python. 
 
 **Windows:** An executable file can be found on the releases page on the right-hand side of the Github page at https://github.com/SjoerdB93/GIScan. 
 
