@@ -417,10 +417,10 @@
       <item row="0" column="1">
        <layout class="QVBoxLayout" name="graphs_layout">
         <item>
-         <layout class="QVBoxLayout" name="vertical_layout"/>
+         <layout class="QVBoxLayout" name="horizontal_layout"/>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="horizontal_layout"/>
+         <layout class="QVBoxLayout" name="vertical_layout"/>
         </item>
        </layout>
       </item>
