@@ -90,7 +90,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
 
     def set_entry(self, height, width, x, y):
-        rounding = 3
+        rounding = 4
         self.recHeigthEntry.setText(str(abs(round(float(height), rounding))))
         self.recWidthEntry.setText(str(abs(round(float(width), rounding))))
         self.middleXEntry.setText(str(round(float(x), rounding)))
@@ -173,7 +173,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             heigth = abs(eclick.ydata - erelease.ydata)
             middleX = (eclick.xdata + erelease.xdata) / 2
             middleY = (eclick.ydata + erelease.ydata) / 2
-            rounding = 3
+            rounding = 4
 
             self.recHeigthEntry.setText(str(abs(round(float(heigth), rounding))))
             self.recWidthEntry.setText(str(abs(round(float(width), rounding))))
