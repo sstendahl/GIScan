@@ -472,22 +472,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
-      </property>
-      <property name="spacing">
-       <number>2</number>
-      </property>
+     <layout class="QGridLayout" name="data">
       <item row="0" column="0">
-       <layout class="QVBoxLayout" name="maplayout">
-        <property name="spacing">
-         <number>1</number>
-        </property>
-        <property name="sizeConstraint">
-         <enum>QLayout::SetNoConstraint</enum>
-        </property>
-       </layout>
+       <layout class="QVBoxLayout" name="maplayout"/>
       </item>
       <item row="0" column="1">
        <layout class="QVBoxLayout" name="graphs_layout">
