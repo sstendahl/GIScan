@@ -1,3 +1,6 @@
+<a href='https://flathub.org/apps/details/se.sjoerd.GIScan'><img width='180' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-en.svg'/></a>
+
+
 This program is free software.
 It is licensed under the GNU GPL version 3 or later.
 That means you are free to use this program for any purpose;
@@ -28,9 +31,9 @@ absolutely no warranty or formal support, but I will try my best to be of assist
 
 # How to install: 
 
-**Windows:** An executable file can be found on the releases page on the right-hand side of the Github page at https://github.com/SjoerdB93/GIScan. 
+**Linux:** The officially recommended method to install GIScan is through Flathub: https://flathub.org/apps/details/se.sjoerd.GIScan. This can either be done graphically through your Software store of choice, or through the commandline. Make sure to enable the Flathub repositories beforehand, as further described here: https://flatpak.org/setup/. Alternatively, it is possible to run directly from source by executing main.py using Python. 
 
-**Linux:** GIScan is currently under the submission process as an application on Flathub. Once that is approved, this is the officially recommended method to install GIScan. In the meantime it can be run directly from source by executing main.py in Python. 
+**Windows:** An executable file can be found on the releases page on the right-hand side of the Github page at https://github.com/SjoerdB93/GIScan. 
 
 **MacOS:** This tool has only been tested on Linux and Windows, and MacOS is not officially supported. Nevertheless, it *should* work on MacOS by executing the main.py from the terminal using Python. 
 
