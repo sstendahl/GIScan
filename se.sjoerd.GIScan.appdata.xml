@@ -46,6 +46,17 @@
       <image>http://www.sjoerd.se/giscan_bg.png</image>
     </screenshot>
   </screenshots>
+  
+    <releases>
+    <release version="1.0.1" date="2022-09-12">
+      <description>
+        <ul>
+          <li>Changed the coordinates to grid-layout to save space</li>
+          <li>Changed rounding in entry to 4 digits</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
 
   <releases>
     <release version="1.0.0" date="2022-09-10">
