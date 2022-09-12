@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1095</width>
-    <height>722</height>
+    <width>1117</width>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -493,7 +493,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QGridLayout" name="data">
+     <layout class="QGridLayout" name="data" columnstretch="5,4">
       <item row="0" column="0">
        <layout class="QVBoxLayout" name="maplayout"/>
       </item>
