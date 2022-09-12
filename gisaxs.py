@@ -44,7 +44,7 @@ def create_layout(self, canvas, layout):
     toolbar = NavigationToolbar(canvas, self)
     layout.addWidget(canvas)
     layout.addWidget(toolbar)
-
+    
 def loadMap_from_file_picker(self):
     path = getPath(self)
     loadMap(self, path)
