@@ -6,7 +6,7 @@ def open_fwhmscan_window(self):
     self.fwhmscan_window = CallUI.fwhmscanUI()
 
     data = self.sampledata.gisaxs_data
-    layout = self.map_preview
+    layout = self.fwhmscan_window.map_preview
     self.clearLayout(layout)
     self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title=self.filename)
 
