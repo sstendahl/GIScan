@@ -122,7 +122,8 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Hold vertical</string>
+           <string>Hold
+Vertical</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -138,7 +139,8 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Hold horizontal</string>
+           <string>Hold
+Horizontal</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -201,7 +203,8 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Save vertical</string>
+           <string>Save
+Vertical</string>
           </property>
          </widget>
         </item>
@@ -214,7 +217,8 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Save horizontal</string>
+           <string>Save
+Horizontal</string>
           </property>
          </widget>
         </item>
