@@ -349,14 +349,14 @@
         <item>
          <widget class="QPushButton" name="saveVertical">
           <property name="text">
-           <string>Save vertical cut</string>
+           <string>Save vertical</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="saveHorizontal">
           <property name="text">
-           <string>Save horizontal cut</string>
+           <string>Save horizontal</string>
           </property>
          </widget>
         </item>
