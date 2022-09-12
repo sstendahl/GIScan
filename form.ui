@@ -16,14 +16,14 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QGridLayout" name="sidebar" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0">
+     <layout class="QGridLayout" name="sidebar" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0">
       <property name="sizeConstraint">
        <enum>QLayout::SetMinimumSize</enum>
       </property>
       <property name="verticalSpacing">
        <number>8</number>
       </property>
-      <item row="15" column="0">
+      <item row="16" column="0">
        <layout class="QVBoxLayout" name="FWHM" stretch="0,0,0,0">
         <property name="spacing">
          <number>10</number>
@@ -67,7 +67,7 @@
         </item>
        </layout>
       </item>
-      <item row="5" column="0">
+      <item row="6" column="0">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -80,7 +80,7 @@
         </property>
        </spacer>
       </item>
-      <item row="19" column="0">
+      <item row="20" column="0">
        <layout class="QVBoxLayout" name="roi_settings">
         <property name="spacing">
          <number>7</number>
@@ -203,7 +203,7 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>0</width>
             <height>0</height>
            </size>
           </property>
@@ -214,7 +214,7 @@
         </item>
        </layout>
       </item>
-      <item row="7" column="0">
+      <item row="8" column="0">
        <layout class="QHBoxLayout" name="scans_layout">
         <item>
          <widget class="QPushButton" name="detector_button">
@@ -226,7 +226,7 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>200</width>
+            <width>0</width>
             <height>0</height>
            </size>
           </property>
@@ -294,7 +294,7 @@
         </property>
        </widget>
       </item>
-      <item row="17" column="0">
+      <item row="18" column="0">
        <layout class="QVBoxLayout" name="checkable_buttons" stretch="0,0,0">
         <property name="spacing">
          <number>10</number>
@@ -337,12 +337,30 @@
         </item>
        </layout>
       </item>
-      <item row="18" column="0">
+      <item row="19" column="0">
        <widget class="Line" name="line_7">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
+      </item>
+      <item row="4" column="0">
+       <layout class="QHBoxLayout" name="save_buttons">
+        <item>
+         <widget class="QPushButton" name="saveVertical">
+          <property name="text">
+           <string>Save vertical cut</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="saveHorizontal">
+          <property name="text">
+           <string>Save horizontal cut</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="2" column="0">
        <layout class="QHBoxLayout" name="hold_buttons">
@@ -368,30 +386,19 @@
         </item>
        </layout>
       </item>
-      <item row="6" column="0">
+      <item row="7" column="0">
        <widget class="Line" name="line_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <layout class="QHBoxLayout" name="save_buttons">
-        <item>
-         <widget class="QPushButton" name="saveVertical">
-          <property name="text">
-           <string>Save vertical cut</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="saveHorizontal">
-          <property name="text">
-           <string>Save horizontal cut</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <item row="5" column="0">
+       <widget class="Line" name="line_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
