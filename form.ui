@@ -388,38 +388,6 @@ Horizontal</string>
         </item>
        </layout>
       </item>
-      <item row="4" column="0">
-       <layout class="QHBoxLayout" name="save_buttons">
-        <item>
-         <widget class="QPushButton" name="saveVertical">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Save
-Vertical</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="saveHorizontal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Save
-Horizontal</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="16" column="0">
        <layout class="QVBoxLayout" name="FWHM" stretch="0,0,0,0">
         <property name="spacing">
@@ -509,6 +477,38 @@ Horizontal</string>
          <string>FWHM scan</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="0">
+       <layout class="QHBoxLayout" name="save_buttons">
+        <item>
+         <widget class="QPushButton" name="saveVertical">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Save
+Vertical</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="saveHorizontal">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Save
+Horizontal</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
