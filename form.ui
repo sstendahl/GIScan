@@ -493,7 +493,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QGridLayout" name="data" columnstretch="5,4">
+     <layout class="QGridLayout" name="data" columnstretch="10,9">
       <item row="0" column="0">
        <layout class="QVBoxLayout" name="maplayout"/>
       </item>
