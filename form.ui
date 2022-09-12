@@ -16,14 +16,14 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,10">
     <item>
-     <layout class="QGridLayout" name="sidebar" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0">
+     <layout class="QGridLayout" name="sidebar" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0">
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <property name="verticalSpacing">
        <number>8</number>
       </property>
-      <item row="7" column="0">
+      <item row="10" column="0">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -36,7 +36,7 @@
         </property>
        </spacer>
       </item>
-      <item row="3" column="0">
+      <item row="5" column="0">
        <layout class="QHBoxLayout" name="hold_buttons">
         <item>
          <widget class="QPushButton" name="holdVertical">
@@ -72,57 +72,14 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="0">
-       <layout class="QVBoxLayout" name="settings" stretch="0,0,0">
-        <property name="spacing">
-         <number>10</number>
-        </property>
-        <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
-        </property>
-        <item alignment="Qt::AlignTop">
-         <widget class="QPushButton" name="load_button">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Load data</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="settings_button">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Settings</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="20" column="0">
+      <item row="23" column="0">
        <widget class="Line" name="line_7">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
-      <item row="9" column="0">
+      <item row="12" column="0">
        <widget class="QPushButton" name="pushButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -141,11 +98,18 @@
         </property>
        </widget>
       </item>
-      <item row="19" column="0">
-       <layout class="QVBoxLayout" name="checkable_buttons" stretch="0,0,0">
+      <item row="22" column="0">
+       <layout class="QVBoxLayout" name="checkable_buttons" stretch="0,0,0,0">
         <property name="spacing">
          <number>10</number>
         </property>
+        <item>
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QPushButton" name="dragButton">
           <property name="sizePolicy">
@@ -202,7 +166,7 @@
         </item>
        </layout>
       </item>
-      <item row="21" column="0">
+      <item row="24" column="0">
        <layout class="QVBoxLayout" name="roi_settings">
         <property name="spacing">
          <number>7</number>
@@ -221,7 +185,7 @@
         </item>
         <item>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="3" column="0">
+          <item row="9" column="0">
            <widget class="QLineEdit" name="middleXEntry">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -237,46 +201,23 @@
             </property>
            </widget>
           </item>
+          <item row="9" column="1">
+           <widget class="QLineEdit" name="middleYEntry">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>10000</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Width:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Center X:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_5">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Center Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
            <widget class="QLineEdit" name="recWidthEntry">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -293,19 +234,6 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Heigth:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
            <widget class="QLineEdit" name="recHeigthEntry">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -321,19 +249,55 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="middleYEntry">
+          <item row="7" column="1">
+           <widget class="QLabel" name="label_5">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>10000</width>
-              <height>16777215</height>
-             </size>
+            <property name="text">
+             <string>Center Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Width:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Heigth:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Center X:</string>
             </property>
            </widget>
           </item>
@@ -363,20 +327,31 @@
         </item>
        </layout>
       </item>
-      <item row="17" column="0">
-       <layout class="QVBoxLayout" name="FWHM" stretch="0,0,0,0">
-        <property name="spacing">
-         <number>10</number>
+      <item row="4" column="0">
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="Line" name="line_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="Line" name="line_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <layout class="QHBoxLayout" name="save_buttons">
         <item>
-         <widget class="Line" name="line_6">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="findFWHM_button">
+         <widget class="QPushButton" name="saveVertical">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -384,50 +359,26 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Find FWHM</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
+           <string>Save vertical</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="FWHM_entry">
+         <widget class="QPushButton" name="saveHorizontal">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="Line" name="line_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+          <property name="text">
+           <string>Save horizontal</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="6" column="0">
-       <widget class="Line" name="line_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="Line" name="line_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="0">
+      <item row="13" column="0">
        <layout class="QGridLayout" name="scan_layout">
         <item row="1" column="2">
          <widget class="QPushButton" name="detector_button">
@@ -469,10 +420,10 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="save_buttons">
+      <item row="2" column="0">
+       <layout class="QHBoxLayout" name="settings">
         <item>
-         <widget class="QPushButton" name="saveVertical">
+         <widget class="QPushButton" name="load_button">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -480,27 +431,60 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Save vertical</string>
+           <string>Load data</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="saveHorizontal">
+         <widget class="QPushButton" name="settings_button">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Save horizontal</string>
+           <string>Settings</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
-       <widget class="Line" name="line_2">
+      <item row="15" column="0">
+       <layout class="QHBoxLayout" name="FWHM_layout">
+        <item>
+         <widget class="QPushButton" name="findFWHM_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Find FWHM</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="FWHM_entry">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="14" column="0">
+       <widget class="Line" name="line_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
