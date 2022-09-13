@@ -94,7 +94,7 @@
          </size>
         </property>
         <property name="text">
-         <string>FWHM scan</string>
+         <string>FWHM scan (beta)</string>
         </property>
        </widget>
       </item>
@@ -175,6 +175,7 @@
          <widget class="QLabel" name="label_3">
           <property name="font">
            <font>
+            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>

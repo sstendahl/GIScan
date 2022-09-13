@@ -24,7 +24,7 @@ def open_fwhmscan_result_window(self, X, Y):
     self.clearLayout(layout)
     in_plane_label, out_of_plane_label = gisaxs.get_labels()
     self.fwhmscan_result_window.save_button.clicked.connect(lambda: saveFile(self, X, Y))
-    figure = plottingtools.plotGraphOnCanvas(self, layout, X, Y, ylabel="FWHM (Å-1)", xlabel=out_of_plane_label,
+    figure = plottingtools.plotGraphOnCanvas(self, layout, X, Y, ylabel="FWHM (Å-1)", xlabel=in_plane_label,
                                              title="FWHM scan", scale="linear",
                                              revert=False, marker = "o")
     self.fwhmscan_result_window.show()
@@ -49,11 +49,16 @@ def fwhmscan(self):
     step_size = float(self.fwhmscan_window.step_size_entry.displayText())
     qy_stop = float(self.fwhmscan_window.qy_stop_entry.displayText())
     width = float(self.fwhmscan_window.width_entry.displayText())
+    qz_middle = float(self.fwhmscan_window.qz_pos_entry.displayText())
+    heigth = float(self.fwhmscan_window.heigth_entry.displayText())
 
     while qy_coordinate < qy_stop:
         x1 = qy_coordinate - width/2
         x2 = qy_coordinate + width/2
-        self.ROI_scan_rect.extents = [x1, x2, 0.10, 0.2]
+        y1 = qz_middle + heigth/2
+        y2 = qz_middle - heigth/2
+
+        self.ROI_scan_rect.extents = [x1, x2, y1, y2]
         startx, stopx, starty, stopy = scanning_tools.find_startstop(self)
         intensity_list = scanning_tools.calc_cut(self, startx, stopx, starty, stopy, horizontal=False)
         mapping = self.sampledata.mapping
@@ -91,7 +96,9 @@ def fwhmscan(self):
     while qy_coordinate > -qy_stop:
         x1 = qy_coordinate - width/2
         x2 = qy_coordinate + width/2
-        self.ROI_scan_rect.extents = [x1, x2, 0.10, 0.2]
+        y1 = qz_middle + heigth/2
+        y2 = qz_middle - heigth/2
+        self.ROI_scan_rect.extents = [x1, x2, y1, y2]
         startx, stopx, starty, stopy = scanning_tools.find_startstop(self)
         intensity_list = scanning_tools.calc_cut(self, startx, stopx, starty, stopy, horizontal=False)
         mapping = self.sampledata.mapping
