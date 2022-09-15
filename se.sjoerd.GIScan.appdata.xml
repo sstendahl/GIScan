@@ -47,8 +47,8 @@
     </screenshot>
   </screenshots>
   
-    <releases>
-    <release version="1.0.1" date="2022-09-12">
+  <releases>
+        <release version="1.0.1" date="2022-09-12">
       <description>
         <ul>
           <li>Changed the coordinates to grid-layout to save space</li>
@@ -56,9 +56,7 @@
         </ul>
       </description>
     </release>
-  </releases>
 
-  <releases>
     <release version="1.0.0" date="2022-09-10">
       <description>
         <ul>
