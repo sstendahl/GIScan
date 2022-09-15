@@ -147,7 +147,7 @@ def populate_cmaplist(self, config, cmaps):
 def write_config(self):
     set_experimental_parameters(self)
     set_cmap(self)
-    if self.sampledata != None:
+    if self.ROI_scan_rect is not None:
         gisaxs.loadMap(self, self.sampledata.path)
         scan.detector_scan(self)
         self.holdHorizontal.setChecked(False)
