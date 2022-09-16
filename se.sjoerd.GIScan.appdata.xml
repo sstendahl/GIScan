@@ -48,12 +48,13 @@
   </screenshots>
   
   <releases>
-            <release version="1.0.1" date="2022-09-16">
+            <release version="1.1.0" date="2022-09-16">
       <description>
         <ul>
           <li>Implemented a FWHM scan function to scan FWHM of Bragg sheet in Qz space over different positions in Qy (still in Beta)</li>
-          <li>Some minor UI chances to ensure compatibility with smaller screen resolutions</li>
-          <li>Some general bug fixes and increased stability</li>
+          <li>Future updates in short term will mostly focus on improving this functionality</li>
+          <li>Made minor UI chances to ensure compatibility with smaller screen resolutions</li>
+          <li>Added a few general bug fixes to prevent GIScan from crashing unexpectedly</li>
         </ul>
       </description>
     </release>
