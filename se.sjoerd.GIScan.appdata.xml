@@ -48,6 +48,16 @@
   </screenshots>
   
   <releases>
+            <release version="1.0.1" date="2022-09-16">
+      <description>
+        <ul>
+          <li>Implemented a FWHM scan function to scan FWHM of Bragg sheet in Qz space over different positions in Qy (still in Beta)</li>
+          <li>Some minor UI chances to ensure compatibility with smaller screen resolutions</li>
+          <li>Some general bug fixes and increased stability</li>
+        </ul>
+      </description>
+    </release>
+    
         <release version="1.0.1" date="2022-09-12">
       <description>
         <ul>
