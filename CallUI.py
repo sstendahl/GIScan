@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QFileDialog
 import numpy as np
 import os
 import shutil
-import platform
+import fwhmscan
 import settings
 import gisaxs
 from PyQt5 import QtGui
@@ -15,6 +15,18 @@ import scanning_tools as scan
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
 Ui_settingsDialog, settingsDialogClass = uic.loadUiType("settingsdialog.ui")
+Ui_fwhmscan_window, fwhmscan_windowClass = uic.loadUiType("fwhmscan_window.ui")
+Ui_fwhmscan_result_window, fwhmscan_result_windowClass = uic.loadUiType("fwhmscan_result_window.ui")
+
+class fwhmscanUI(fwhmscan_windowClass, Ui_fwhmscan_window):
+    def __init__(self, parent=None):
+        fwhmscan_windowClass.__init__(self, parent)
+        self.setupUi(self)
+
+class fwhmscan_resultUI(fwhmscan_result_windowClass, Ui_fwhmscan_result_window):
+    def __init__(self, parent=None):
+        fwhmscan_result_windowClass.__init__(self, parent)
+        self.setupUi(self)
 
 
 class settingsUI(settingsDialogClass, Ui_settingsDialog):
@@ -59,6 +71,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
         self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
         self.dragButton.clicked.connect(self.press_drag_button)
+        self.fwhmscan_button.clicked.connect(lambda: fwhmscan.open_fwhmscan_window(self))
         self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
         self.findFWHM_button.clicked.connect(self.press_FWHM_button)
         self.ROI_button.clicked.connect(self.press_ROI_button)
@@ -261,10 +274,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 scan.calcOffSpec(self, scan = "both")
 
 
-    def saveFileDialog(self, documenttype="Text file (*.txt)", title="Save file"):
+    def saveFileDialog(self, filename = None, documenttype="Text file (*.txt)", title="Save file"):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName = QFileDialog.getSaveFileName(self, title, self.filename[:-4],
+        if filename == None:
+            filename = self.filename[:-4]
+        fileName = QFileDialog.getSaveFileName(self, title, filename,
                                                documenttype, options=options)
         return fileName
 
