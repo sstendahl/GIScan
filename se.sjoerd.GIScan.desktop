@@ -3,4 +3,4 @@ Name=GIScan
 Exec=runner.sh
 Type=Application
 Icon=se.sjoerd.GIScan
-Categories=Utility;Science
+Categories=Education;Science
