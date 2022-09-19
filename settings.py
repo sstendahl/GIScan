@@ -35,6 +35,7 @@ def openSettingsdialog(self):
     self.settingsdialog.dby_line.setText(str(config["db_y"]))
     self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
     self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
+    self.settingsdialog.dark_graphs.setChecked(config["dark_graphs"])
     check_cbar = config["colorbar"]
     self.settingsdialog.cbar_check.setChecked(check_cbar)
     self.settingsdialog.show()
@@ -55,6 +56,7 @@ def set_experimental_parameters(self):
     config["ps_y"] = float(self.settingsdialog.ps_y_line.displayText())
     config["mapping"] = str(self.settingsdialog.mapping_widget.currentText())
     config["cbar_pos"] = str(self.settingsdialog.cbar_pos_widget.currentText())
+    config["dark_graphs"] = self.settingsdialog.dark_graphs.isChecked()
     if self.settingsdialog.cbar_check.isChecked():
         cbar = 1
     else:
@@ -147,7 +149,7 @@ def populate_cmaplist(self, config, cmaps):
 def write_config(self):
     set_experimental_parameters(self)
     set_cmap(self)
-    if self.sampledata != None:
+    if self.ROI_scan_rect is not None:
         gisaxs.loadMap(self, self.sampledata.path)
         scan.detector_scan(self)
         self.holdHorizontal.setChecked(False)
