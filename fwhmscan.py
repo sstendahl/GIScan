@@ -2,7 +2,10 @@ import CallUI
 import plottingtools
 import scanning_tools
 import numpy as np
+import json
 import gisaxs
+import settings
+import shutil
 
 
 def open_fwhmscan_window(self):
@@ -13,8 +16,48 @@ def open_fwhmscan_window(self):
     layout = self.fwhmscan_window.map_preview
     self.clearLayout(layout)
     self.previewcanvas = plottingtools.singlePlotonCanvas(self, layout, data, title=self.filename)
+
+    with open("config.json", 'r') as f:
+        config = json.load(f)
+
+    try:
+        step_size = config["fwhmscan_stepsize"]
+        width = config["fwhmscan_width"]
+        qz_middle = config["fwhmscan_qzposition"]
+        heigth = config["fwhmscan_heigth"]
+        qy_stop = config["fwhmscan_qystop"]
+    except KeyError:
+        step_size = float(self.fwhmscan_window.step_size_entry.displayText())
+        qy_stop = float(self.fwhmscan_window.qy_stop_entry.displayText())
+        width = float(self.fwhmscan_window.width_entry.displayText())
+        qz_middle = float(self.fwhmscan_window.qz_pos_entry.displayText())
+        heigth = float(self.fwhmscan_window.heigth_entry.displayText())
+
+    self.fwhmscan_window.step_size_entry.setText(str(step_size))
+    self.fwhmscan_window.width_entry.setText(str(width))
+    self.fwhmscan_window.qz_pos_entry.setText(str(qz_middle))
+    self.fwhmscan_window.heigth_entry.setText(str(heigth))
+    self.fwhmscan_window.qy_stop_entry.setText(str(qy_stop))
+
     self.fwhmscan_window.show()
-    self.fwhmscan_window.accepted.connect(lambda: fwhmscan(self))
+    self.fwhmscan_window.accepted.connect(lambda: press_fwhmscan(self))
+
+def press_fwhmscan(self):
+    save_fwhmscan_settings(self)
+    fwhmscan(self)
+
+def save_fwhmscan_settings(self):
+    with open("config.json", 'r') as f:
+        config = json.load(f)
+
+    config["fwhmscan_stepsize"] = float(self.fwhmscan_window.step_size_entry.displayText())
+    config["fwhmscan_qystop"] = float(self.fwhmscan_window.qy_stop_entry.displayText())
+    config["fwhmscan_width"] = float(self.fwhmscan_window.width_entry.displayText())
+    config["fwhmscan_qzposition"] = float(self.fwhmscan_window.qz_pos_entry.displayText())
+    config["fwhmscan_heigth"] = float(self.fwhmscan_window.heigth_entry.displayText())
+    with open("config.json", 'w') as f:
+        json.dump(config, f)
+
 
 
 def open_fwhmscan_result_window(self, X, Y):

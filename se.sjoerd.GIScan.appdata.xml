@@ -53,6 +53,7 @@
       <description>
         <ul>
           <li>Fixed a bug where ROI and Background rectangles didn't switch properly after using FWHM scan function</li>
+          <li>FWHM scan settings are now persistent over usage</li>
         </ul>
       </description>
     </release>
