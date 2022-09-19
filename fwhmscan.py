@@ -12,7 +12,7 @@ def open_fwhmscan_window(self):
     data = self.sampledata.gisaxs_data
     layout = self.fwhmscan_window.map_preview
     self.clearLayout(layout)
-    self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title=self.filename)
+    self.previewcanvas = plottingtools.singlePlotonCanvas(self, layout, data, title=self.filename)
     self.fwhmscan_window.show()
     self.fwhmscan_window.accepted.connect(lambda: fwhmscan(self))
 
@@ -149,13 +149,6 @@ def fwhmscan(self):
                 FWHM = (FWHM_list[index] + FWHM_listminus[index]) / 2
                 FWHM_average.append(FWHM)
                 qy_newlist.append(qy_list[index])
-        
-    self.ROI_background_rect.set_visible(False)
-    self.ROI_background_rect.set_active(False)
-    self.bg_ROI_button.setChecked(False)
-    self.ROI_button.setChecked(True)
-    self.ROI_scan_rect.set_visible(True)
-    self.ROI_scan_rect.set_active(True)
     open_fwhmscan_result_window(self, qy_newlist, FWHM_average)
 
 
