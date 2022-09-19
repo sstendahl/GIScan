@@ -6,7 +6,7 @@ import gisaxs
 
 
 def open_fwhmscan_window(self):
-    """Opens settings dialog."""
+    """Opens window with FWHM scan setuo."""
     self.fwhmscan_window = CallUI.fwhmscanUI()
 
     data = self.sampledata.gisaxs_data
@@ -18,7 +18,7 @@ def open_fwhmscan_window(self):
 
 
 def open_fwhmscan_result_window(self, X, Y):
-    """Opens settings dialog."""
+    """Opens results of FWHM scan."""
     self.fwhmscan_result_window = CallUI.fwhmscan_resultUI()
     layout = self.fwhmscan_result_window.fwhm_graph_layout
     self.clearLayout(layout)
@@ -30,6 +30,7 @@ def open_fwhmscan_result_window(self, X, Y):
     self.fwhmscan_result_window.show()
 
 def saveFile(self, X, Y):
+    """Save file, will have to rewrite this to be more universal."""
     filename = f"{self.filename[:-4]}_FWHMscan"
     path = self.saveFileDialog(filename = filename, title="Save FWHM scan")
     filename = path[0]
@@ -40,6 +41,10 @@ def saveFile(self, X, Y):
 
 
 def fwhmscan(self):
+    """Perform the FWHM scan. 
+        This is just a prototype solution, will rewrite a proper version.
+    """
+
     qy_coordinate = 0
     FWHM_list = []
     FWHM_listminus = []
@@ -144,12 +149,20 @@ def fwhmscan(self):
                 FWHM = (FWHM_list[index] + FWHM_listminus[index]) / 2
                 FWHM_average.append(FWHM)
                 qy_newlist.append(qy_list[index])
-
+        
+    self.ROI_background_rect.set_visible(False)
+    self.ROI_background_rect.set_active(False)
+    self.bg_ROI_button.setChecked(False)
+    self.ROI_button.setChecked(True)
+    self.ROI_scan_rect.set_visible(True)
+    self.ROI_scan_rect.set_active(True)
     open_fwhmscan_result_window(self, qy_newlist, FWHM_average)
 
 
 def find_FWHM(self, position, scan_type="vertical"):
-    """PLACEHOLDER FUNCTION! WORKS BUT VERY UGLY, DO NOT USE FOR STABLE RELEASE"""
+    """
+    Find FWHM of the peak near position
+    Placeholder function, quite ugly right now."""
     xdata = self.sampledata.vertical_scan_x
     ydata = self.sampledata.vertical_scan_y
     index_max = np.argmax(self.sampledata.vertical_scan_y)
