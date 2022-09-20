@@ -78,12 +78,13 @@ class PlotWidget(FigureCanvas):
         else:
             plt.style.use(style)
         plt.rcParams.update({'font.family':'sans-serif'})
-        plt.rc('font', size=10) 
+        label_font_size = 12
+        titel_font_size = 12
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.ax = self.figure.add_subplot(111)
-        self.ax.set_title(title)
+        self.ax.set_title(title, fontsize = title_font_size)
         self.figure.set_tight_layout(True)
-        self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(ylabel)
+        self.ax.set_xlabel(xlabel, fontsize = label_font_size)
+        self.ax.set_ylabel(ylabel, fontsize = label_font_size)
         super(PlotWidget, self).__init__(self.figure)
