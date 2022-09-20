@@ -71,7 +71,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
         self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
         self.dragButton.clicked.connect(self.press_drag_button)
-        self.fwhmscan_button.clicked.connect(lambda: fwhmscan.open_fwhmscan_window(self))
         self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
         self.findFWHM_button.clicked.connect(self.press_FWHM_button)
         self.ROI_button.clicked.connect(self.press_ROI_button)
