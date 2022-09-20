@@ -42,11 +42,11 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.setWindowIcon\
             (QtGui.QIcon('logo.png'))
         self.setupUi(self)
-        self.connectActions()
         self.sampledata = None
         self.clicked = False
         self.ROI_scan_rect = None
         self.ROI_background_rect = None
+        self.connectActions()
 
         config_path = settings.get_path()
         if not os.path.isfile(f"{config_path}/config.json"):
