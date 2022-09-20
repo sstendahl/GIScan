@@ -79,7 +79,7 @@ class PlotWidget(FigureCanvas):
             plt.style.use(style)
         plt.rcParams.update({'font.family':'sans-serif'})
         label_font_size = 12
-        titel_font_size = 12
+        title_font_size = 12
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.ax = self.figure.add_subplot(111)
