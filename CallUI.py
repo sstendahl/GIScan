@@ -65,16 +65,18 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def connectActions(self):
         # Connect File actions
         self.load_button.clicked.connect(lambda: gisaxs.loadMap_from_file_picker(self))
-        self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
-        self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
-        self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
-        self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
-        self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
-        self.dragButton.clicked.connect(self.press_drag_button)
         self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
-        self.findFWHM_button.clicked.connect(self.press_FWHM_button)
-        self.ROI_button.clicked.connect(self.press_ROI_button)
-        self.bg_ROI_button.clicked.connect(self.press_bg_ROI_button)
+        if self.sampledata is not None:
+            self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
+            self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
+            self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
+            self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
+            self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
+            self.dragButton.clicked.connect(self.press_drag_button)
+            self.fwhmscan_button.clicked.connect(lambda: fwhmscan.open_fwhmscan_window(self))
+            self.findFWHM_button.clicked.connect(self.press_FWHM_button)
+            self.ROI_button.clicked.connect(self.press_ROI_button)
+            self.bg_ROI_button.clicked.connect(self.press_bg_ROI_button)
 
     def press_drag_button(self):
         if self.dragButton.isChecked():
