@@ -47,7 +47,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clicked = False
         self.ROI_scan_rect = None
         self.ROI_background_rect = None
-        print(plt.style.available)
 
 
         config_path = settings.get_path()
