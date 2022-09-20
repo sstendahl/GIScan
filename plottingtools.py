@@ -77,6 +77,7 @@ class PlotWidget(FigureCanvas):
             plt.style.use('dark_background')
         else:
             plt.style.use(style)
+        plt.rcParams.update({'font.family':'sans-serif'})
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.ax = self.figure.add_subplot(111)
