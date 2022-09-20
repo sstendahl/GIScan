@@ -77,8 +77,7 @@ class PlotWidget(FigureCanvas):
             plt.style.use('dark_background')
         else:
             plt.style.use(style)
-        plt.rcParams.update({'font.family':'sans-serif'})
-        label_font_size = 12
+        label_font_size = 11
         title_font_size = 12
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
