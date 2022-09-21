@@ -35,7 +35,11 @@ def openSettingsdialog(self):
     self.settingsdialog.dby_line.setText(str(config["db_y"]))
     self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
     self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
-    self.settingsdialog.dark_graphs.setChecked(config["dark_graphs"])
+    #Temporary workaround
+    try:
+        self.settingsdialog.dark_graphs.setChecked(config["dark_graphs"])
+    except KeyError:
+        pass
     check_cbar = config["colorbar"]
     self.settingsdialog.cbar_check.setChecked(check_cbar)
     self.settingsdialog.show()
