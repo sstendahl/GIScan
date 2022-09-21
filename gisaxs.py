@@ -51,8 +51,6 @@ def loadMap_from_file_picker(self):
 
 def loadMap(self, file):
     self.firstRun = True
-    if self.ROI_scan_rect is None:
-        self.connectActions()
     self.holdVertical.setChecked(False)
     self.holdHorizontal.setChecked(False)
     self.figurecanvas = None
