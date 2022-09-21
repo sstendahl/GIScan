@@ -37,10 +37,10 @@ def openSettingsdialog(self):
         self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
         self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
         self.settingsdialog.dark_graphs.setChecked(config["dark_graphs"])
+        check_cbar = config["colorbar"]
+        self.settingsdialog.cbar_check.setChecked(check_cbar)
     except KeyError:
         pass
-    check_cbar = config["colorbar"]
-    self.settingsdialog.cbar_check.setChecked(check_cbar)
     self.settingsdialog.show()
     self.settingsdialog.accepted.connect(lambda: write_config(self))
 
