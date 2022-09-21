@@ -53,9 +53,10 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             path = config_path + "/config.json"
             shutil.copy("config.json", path)
             print(f"Saved config file in {config_path}")
-
+        
         gisaxs.loadEmpty(self)
-
+        self.connectActions()
+     
     def loadMap(self):
         path = scan.getPath()
         gisaxs.loadMap(path)
