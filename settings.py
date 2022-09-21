@@ -167,7 +167,8 @@ def get_config(key):
     try:
         item = config[key]
     except KeyError:
-        item = False
+        print(f"Could not find a config for key {key}, returning None"}
+        item = None
     return item
 
 
