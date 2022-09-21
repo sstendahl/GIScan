@@ -1,5 +1,6 @@
 from matplotlib.figure import Figure
 import matplotlib.colors as colors
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import gisaxs
@@ -30,10 +31,10 @@ def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log"
     canvas.ax.set_yscale(scale)
 
 
-def singlePlotonCanvas(self, layout, data, ylabel="", xlim=None, title="GISAXS Data"):
+def singlePlotonCanvas(self, layout, data, ylabel="", xlim=None, title="GISAXS Data", style = "seaborn-whitegrid"):
     in_plane_label, out_of_plane_label = gisaxs.get_labels()
     canvas = PlotWidget(xlabel=in_plane_label, ylabel=out_of_plane_label,
-                        title=title)
+                        title=title, style = style)
     figure = canvas.figure
     plotFigure(self, data, canvas, title=title)
     layout.addWidget(canvas)
@@ -71,12 +72,18 @@ def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="line
 
 
 class PlotWidget(FigureCanvas):
-    def __init__(self, parent=None, xlabel="", ylabel="", title="", scale="linear"):
+    def __init__(self, parent=None, xlabel="", ylabel="", title="", scale="linear", style = "seaborn-whitegrid"):
+        if settings.get_config("dark_graphs"):
+            plt.style.use('dark_background')
+        else:
+            plt.style.use(style)
+        label_font_size = 11
+        title_font_size = 12
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.ax = self.figure.add_subplot(111)
-        self.ax.set_title(title)
+        self.ax.set_title(title, fontsize = title_font_size)
         self.figure.set_tight_layout(True)
-        self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(ylabel)
+        self.ax.set_xlabel(xlabel, fontsize = label_font_size)
+        self.ax.set_ylabel(ylabel, fontsize = label_font_size)
         super(PlotWidget, self).__init__(self.figure)

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Settings</string>
+   <string>FWHM scan</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="7" column="1">
