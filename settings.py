@@ -28,15 +28,14 @@ def openSettingsdialog(self):
     with open("config.json", 'r') as f:
         config = json.load(f)
     load_cmaplist(self)
-    self.settingsdialog.ai_line.setText(str(config["ai"]))
-    self.settingsdialog.wavelength_line.setText(str(config["wavelength"]))
-    self.settingsdialog.sdd_line.setText(str(config["sdd"]))
-    self.settingsdialog.dbx_line.setText(str(config["db_x"]))
-    self.settingsdialog.dby_line.setText(str(config["db_y"]))
-    self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
-    self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
-    #Temporary workaround
     try:
+        self.settingsdialog.ai_line.setText(str(config["ai"]))
+        self.settingsdialog.wavelength_line.setText(str(config["wavelength"]))
+        self.settingsdialog.sdd_line.setText(str(config["sdd"]))
+        self.settingsdialog.dbx_line.setText(str(config["db_x"]))
+        self.settingsdialog.dby_line.setText(str(config["db_y"]))
+        self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
+        self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
         self.settingsdialog.dark_graphs.setChecked(config["dark_graphs"])
     except KeyError:
         pass
