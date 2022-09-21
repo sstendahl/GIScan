@@ -69,7 +69,6 @@ def loadMap(self, file):
         layout = self.maplayout
         self.clearLayout(self.maplayout)
         self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title = filename, style = "default")
-        self.connectActions()
         try:
             self.define_rectangle()
             scan.find_specular(self)

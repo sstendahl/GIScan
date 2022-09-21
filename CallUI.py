@@ -46,8 +46,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clicked = False
         self.ROI_scan_rect = None
         self.ROI_background_rect = None
-        self.connectActions()
-
         config_path = settings.get_path()
         if not os.path.isfile(f"{config_path}/config.json"):
             if not os.path.isdir(config_path):
@@ -55,9 +53,10 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             path = config_path + "/config.json"
             shutil.copy("config.json", path)
             print(f"Saved config file in {config_path}")
-
+        
         gisaxs.loadEmpty(self)
-
+        self.connectActions()
+     
     def loadMap(self):
         path = scan.getPath()
         gisaxs.loadMap(path)
