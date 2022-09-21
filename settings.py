@@ -161,7 +161,10 @@ def get_config(key):
     os.chdir(config_path)
     with open("config.json", 'r') as f:
         config = json.load(f)
-    item = config[key]
+    try:
+        item = config[key]
+    except KeyError:
+        item = None
     return item
 
 
