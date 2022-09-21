@@ -48,6 +48,16 @@
   </screenshots>
   
   <releases>
+    
+        <release version="1.1.2" date="2022-09-21">
+      <description>
+        <ul>
+          <li>Added grids to the scan graphs</li>
+          <li>Added an option for dark graphs to facilitate dark mode themes</li>
+          <li>Minor bug fixes</li>
+        </ul>
+      </description>
+    </release>
   
     <release version="1.1.1" date="2022-09-19">
       <description>
