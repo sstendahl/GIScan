@@ -9,7 +9,7 @@ import shutil
 
 
 def open_fwhmscan_window(self):
-    """Opens window with FWHM scan setuo."""
+    """Opens window with FWHM scan setup."""
     self.fwhmscan_window = CallUI.fwhmscanUI()
 
     data = self.sampledata.gisaxs_data

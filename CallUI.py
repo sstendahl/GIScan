@@ -46,6 +46,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.clicked = False
         self.ROI_scan_rect = None
         self.ROI_background_rect = None
+        self.load_button.clicked.connect(lambda: gisaxs.loadMap_from_file_picker(self))
+        self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
         config_path = settings.get_path()
         if not os.path.isfile(f"{config_path}/config.json"):
             if not os.path.isdir(config_path):
@@ -55,27 +57,23 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             print(f"Saved config file in {config_path}")
         
         gisaxs.loadEmpty(self)
-        self.connectActions()
-     
+
     def loadMap(self):
         path = scan.getPath()
         gisaxs.loadMap(path)
 
     def connectActions(self):
-        # Connect File actions
-        self.load_button.clicked.connect(lambda: gisaxs.loadMap_from_file_picker(self))
-        self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
-        if self.sampledata is not None:
-            self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
-            self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
-            self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
-            self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
-            self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
-            self.dragButton.clicked.connect(self.press_drag_button)
-            self.fwhmscan_button.clicked.connect(lambda: fwhmscan.open_fwhmscan_window(self))
-            self.findFWHM_button.clicked.connect(self.press_FWHM_button)
-            self.ROI_button.clicked.connect(self.press_ROI_button)
-            self.bg_ROI_button.clicked.connect(self.press_bg_ROI_button)
+        """Connect actions to buttons."""
+        self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
+        self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
+        self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
+        self.yoneda_button.clicked.connect(lambda: scan.YonedaScan(self))
+        self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
+        self.dragButton.clicked.connect(self.press_drag_button)
+        self.fwhmscan_button.clicked.connect(lambda: fwhmscan.open_fwhmscan_window(self))
+        self.findFWHM_button.clicked.connect(self.press_FWHM_button)
+        self.ROI_button.clicked.connect(self.press_ROI_button)
+        self.bg_ROI_button.clicked.connect(self.press_bg_ROI_button)
 
     def press_drag_button(self):
         if self.dragButton.isChecked():
