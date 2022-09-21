@@ -164,7 +164,7 @@ def get_config(key):
     try:
         item = config[key]
     except KeyError:
-        item = None
+        item = False
     return item
 
 
