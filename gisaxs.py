@@ -52,6 +52,23 @@ def loadMap_from_file_picker(self):
     path = getPath(self)
     loadMap(self, path)
 
+def set_ROI_mode(self, mode = "ROI"):
+    """Set ROI to either regular ROI or Background mode."""
+    if mode == "ROI":
+        setter1 = True
+        setter2 = False
+    elif mode == "background":
+        setter1 = False
+        setter2 = True
+
+    self.ROI_button.setChecked(setter1)
+    self.bg_ROI_button.setChecked(setter2)
+    self.ROI_scan_rect.set_visible(setter1)
+    self.ROI_scan_rect.set_active(setter1)
+    self.ROI_background_rect.set_visible(setter2)
+    self.ROI_background_rect.set_active(setter2)
+
+
 def loadMap(self, file):
     """Load the the selected GISAXS map."""
 
@@ -78,6 +95,7 @@ def loadMap(self, file):
         self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title = filename, style = "default")
         try:
             self.define_rectangle()
+            set_ROI_mode(self, "ROI")
             scan.find_specular(self)
             scan.detector_scan(self)
             self.holdHorizontal.setChecked(False)
