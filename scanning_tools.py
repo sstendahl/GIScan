@@ -15,6 +15,7 @@ def ttheta_f(pp_x, db_x, ps_x, sdd):
 
 def alpha_f(pp_y, db_y, ps_y, sdd, a_i):
     """Convert single vertical pixel coordinate to angular coordinates"""
+
     return np.degrees(np.arctan((pp_y - db_y) * ps_y / sdd)) - a_i
 
 
@@ -267,7 +268,6 @@ def calc_cut(self, startx, stopx, starty, stopy, horizontal=True):
 
 
 def get_average_background(self, type_of_ROI = "bg"):
-    """Get the average background intensity of a selected ROI."""
     startx, stopx, starty, stopy = find_startstop(self, type_of_ROI)
     total_intensity = 0
     total_datapoints = 0
@@ -353,7 +353,6 @@ def find_peak_in_range(self, position, xdata, ydata):
 
 
 def find_FWHM(self, position, scan_type="vertical"):
-    """Find a FWHM at a peak near a selected position"""
     if scan_type == "horizontal":
         xdata = self.sampledata.horizontal_scan_x
         ydata = self.sampledata.horizontal_scan_y
