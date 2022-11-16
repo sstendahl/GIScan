@@ -1,3 +1,13 @@
 /.flatpak-builder/
 /build/
 /build-dir/
+/.flatpak-builder/
+/flathub/
+/venv38/
+/venv38/bin/
+/venv38/include/
+/venv38/lib/
+/venv38/lib64/
+/venv38/share/
+/venv38/pyvenv.cfg
+/venv_new/

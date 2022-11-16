@@ -108,7 +108,6 @@ def loadMap(self, file):
 def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
     """Get the path from the file picker."""
     options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
     path = QFileDialog.getOpenFileName(self,"Open GISAXS data file", "",documenttype, options=options)[0]
     return path
 
