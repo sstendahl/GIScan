@@ -41,18 +41,39 @@ def loadEmpty(self):
     create_layout(self, verticalscan_canvas, self.vertical_layout)
 
 def create_layout(self, canvas, layout):
-    """Create an empty layout with a canvas and a toolbar, so a a graph can be plotted."""
+    """Create a layout to plat a graph on."""
+
     toolbar = NavigationToolbar(canvas, self)
     layout.addWidget(canvas)
     layout.addWidget(toolbar)
     
 def loadMap_from_file_picker(self):
-    """Select a map with the file picker and load this."""
+    """Load the GISAXS map after selecting it from the file picker."""
     path = getPath(self)
     loadMap(self, path)
 
-def loadMap(self, file, filetype = "cbf"):
-    """Load the selected map into GISCAN."""
+def set_ROI_mode(self, mode = "ROI"):
+    """Set ROI to either regular ROI or Background mode."""
+    if mode == "ROI":
+        setter1 = True
+        setter2 = False
+    elif mode == "background":
+        setter1 = False
+        setter2 = True
+
+    self.ROI_button.setChecked(setter1)
+    self.bg_ROI_button.setChecked(setter2)
+    self.ROI_scan_rect.set_visible(setter1)
+    self.ROI_scan_rect.set_active(setter1)
+    self.ROI_background_rect.set_visible(setter2)
+    self.ROI_background_rect.set_active(setter2)
+
+
+def loadMap(self, file):
+    """Load the the selected GISAXS map."""
+
+    if self.ROI_scan_rect == None:
+        self.connectActions()
     self.firstRun = True
     self.holdVertical.setChecked(False)
     self.holdHorizontal.setChecked(False)
@@ -64,17 +85,17 @@ def loadMap(self, file, filetype = "cbf"):
         filename = Path(file).name
         os.chdir(path)
         self.filename = filename
-        if filetype == "cbf":
-            contents = cbf.read(filename)
+        contents = cbf.read(filename)
         data = contents.data
         self.sampledata.gisaxs_data = data
         self.sampledata.path = file
 
         layout = self.maplayout
         self.clearLayout(self.maplayout)
-        self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title = filename)
+        self.figurecanvas = plottingtools.singlePlotonCanvas(self, layout, data, title = filename, style = "default")
         try:
             self.define_rectangle()
+            set_ROI_mode(self, "ROI")
             scan.find_specular(self)
             scan.detector_scan(self)
             self.holdHorizontal.setChecked(False)
@@ -83,10 +104,11 @@ def loadMap(self, file, filetype = "cbf"):
             print("Error doing preset runs")
         self.firstRun = False
 
+
 def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
-    """Obtain a path using the filepicker."""
+    """Get the path from the file picker."""
     options = QFileDialog.Options()
-    #options |= QFileDialog.DontUseNativeDialog
+    options |= QFileDialog.DontUseNativeDialog
     path = QFileDialog.getOpenFileName(self,"Open GISAXS data file", "",documenttype, options=options)[0]
     return path
 
