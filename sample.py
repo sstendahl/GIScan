@@ -30,12 +30,14 @@ class Sample:
         self.horizontal_scan_x = []
 
     def remove_background(self, heigth = 1, horizontal = True):
+        """Remove background signal from integrated cuts."""
         if horizontal:
             self.horizontal_scan_y = [data - self.average_bg * heigth for data in self.horizontal_scan_y]
         else:
             self.vertical_scan_y = [data - self.average_bg*heigth for data in self.vertical_scan_y]
 
     def remove_zeroes(self):
+        """Remove values that are equal to zero from the integrated cuts."""
         new_list = []
         new_coordinatelist = []
         for index in range(len(self.vertical_scan_y)):

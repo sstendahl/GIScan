@@ -41,15 +41,18 @@ def loadEmpty(self):
     create_layout(self, verticalscan_canvas, self.vertical_layout)
 
 def create_layout(self, canvas, layout):
+    """Create an empty layout with a canvas and a toolbar, so a a graph can be plotted."""
     toolbar = NavigationToolbar(canvas, self)
     layout.addWidget(canvas)
     layout.addWidget(toolbar)
     
 def loadMap_from_file_picker(self):
+    """Select a map with the file picker and load this."""
     path = getPath(self)
     loadMap(self, path)
 
-def loadMap(self, file):
+def loadMap(self, file, filetype = "cbf"):
+    """Load the selected map into GISCAN."""
     self.firstRun = True
     self.holdVertical.setChecked(False)
     self.holdHorizontal.setChecked(False)
@@ -61,7 +64,8 @@ def loadMap(self, file):
         filename = Path(file).name
         os.chdir(path)
         self.filename = filename
-        contents = cbf.read(filename)
+        if filetype == "cbf":
+            contents = cbf.read(filename)
         data = contents.data
         self.sampledata.gisaxs_data = data
         self.sampledata.path = file
@@ -80,8 +84,9 @@ def loadMap(self, file):
         self.firstRun = False
 
 def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
+    """Obtain a path using the filepicker."""
     options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
+    #options |= QFileDialog.DontUseNativeDialog
     path = QFileDialog.getOpenFileName(self,"Open GISAXS data file", "",documenttype, options=options)[0]
     return path
 

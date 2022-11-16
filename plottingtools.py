@@ -58,7 +58,7 @@ def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="line
     cbar = settings.get_config("colorbar")
     cmap = settings.get_config("cmap")
     #gisaxs_map = fig.contour(data, levels=200, cmap= cmap, locator=ticker.LogLocator(base=2), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
-    gisaxs_map = fig.imshow(data, cmap=cmap, norm=colors.SymLogNorm(linthresh=5, base=2), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
+    gisaxs_map = fig.imshow(data, cmap=cmap, norm=colors.SymLogNorm(linthresh=5), origin="lower", extent=[x_min, x_max, y_min, y_max], aspect="auto")
     if cbar:
         pos = settings.get_config("cbar_pos").lower()
         canvas.figure.colorbar(gisaxs_map, location=pos)

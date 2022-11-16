@@ -1,5 +1,6 @@
 import CallUI
 import plottingtools
+import scanning_tools
 
 def open_fwhmscan_window(self):
     """Opens settings dialog."""
@@ -14,4 +15,6 @@ def open_fwhmscan_window(self):
     self.fwhmscan_window.accepted.connect(lambda: fwhmscan(self))
 
 def fwhmscan(self):
-    pass
+    self.ROI_scan_rect.extents = [-0.01, 0.01, 0.10, 0.2]
+    startx, stopx, starty, stopy = scanning_tools.find_startstop(self)
+    intensity_list = scanning_tools.calc_cut(self, startx, stopx, starty, stopy, horizontal=False)
