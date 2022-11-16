@@ -378,11 +378,11 @@ def find_FWHM(self, position, scan_type="vertical"):
 
         found_left = False
         found_right = False
-        mesh_step = 1000000
+        mesh_step = 100000
 
         # Will optimize this a bit
         for index in range(mesh_step):
-            index = index / (mesh_step / 200)
+            index = index / (mesh_step)
             y_value_left = np.interp(peak_coordinate - index, xs, ys)
             y_value_right = np.interp(peak_coordinate + index, xs, ys)
             if found_left == False and y_value_left <= half_intensity:
@@ -392,9 +392,9 @@ def find_FWHM(self, position, scan_type="vertical"):
                 right_boundary_value = peak_coordinate + index
                 found_right = True
             if found_left == True and found_right == True:
+                FWHM = right_boundary_value - left_boundary_value
                 break
 
-        FWHM = right_boundary_value - left_boundary_value
         if hasattr(self, 'hline'):
             self.hline.remove()
         self.hline = axes.hlines(y=ydata[peak_position] / 2, xmin=left_boundary_value, xmax=right_boundary_value,

@@ -16,10 +16,16 @@ import scanning_tools as scan
 Ui_MainWindow, QtBaseClass = uic.loadUiType("form.ui")
 Ui_settingsDialog, settingsDialogClass = uic.loadUiType("settingsdialog.ui")
 Ui_fwhmscan_window, fwhmscan_windowClass = uic.loadUiType("fwhmscan_window.ui")
+Ui_fwhmscan_result_window, fwhmscan_result_windowClass = uic.loadUiType("fwhmscan_result_window.ui")
 
 class fwhmscanUI(fwhmscan_windowClass, Ui_fwhmscan_window):
     def __init__(self, parent=None):
         fwhmscan_windowClass.__init__(self, parent)
+        self.setupUi(self)
+
+class fwhmscan_resultUI(fwhmscan_result_windowClass, Ui_fwhmscan_result_window):
+    def __init__(self, parent=None):
+        fwhmscan_result_windowClass.__init__(self, parent)
         self.setupUi(self)
 
 
@@ -36,12 +42,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.setWindowIcon\
             (QtGui.QIcon('logo.png'))
         self.setupUi(self)
-        self.connectActions()
         self.sampledata = None
         self.clicked = False
         self.ROI_scan_rect = None
         self.ROI_background_rect = None
-
+        self.load_button.clicked.connect(lambda: gisaxs.loadMap_from_file_picker(self))
+        self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
         config_path = settings.get_path()
         if not os.path.isfile(f"{config_path}/config.json"):
             if not os.path.isdir(config_path):
@@ -49,7 +55,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
             path = config_path + "/config.json"
             shutil.copy("config.json", path)
             print(f"Saved config file in {config_path}")
-
+        
         gisaxs.loadEmpty(self)
 
     def loadMap(self):
@@ -57,8 +63,7 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         gisaxs.loadMap(path)
 
     def connectActions(self):
-        # Connect File actions
-        self.load_button.clicked.connect(lambda: gisaxs.loadMap_from_file_picker(self))
+        """Connect actions to buttons."""
         self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
         self.saveHorizontal.clicked.connect(lambda: self.saveFile(horizontal=True))
         self.setRec.clicked.connect(lambda: self.setRectangleFromEntry())
@@ -66,7 +71,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.detector_button.clicked.connect(lambda: scan.detector_scan(self))
         self.dragButton.clicked.connect(self.press_drag_button)
         self.fwhmscan_button.clicked.connect(lambda: fwhmscan.open_fwhmscan_window(self))
-        self.settings_button.clicked.connect(lambda: settings.openSettingsdialog(self))
         self.findFWHM_button.clicked.connect(self.press_FWHM_button)
         self.ROI_button.clicked.connect(self.press_ROI_button)
         self.bg_ROI_button.clicked.connect(self.press_bg_ROI_button)
@@ -130,14 +134,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def press_bg_ROI_button(self):
         if self.ROI_scan_rect is not None:
             if self.bg_ROI_button.isChecked():
-                self.ROI_background_rect.set_visible(True)
-                self.ROI_background_rect.set_active(True)
-                self.ROI_button.setChecked(False)
-                self.ROI_scan_rect.set_visible(False)
-                self.ROI_scan_rect.set_active(False)
+                gisaxs.set_ROI_mode(self, "background")
                 self.figurecanvas[1].draw()
-
-
             else:
                 self.ROI_background_rect.set_visible(False)
                 self.ROI_background_rect.set_active(False)
@@ -146,13 +144,8 @@ class CallUI(QtBaseClass, Ui_MainWindow):
     def press_ROI_button(self):
         if self.ROI_scan_rect is not None:
             if self.ROI_button.isChecked():
-                self.ROI_scan_rect.set_visible(True)
-                self.ROI_scan_rect.set_active(True)
-                self.bg_ROI_button.setChecked(False)
-                self.ROI_background_rect.set_visible(False)
-                self.ROI_background_rect.set_active(False)
+                gisaxs.set_ROI_mode(self, "ROI")
                 self.figurecanvas[1].draw()
-    
             else:
                 self.ROI_scan_rect.set_visible(False)
                 self.ROI_scan_rect.set_active(False)
@@ -268,10 +261,12 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 scan.calcOffSpec(self, scan = "both")
 
 
-    def saveFileDialog(self, documenttype="Text file (*.txt)", title="Save file"):
+    def saveFileDialog(self, filename = None, documenttype="Text file (*.txt)", title="Save file"):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName = QFileDialog.getSaveFileName(self, title, self.filename[:-4],
+        if filename == None:
+            filename = self.filename[:-4]
+        fileName = QFileDialog.getSaveFileName(self, title, filename,
                                                documenttype, options=options)
         return fileName
 

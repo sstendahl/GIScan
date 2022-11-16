@@ -47,7 +47,38 @@
     </screenshot>
   </screenshots>
   
-    <releases>
+  <releases>
+    
+        <release version="1.1.2" date="2022-09-21">
+      <description>
+        <ul>
+          <li>Added grids to the scan graphs</li>
+          <li>Added an option for dark graphs to facilitate dark mode themes</li>
+          <li>Minor bug fixes</li>
+        </ul>
+      </description>
+    </release>
+  
+    <release version="1.1.1" date="2022-09-19">
+      <description>
+        <ul>
+          <li>Fixed a bug where ROI and Background rectangles didn't switch properly after using FWHM scan function</li>
+          <li>FWHM scan settings are now persistent over usage</li>
+        </ul>
+      </description>
+    </release>
+    
+    <release version="1.1.0" date="2022-09-16">
+      <description>
+        <ul>
+          <li>Implemented a FWHM scan function to scan FWHM of Bragg sheet in Qz space over different positions in Qy (still in Beta)</li>
+          <li>Future updates in short term will mostly focus on improving this functionality</li>
+          <li>Made minor UI chances to ensure compatibility with smaller screen resolutions</li>
+          <li>Added a few general bug fixes to prevent GIScan from crashing unexpectedly</li>
+        </ul>
+      </description>
+    </release>
+    
     <release version="1.0.1" date="2022-09-12">
       <description>
         <ul>
@@ -56,9 +87,7 @@
         </ul>
       </description>
     </release>
-  </releases>
 
-  <releases>
     <release version="1.0.0" date="2022-09-10">
       <description>
         <ul>

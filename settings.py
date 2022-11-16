@@ -28,15 +28,19 @@ def openSettingsdialog(self):
     with open("config.json", 'r') as f:
         config = json.load(f)
     load_cmaplist(self)
-    self.settingsdialog.ai_line.setText(str(config["ai"]))
-    self.settingsdialog.wavelength_line.setText(str(config["wavelength"]))
-    self.settingsdialog.sdd_line.setText(str(config["sdd"]))
-    self.settingsdialog.dbx_line.setText(str(config["db_x"]))
-    self.settingsdialog.dby_line.setText(str(config["db_y"]))
-    self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
-    self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
-    check_cbar = config["colorbar"]
-    self.settingsdialog.cbar_check.setChecked(check_cbar)
+    try:
+        self.settingsdialog.ai_line.setText(str(config["ai"]))
+        self.settingsdialog.wavelength_line.setText(str(config["wavelength"]))
+        self.settingsdialog.sdd_line.setText(str(config["sdd"]))
+        self.settingsdialog.dbx_line.setText(str(config["db_x"]))
+        self.settingsdialog.dby_line.setText(str(config["db_y"]))
+        self.settingsdialog.ps_x_line.setText(str(config["ps_x"]))
+        self.settingsdialog.ps_y_line.setText(str(config["ps_y"]))
+        self.settingsdialog.dark_graphs.setChecked(config["dark_graphs"])
+        check_cbar = config["colorbar"]
+        self.settingsdialog.cbar_check.setChecked(check_cbar)
+    except KeyError:
+        pass
     self.settingsdialog.show()
     self.settingsdialog.accepted.connect(lambda: write_config(self))
 
@@ -55,6 +59,7 @@ def set_experimental_parameters(self):
     config["ps_y"] = float(self.settingsdialog.ps_y_line.displayText())
     config["mapping"] = str(self.settingsdialog.mapping_widget.currentText())
     config["cbar_pos"] = str(self.settingsdialog.cbar_pos_widget.currentText())
+    config["dark_graphs"] = self.settingsdialog.dark_graphs.isChecked()
     if self.settingsdialog.cbar_check.isChecked():
         cbar = 1
     else:
@@ -147,7 +152,7 @@ def populate_cmaplist(self, config, cmaps):
 def write_config(self):
     set_experimental_parameters(self)
     set_cmap(self)
-    if self.sampledata != None:
+    if self.ROI_scan_rect is not None:
         gisaxs.loadMap(self, self.sampledata.path)
         scan.detector_scan(self)
         self.holdHorizontal.setChecked(False)
@@ -159,7 +164,11 @@ def get_config(key):
     os.chdir(config_path)
     with open("config.json", 'r') as f:
         config = json.load(f)
-    item = config[key]
+    try:
+        item = config[key]
+    except KeyError:
+        print(f"Could not find a config for key {key}, returning None")
+        item = None
     return item
 
 

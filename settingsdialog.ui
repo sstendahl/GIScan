@@ -14,10 +14,14 @@
    <string>Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="8" column="1">
-    <layout class="QGridLayout" name="gridLayout_3"/>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Mapping:</string>
+     </property>
+    </widget>
    </item>
-   <item row="10" column="1">
+   <item row="11" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="1" column="1">
       <widget class="QLineEdit" name="sdd_line">
@@ -132,42 +136,19 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="1">
-    <widget class="QComboBox" name="mapping_widget">
-     <item>
-      <property name="text">
-       <string>Angular</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>q-space</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Pixels</string>
-      </property>
-     </item>
+   <item row="13" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="2" column="0">
     <layout class="QGridLayout" name="gridLayout_4">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Color map category: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Color map:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QComboBox" name="cbar_pos_widget">
        <item>
         <property name="text">
@@ -191,6 +172,20 @@
        </item>
       </widget>
      </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Color map:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Color bar position:</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
       <widget class="QComboBox" name="cmap_list_widget">
        <property name="sizePolicy">
@@ -201,15 +196,15 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QComboBox" name="cmap_category_widget"/>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_10">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Color bar position:</string>
+        <string>Color map category: </string>
        </property>
       </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QComboBox" name="cmap_category_widget"/>
      </item>
      <item row="2" column="0">
       <widget class="QCheckBox" name="cbar_check">
@@ -218,29 +213,40 @@
        </property>
       </widget>
      </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="dark_graphs">
+       <property name="text">
+        <string>Dark graphs</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
-   <item row="12" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
+   <item row="7" column="0">
+    <widget class="QComboBox" name="mapping_widget">
+     <item>
+      <property name="text">
+       <string>Angular</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>q-space</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Pixels</string>
+      </property>
+     </item>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Mapping:</string>
-     </property>
-    </widget>
+   <item row="9" column="0">
+    <layout class="QGridLayout" name="gridLayout_3"/>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>cmap_category_widget</tabstop>
   <tabstop>cmap_list_widget</tabstop>
   <tabstop>mapping_widget</tabstop>
   <tabstop>ai_line</tabstop>
