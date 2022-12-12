@@ -48,10 +48,11 @@
   </screenshots>
   
   <releases>
-                <release version="1.1.4" date="2022-12-31">
+                <release version="1.1.4" date="2022-12-12">
       <description>
         <ul>
           <li>Expanded permissions to home folder for Flatpak version</li>
+          <li>Update screenshots on Flathub</li>              
           <li>Use native filechooser</li>    
           <li>Minor bug fixes and code cleanup</li>                    
         </ul>
