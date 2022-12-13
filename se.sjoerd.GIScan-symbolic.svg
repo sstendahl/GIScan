@@ -24,11 +24,11 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="45.254834"
-     inkscape:cx="7.5903494"
-     inkscape:cy="15.003922"
+     inkscape:zoom="11.313709"
+     inkscape:cx="-20.108349"
+     inkscape:cy="7.7339804"
      inkscape:window-width="1463"
-     inkscape:window-height="1581"
+     inkscape:window-height="804"
      inkscape:window-x="35"
      inkscape:window-y="32"
      inkscape:window-maximized="0"
@@ -358,20 +358,14 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath7495">
       <rect
-         style="display:none;fill:#d46565;fill-opacity:1;stroke:none;stroke-width:0.0828918;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+         style="display:block;fill:#d46565;fill-opacity:1;stroke:none;stroke-width:0.0828918;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
          id="rect7497"
          width="1.1268827"
          height="1.5921607"
          x="1.5723944"
          y="4.0495949"
          rx="0"
-         ry="0.45968723"
-         d="m 2.0320816,4.0495949 h 0.2075082 c 0.2546667,0 0.4596872,0.2050205 0.4596872,0.4596872 v 0.6727862 c 0,0.2546668 -0.2050205,0.4596873 -0.4596872,0.4596873 H 2.0320816 c -0.2546667,0 -0.4596872,-0.2050205 -0.4596872,-0.4596873 V 4.5092821 c 0,-0.2546667 0.2050205,-0.4596872 0.4596872,-0.4596872 z" />
-      <path
-         id="lpe_path-effect7499"
-         style="fill:#d46565;fill-opacity:1;stroke:none;stroke-width:0.0828918;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
-         class="powerclip"
-         d="M -2.9427619,-4.6180649 H 7.3320246 V 10.471315 H -2.9427619 Z m 4.9748435,8.6676598 c -0.2546667,0 -0.4596872,0.2050205 -0.4596872,0.4596872 v 0.6727862 c 0,0.2546668 0.2050205,0.4596873 0.4596872,0.4596873 h 0.2075082 c 0.2546667,0 0.4596872,-0.2050205 0.4596872,-0.4596873 V 4.5092821 c 0,-0.2546667 -0.2050205,-0.4596872 -0.4596872,-0.4596872 z" />
+         ry="0.45968723" />
     </clipPath>
   </defs>
   <g
@@ -386,38 +380,6 @@
        x="0"
        y="0.12"
        ry="0.59014821" />
-    <path
-       style="fill:#000000;fill-opacity:1;stroke-width:0.248836;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
-       id="rect497"
-       width="0.2747865"
-       height="5.0893798"
-       x="2.0572381"
-       y="0.38193515"
-       ry="2.5446899"
-       rx="0"
-       clip-path="url(#clipPath7495)"
-       inkscape:path-effect="#path-effect7499"
-       d="M 2.0572381,0.38193515 H 2.3320246 V 5.4713149 H 2.0572381 Z"
-       sodipodi:type="rect"
-       transform="matrix(1.3595411,0,0,1,-0.7637103,-0.00112313)" />
-    <rect
-       style="fill:#000000;fill-opacity:1;stroke-width:0.481093;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
-       id="rect574-3-6"
-       width="3.2269588"
-       height="0.37777442"
-       x="0.62241513"
-       y="1.5165385"
-       rx="0"
-       ry="0.37777442" />
-    <rect
-       style="fill:#000000;fill-opacity:1;stroke-width:0.481093;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
-       id="rect574-3-6-7"
-       width="3.2269588"
-       height="0.37777442"
-       x="0.64206731"
-       y="2.8691859"
-       rx="0"
-       ry="0.37777442" />
     <rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.252;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
        id="rect620"
@@ -427,6 +389,30 @@
        y="1.2237401"
        ry="0"
        rx="0" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.376703;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+       id="rect8623"
+       width="0.021277571"
+       height="3.2360418"
+       x="2.1898911"
+       y="0.62274951"
+       ry="0.03295891" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.252;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+       id="rect8833"
+       width="2.8643615"
+       height="0.0882916"
+       x="0.78770453"
+       y="1.6503632"
+       ry="0.03295891" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.256412;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+       id="rect8835"
+       width="3.0311196"
+       height="0.077918932"
+       x="0.72925287"
+       y="2.9971545"
+       ry="0.031192705" />
   </g>
   <g
      inkscape:label="Layer 1"
