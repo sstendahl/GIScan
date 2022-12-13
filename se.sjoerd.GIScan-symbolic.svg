@@ -26,7 +26,7 @@
      showgrid="true"
      inkscape:zoom="45.254834"
      inkscape:cx="7.5903494"
-     inkscape:cy="11.468388"
+     inkscape:cy="15.003922"
      inkscape:window-width="1463"
      inkscape:window-height="1581"
      inkscape:window-x="35"
@@ -399,14 +399,14 @@
        inkscape:path-effect="#path-effect7499"
        d="M 2.0572381,0.38193515 H 2.3320246 V 5.4713149 H 2.0572381 Z"
        sodipodi:type="rect"
-       transform="matrix(1.9511302,0,0,1,-2.1588175,-0.011149)" />
+       transform="matrix(1.3595411,0,0,1,-0.7637103,-0.00112313)" />
     <rect
        style="fill:#000000;fill-opacity:1;stroke-width:0.481093;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
        id="rect574-3-6"
        width="3.2269588"
        height="0.37777442"
-       x="0.59788716"
-       y="1.4638741"
+       x="0.62241513"
+       y="1.5165385"
        rx="0"
        ry="0.37777442" />
     <rect
@@ -414,18 +414,18 @@
        id="rect574-3-6-7"
        width="3.2269588"
        height="0.37777442"
-       x="0.57126957"
-       y="2.8149912"
+       x="0.64206731"
+       y="2.8691859"
        rx="0"
        ry="0.37777442" />
     <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.229;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.252;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
        id="rect620"
-       width="3.6443334"
-       height="0.83647519"
-       x="0.37191701"
-       y="1.2369088"
-       ry="0.4182376"
+       width="3.6212494"
+       height="1.020075"
+       x="0.39314228"
+       y="1.2237401"
+       ry="0"
        rx="0" />
   </g>
   <g
