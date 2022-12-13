@@ -48,7 +48,18 @@
   </screenshots>
   
   <releases>
-                <release version="1.1.4" date="2022-12-12">
+  
+    <release version="1.1.5" date="2022-12-13">
+      <description>
+        <ul>
+          <li>Updated Flatpak runtime</li>
+          <li>Added symbolic icon</li>          
+          <li>Updated icons to vector image</li>
+        </ul>
+      </description>
+    </release>
+    
+     <release version="1.1.4" date="2022-12-12">
       <description>
         <ul>
           <li>Expanded permissions to home folder for Flatpak version</li>
@@ -59,7 +70,7 @@
       </description>
     </release>
     
-            <release version="1.1.3" date="2022-10-07">
+     <release version="1.1.3" date="2022-10-07">
       <description>
         <ul>
           <li>Fixed a bug where ROI selection didn't work properly if last sample ended on background selection</li>
