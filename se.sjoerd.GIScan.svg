@@ -25,9 +25,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="22.627417"
-     inkscape:cx="12.573242"
-     inkscape:cy="10.208854"
+     inkscape:zoom="32"
+     inkscape:cx="6.984375"
+     inkscape:cy="8.71875"
      inkscape:window-width="1463"
      inkscape:window-height="1211"
      inkscape:window-x="35"
@@ -60,7 +60,7 @@
          offset="0"
          id="stop3930" />
       <stop
-         style="stop-color:#ffff00;stop-opacity:0.46061906;"
+         style="stop-color:#ffff60;stop-opacity:0.46061909;"
          offset="1"
          id="stop3932" />
     </linearGradient>
@@ -401,7 +401,7 @@
      id="layer2"
      inkscape:label="Layer 2">
     <rect
-       style="fill:#406fd5;fill-opacity:1;stroke:none;stroke-width:0.382341"
+       style="fill:#2257c3;fill-opacity:1;stroke:none;stroke-width:0.382341"
        id="rect9034"
        width="4.2333331"
        height="3.9338365"
@@ -423,7 +423,7 @@
        sodipodi:type="rect"
        transform="matrix(1,0,0,1.0009277,0,1.4402568e-4)" />
     <rect
-       style="fill:#bccd61;fill-opacity:1;stroke-width:0.358086;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
+       style="fill:#b1c48e;fill-opacity:1;stroke-width:0.358086;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
        id="rect574"
        width="3.2044716"
        height="0.21076034"
@@ -432,7 +432,7 @@
        rx="1.6022358"
        ry="0.21076034" />
     <rect
-       style="fill:#e6ec5f;fill-opacity:1;stroke-width:0.384699;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
+       style="fill:#e2e98c;fill-opacity:1;stroke-width:0.384699;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
        id="rect574-3"
        width="3.5767682"
        height="0.21793146"
