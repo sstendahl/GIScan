@@ -26,7 +26,7 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="22.627417"
-     inkscape:cx="9.1260969"
+     inkscape:cx="0.64081552"
      inkscape:cy="15.865708"
      inkscape:window-width="1463"
      inkscape:window-height="1211"
@@ -441,13 +441,13 @@
        rx="1.7883841"
        ry="0.21793146" />
     <rect
-       style="fill:none;stroke:#fb0000;stroke-width:0.05;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+       style="fill:none;stroke:#fb0000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
        id="rect620"
-       width="3.6812999"
-       height="0.3673065"
-       x="0.34836373"
-       y="1.3269515"
-       ry="0.18365325"
+       width="3.677254"
+       height="0.42962772"
+       x="0.35038671"
+       y="1.3289745"
+       ry="0.21481386"
        rx="0" />
   </g>
   <g

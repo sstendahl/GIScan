@@ -399,33 +399,33 @@
        inkscape:path-effect="#path-effect7499"
        d="m 2.1946314,0.38193515 c 0.076116,0 0.1373932,1.13493165 0.1373932,2.54468985 0,1.4097582 -0.061277,2.5446899 -0.1373932,2.5446899 -0.076116,0 -0.1373933,-1.1349317 -0.1373933,-2.5446899 0,-1.4097582 0.061277,-2.54468985 0.1373933,-2.54468985 z"
        sodipodi:type="rect"
-       transform="translate(0,4.9836119e-4)" />
+       transform="matrix(2.1535904,0,0,1,-2.4864407,4.9836119e-4)" />
     <rect
-       style="fill:#000000;fill-opacity:1;stroke-width:0.358086;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
+       style="fill:#000000;fill-opacity:1;stroke-width:0.509985;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
        id="rect574"
        width="3.2044716"
-       height="0.21076034"
+       height="0.42749271"
        x="0.5623613"
        y="1.4207611"
        rx="1.6022358"
-       ry="0.21076034" />
+       ry="0.42749271" />
     <rect
-       style="fill:#000000;fill-opacity:1;stroke-width:0.384699;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
+       style="fill:#000000;fill-opacity:1;stroke-width:0.581731;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
        id="rect574-3"
        width="3.5767682"
-       height="0.21793146"
+       height="0.49833608"
        x="0.37646917"
-       y="2.8921745"
+       y="2.6117699"
        rx="1.7883841"
-       ry="0.21793146" />
+       ry="0.49833608" />
     <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.229;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
        id="rect620"
-       width="3.6729121"
-       height="0.50202149"
-       x="0.3525576"
-       y="1.2716297"
-       ry="0.25101075"
+       width="3.6443334"
+       height="0.83647519"
+       x="0.37191701"
+       y="1.2369088"
+       ry="0.4182376"
        rx="0" />
   </g>
   <g
