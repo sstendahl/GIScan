@@ -26,8 +26,8 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="22.627417"
-     inkscape:cx="0.64081552"
-     inkscape:cy="15.865708"
+     inkscape:cx="12.573242"
+     inkscape:cy="10.208854"
      inkscape:window-width="1463"
      inkscape:window-height="1211"
      inkscape:window-x="35"
@@ -56,7 +56,7 @@
        inkscape:collect="always"
        id="linearGradient3934">
       <stop
-         style="stop-color:#ffff66;stop-opacity:1;"
+         style="stop-color:#ffff90;stop-opacity:1;"
          offset="0"
          id="stop3930" />
       <stop
@@ -371,8 +371,8 @@
        inkscape:collect="always"
        xlink:href="#linearGradient3934"
        id="linearGradient3936"
-       x1="2.2011569"
-       y1="4.018322"
+       x1="2.2048419"
+       y1="4.0587654"
        x2="2.1897528"
        y2="0.36712363"
        gradientUnits="userSpaceOnUse" />
@@ -393,7 +393,7 @@
          id="lpe_path-effect7499"
          style="fill:#d46565;fill-opacity:1;stroke:none;stroke-width:0.0828918;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
          class="powerclip"
-         d="M -2.9427619,-4.6180649 H 7.3320246 V 10.471315 H -2.9427619 Z m 4.9748435,8.6676598 c -0.2546667,0 -0.4596872,0.2050205 -0.4596872,0.4596872 v 0.6727862 c 0,0.2546668 0.2050205,0.4596873 0.4596872,0.4596873 h 0.2075082 c 0.2546667,0 0.4596872,-0.2050205 0.4596872,-0.4596873 V 4.5092821 c 0,-0.2546667 -0.2050205,-0.4596872 -0.4596872,-0.4596872 z" />
+         d="M -2.9427619,-4.6180649 H 7.3277653 V 10.526857 H -2.9427619 Z m 4.9748435,8.6676598 c -0.2546667,0 -0.4596872,0.2050205 -0.4596872,0.4596872 v 0.6727862 c 0,0.2546668 0.2050205,0.4596873 0.4596872,0.4596873 h 0.2075082 c 0.2546667,0 0.4596872,-0.2050205 0.4596872,-0.4596873 V 4.5092821 c 0,-0.2546667 -0.2050205,-0.4596872 -0.4596872,-0.4596872 z" />
     </clipPath>
   </defs>
   <g
@@ -401,7 +401,7 @@
      id="layer2"
      inkscape:label="Layer 2">
     <rect
-       style="fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.382341"
+       style="fill:#406fd5;fill-opacity:1;stroke:none;stroke-width:0.382341"
        id="rect9034"
        width="4.2333331"
        height="3.9338365"
@@ -411,19 +411,19 @@
     <path
        style="fill:url(#linearGradient3936);fill-opacity:1;stroke-width:0.248836;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
        id="rect497"
-       width="0.2747865"
-       height="5.0893798"
+       width="0.27052718"
+       height="5.1449218"
        x="2.0572381"
        y="0.38193515"
        ry="2.5446899"
-       rx="0.13739325"
+       rx="0.13526359"
        clip-path="url(#clipPath7495)"
        inkscape:path-effect="#path-effect7499"
-       d="m 2.1946314,0.38193515 c 0.076116,0 0.1373932,1.13493165 0.1373932,2.54468985 0,1.4097582 -0.061277,2.5446899 -0.1373932,2.5446899 -0.076116,0 -0.1373933,-1.1349317 -0.1373933,-2.5446899 0,-1.4097582 0.061277,-2.54468985 0.1373933,-2.54468985 z"
+       d="m 2.1925017,0.38193515 c 0.074936,0 0.1352636,1.13493165 0.1352636,2.54468985 v 0.055542 c 0,1.4097582 -0.060328,2.5446899 -0.1352636,2.5446899 -0.074936,0 -0.1352636,-1.1349317 -0.1352636,-2.5446899 V 2.926625 c 0,-1.4097582 0.060328,-2.54468985 0.1352636,-2.54468985 z"
        sodipodi:type="rect"
-       transform="translate(0,4.9836119e-4)" />
+       transform="matrix(1,0,0,1.0009277,0,1.4402568e-4)" />
     <rect
-       style="fill:#a6a687;fill-opacity:1;stroke-width:0.358086;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
+       style="fill:#bccd61;fill-opacity:1;stroke-width:0.358086;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
        id="rect574"
        width="3.2044716"
        height="0.21076034"
@@ -432,7 +432,7 @@
        rx="1.6022358"
        ry="0.21076034" />
     <rect
-       style="fill:#d4d465;fill-opacity:1;stroke-width:0.384699;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
+       style="fill:#e6ec5f;fill-opacity:1;stroke-width:0.384699;stroke-linecap:round;stroke-linejoin:bevel;paint-order:stroke markers fill"
        id="rect574-3"
        width="3.5767682"
        height="0.21793146"
