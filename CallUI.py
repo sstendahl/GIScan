@@ -274,7 +274,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
 
     def saveFileDialog(self, filename = None, documenttype="Text file (*.txt)", title="Save file"):
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
         if filename == None:
             filename = self.filename[:-4]
         fileName = QFileDialog.getSaveFileName(self, title, filename,
