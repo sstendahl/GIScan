@@ -54,6 +54,16 @@
   </screenshots>
   
   <releases>
+
+     <release version="1.1.6" date="2023-03-14">
+      <description>
+        <p>Super minor update, the units in the sample to detector distance were wrong. At one point I'll streamline the FWHM scan mode as well, but given my schedule next significant update is still a bit away in the distant future</p>
+        <ul>
+          <li>Fix sample to detector distance</li>
+        </ul>
+      </description>
+    </release>
+
   
     <release version="1.1.5" date="2022-12-13">
       <description>
