@@ -11,16 +11,15 @@ import plottingtools
 import settings
 
 def get_labels():
-    """Retreive label names for current mapping"""
-
+    """Retrieve label names for current mapping."""
     mapping = settings.get_config("mapping")
     if mapping == "Angular":
-        in_plane_label = "In-plane scattering angle $\phi{_f}$ (°)"
-        out_of_plane_label = "Out-of-plane scattering angle $\\alpha{_f}$ (°)"
-    if mapping == "q-space":
-        in_plane_label = "In-plane scattering vector q${_y}$ (Å$^{-1}$)"
-        out_of_plane_label = "Out-of-plane scattering vector q${_z}$ (Å$^{-1}$)"
-    if mapping == "Pixels":
+        in_plane_label = r"In-plane scattering angle $\phi{_f}$ (°)"
+        out_of_plane_label = r"Out-of-plane scattering angle $\alpha{_f}$ (°)"
+    elif mapping == "q-space":
+        in_plane_label = r"In-plane scattering vector q${_y}$ (Å$^{-1}$)"
+        out_of_plane_label = r"Out-of-plane scattering vector q${_z}$ (Å$^{-1}$)"
+    else:  # Pixels
         in_plane_label = "Horizontal detector position (pixels)"
         out_of_plane_label = "Vertical detector position (pixels)"
     return in_plane_label, out_of_plane_label
@@ -41,8 +40,7 @@ def loadEmpty(self):
     create_layout(self, verticalscan_canvas, self.vertical_layout)
 
 def create_layout(self, canvas, layout):
-    """Create a layout to plat a graph on."""
-
+    """Create a layout to plot a graph on."""
     toolbar = NavigationToolbar(canvas, self)
     layout.addWidget(canvas)
     layout.addWidget(toolbar)
@@ -70,7 +68,7 @@ def set_ROI_mode(self, mode = "ROI"):
 
 
 def loadMap(self, file):
-    """Load the the selected GISAXS map."""
+    """Load the selected GISAXS map."""
 
     if self.ROI_scan_rect == None:
         self.connectActions()
@@ -88,6 +86,7 @@ def loadMap(self, file):
         contents = cbf.read(filename)
         data = contents.data
         self.sampledata.gisaxs_data = data
+        self.sampledata.invalidate_cache()
         self.sampledata.path = file
 
         layout = self.maplayout
@@ -110,4 +109,3 @@ def getPath(self, documenttype="GISAXS data file (*.cbf);;All Files (*)"):
     options = QFileDialog.Options()
     path = QFileDialog.getOpenFileName(self,"Open GISAXS data file", "",documenttype, options=options)[0]
     return path
-

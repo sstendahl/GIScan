@@ -26,10 +26,19 @@ GIScan is mostly developed with the analysis of multilayers in mind but can be u
 in cbf format. If a beamline or datatype (be it GISAXS or GISANS) is not supported and you would like to use this
 tool, please submit an issue on the Github page so this can be arranged.
       
-For any support or other questions, please contact me at info@sjoerd.se. Keep in mind that this program comes with 
+For any support or other questions, please contact me at contact@sjoerd.se. Keep in mind that this program comes with 
 absolutely no warranty or formal support, but I will try my best to be of assistance.  
 
 # How to install: 
+
+**Run in Python without installing**: You can run GIScan from Python directly. Be sure to install the dependencies:
+```
+pin install -r requirements.txt
+```
+And then you should be able to launch GIScan directly from Python:
+```
+python main.py
+```
 
 **Linux:** The officially recommended method to install GIScan is through Flathub: https://flathub.org/apps/details/se.sjoerd.GIScan. This can either be done graphically through your software manager of choice, or through the command line using `flatpak install flathub se.sjoerd.GIScan`. Make sure to enable the Flathub repositories beforehand, as further described here: https://flatpak.org/setup/. Alternatively, it is possible to run directly from source by executing main.py using Python. 
 

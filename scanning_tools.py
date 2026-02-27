@@ -4,7 +4,6 @@ import plottingtools
 import json
 import os
 from scipy.signal import find_peaks
-import scanning_tools as scan
 import settings
 
 
@@ -198,7 +197,7 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
 
     if horizontal and not hold_horizontal:
         self.sampledata.horizontal_scan_x = coordinatelist
-        height = abs(starty - stopy)
+        height = abs(starty - stopy) or 1
         intensity_list = [value/height for value in intensity_list]
         self.sampledata.horizontal_scan_y = intensity_list
         self.sampledata.remove_background()
@@ -207,7 +206,7 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
 
     if not horizontal and not hold_vertical:
         self.sampledata.vertical_scan_x = coordinatelist
-        height = abs(startx - stopx)
+        height = abs(startx - stopx) or 1
         intensity_list = [value/height for value in intensity_list]
         self.sampledata.vertical_scan_y = intensity_list
         self.sampledata.remove_background(horizontal = False)
@@ -232,10 +231,10 @@ def start_offspec(self, hold_horizontal, hold_vertical, horizontal=True):
                                                  revert=False)
         self.verticalscanfig = figure
 
-    figure[1].canvas.mpl_connect('motion_notify_event',
+    figure[1].mpl_connect('motion_notify_event',
                                  lambda event: self.dragVline(event, scan_type=scan_type))
-    figure[1].canvas.mpl_connect('button_press_event', self.pressVline)
-    figure[1].canvas.mpl_connect('button_release_event',
+    figure[1].mpl_connect('button_press_event', self.pressVline)
+    figure[1].mpl_connect('button_release_event',
                                  lambda event: self.releaseVline(event, scan_type=scan_type))
 
 
@@ -279,46 +278,36 @@ def get_average_background(self, type_of_ROI = "bg"):
     return average
 
 def find_startstop(self, type_of_ROI="scan"):
-    startx, stopx, starty, stopy = 0, 0, 0, 0
-
     if type_of_ROI == "scan":
         x0, x1, y0, y1 = self.ROI_scan_rect.extents
     if type_of_ROI == "bg":
         x0, x1, y0, y1 = self.ROI_background_rect.extents
-    start = x0
-    stop = x1
-    found_start = False
-    found_stop = False
+
     if self.sampledata.mapping == "Angular":
-        x_array = self.sampledata.get_x_angular()
-        y_array = self.sampledata.get_y_angular()
+        x_array = np.array(self.sampledata.get_x_angular())
+        y_array = np.array(self.sampledata.get_y_angular())
     elif self.sampledata.mapping == "q-space":
-        x_array = self.sampledata.get_y_qspace()
-        y_array = self.sampledata.get_z_qspace()
+        x_array = np.array(self.sampledata.get_y_qspace())
+        y_array = np.array(self.sampledata.get_z_qspace())
     else:
-        x_array = self.sampledata.get_x_pixels()
-        y_array = self.sampledata.get_y_pixels()
+        x_array = np.array(self.sampledata.get_x_pixels())
+        y_array = np.array(self.sampledata.get_y_pixels())
 
-    for index, element in enumerate(x_array):
-        if element > min([start, stop]) and not found_start:
-            startx = index
-            found_start = True
-        if element > max([start, stop]) and not found_stop:
-            stopx = index
-            found_stop = True
-            break
-    found_start = False
+    x_lo, x_hi = min(x0, x1), max(x0, x1)
+    y_lo, y_hi = min(y0, y1), max(y0, y1)
 
-    start = y1
-    stop = y0
+    x_indices = np.where((x_array >= x_lo) & (x_array <= x_hi))[0]
+    if len(x_indices) > 0:
+        startx, stopx = int(x_indices[0]), int(x_indices[-1])
+    else:
+        startx, stopx = int(np.argmin(np.abs(x_array - x_lo))), int(np.argmin(np.abs(x_array - x_hi)))
 
-    for index, element in enumerate(y_array):
-        if element > min([start, stop]) and not found_start:
-            starty = index
-            found_start = True
-        if element > max([start, stop]):
-            stopy = index
-            break
+    y_indices = np.where((y_array >= y_lo) & (y_array <= y_hi))[0]
+    if len(y_indices) > 0:
+        starty, stopy = int(y_indices[0]), int(y_indices[-1])
+    else:
+        starty, stopy = int(np.argmin(np.abs(y_array - y_lo))), int(np.argmin(np.abs(y_array - y_hi)))
+
     return startx, stopx, starty, stopy
 
 
@@ -364,40 +353,43 @@ def find_FWHM(self, position, scan_type="vertical"):
         ydata = self.sampledata.vertical_scan_y
         figure = self.verticalscanfig[0]
         axes = figure.axes[0]
+
     peak_position = find_peak_in_range(self, position, xdata, ydata)
     print(f"Peak position is {peak_position}")
+
     if peak_position is not None:
+        xs = np.array(xdata)
+        ys = np.array(ydata)
+        sort_idx = np.argsort(xs)
+        xs, ys = xs[sort_idx], ys[sort_idx]
+
+        peak_coordinate = xdata[peak_position]
         half_intensity = ydata[peak_position] / 2
-        # Find left boundary:
 
-        xs = np.sort(xdata)
-        ys = np.array(ydata)[np.argsort(xdata)]
-        start_position = peak_position
-        peak_coordinate = xdata[start_position]
+        # Find the half-maximum crossings by locating sign changes in (y - half_intensity),
+        # then linearly interpolate to get the exact crossing x-coordinate.
+        delta = ys - half_intensity
+        cross = np.where(np.diff(np.sign(delta)))[0]  # indices just before each crossing
 
-        found_left = False
-        found_right = False
-        mesh_step = 100000
+        left_crosses  = cross[xs[cross] < peak_coordinate]
+        right_crosses = cross[xs[cross] > peak_coordinate]
 
-        # Will optimize this a bit
-        for index in range(mesh_step):
-            index = index / (mesh_step)
-            y_value_left = np.interp(peak_coordinate - index, xs, ys)
-            y_value_right = np.interp(peak_coordinate + index, xs, ys)
-            if found_left == False and y_value_left <= half_intensity:
-                left_boundary_value = peak_coordinate - index
-                found_left = True
-            if found_right == False and y_value_right <= half_intensity:
-                right_boundary_value = peak_coordinate + index
-                found_right = True
-            if found_left == True and found_right == True:
-                FWHM = right_boundary_value - left_boundary_value
-                break
+        if len(left_crosses) > 0 and len(right_crosses) > 0:
+            lc = left_crosses[-1]   # closest crossing to the left of the peak
+            rc = right_crosses[0]   # closest crossing to the right of the peak
+
+            # Linear interpolation between the two bracketing points
+            left_boundary_value  = xs[lc]  - delta[lc]  * (xs[lc + 1]  - xs[lc])  / (delta[lc + 1]  - delta[lc])
+            right_boundary_value = xs[rc]  - delta[rc]  * (xs[rc + 1]  - xs[rc])  / (delta[rc + 1]  - delta[rc])
+            FWHM = right_boundary_value - left_boundary_value
+        else:
+            print("Could not find half-maximum crossings on both sides of the peak")
+            left_boundary_value = right_boundary_value = peak_coordinate
+            FWHM = 0
 
         if hasattr(self, 'hline'):
             self.hline.remove()
-        self.hline = axes.hlines(y=ydata[peak_position] / 2, xmin=left_boundary_value, xmax=right_boundary_value,
-                                 color='r')
+        self.hline = axes.hlines(y=half_intensity, xmin=left_boundary_value, xmax=right_boundary_value, color='r')
         self.verticalscanfig[1].draw()
         self.horizontalscanfig[1].draw()
     else:

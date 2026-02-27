@@ -58,10 +58,6 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         
         gisaxs.loadEmpty(self)
 
-    def loadMap(self):
-        path = scan.getPath()
-        gisaxs.loadMap(path)
-
     def connectActions(self):
         """Connect actions to buttons."""
         self.saveVertical.clicked.connect(lambda: self.saveFile(horizontal=False))
@@ -107,25 +103,25 @@ class CallUI(QtBaseClass, Ui_MainWindow):
         self.middleXEntry.setText(str(round(float(x), rounding)))
         self.middleYEntry.setText(str(round(float(y), rounding)))
         extends = [(x - width / 2), x + width / 2, y - height / 2, y + height / 2]
-        self.ROI_scan_rect.to_draw.set_visible(True)
+        self.ROI_scan_rect.set_visible(True)
         self.ROI_scan_rect.extents = extends
 
     def define_rectangle(self):
         self.ROI_scan_rect = RectangleSelector(self.figurecanvas[0].axes[0], self.on_release,
-                                               drawtype='box', useblit=True,
+                                               useblit=True,
                                                button=[1],  # don't use middle button
                                                minspanx=0.1, minspany=0.1,
                                                spancoords='pixels',
                                                interactive=True,
-                                               rectprops=dict(linestyle='-', color='red', alpha=0.2, linewidth=2))
+                                               props=dict(linestyle='-', color='red', alpha=0.2, linewidth=2))
 
         self.ROI_background_rect = RectangleSelector(self.figurecanvas[0].axes[0], self.on_release,
-                                                     drawtype='box', useblit=True,
+                                                     useblit=True,
                                                      button=[1],  # don't use middle button
                                                      minspanx=0.1, minspany=0.1,
                                                      spancoords='pixels',
                                                      interactive=True,
-                                                     rectprops=dict(linestyle='-', color='yellow', alpha=0.2,
+                                                     props=dict(linestyle='-', color='yellow', alpha=0.2,
                                                                     linewidth=2))
         self.ROI_background_rect.extents = [0, 0, 0, 0]
         self.ROI_background_rect.set_visible(False)
@@ -227,14 +223,14 @@ class CallUI(QtBaseClass, Ui_MainWindow):
                 ymin += y_shift
                 ymax += y_shift
                 extents = [xmin, xmax, ymin, ymax]
-                self.ROI_scan_rect.to_draw.set_visible(True)
+                self.ROI_scan_rect.set_visible(True)
                 self.ROI_scan_rect.extents = extents
             if scan_type == "horizontal":
                 x_shift = (event.xdata - middleX)
                 xmin += x_shift
                 xmax += x_shift
                 extents = [xmin, xmax, ymin, ymax]
-                self.ROI_scan_rect.to_draw.set_visible(True)
+                self.ROI_scan_rect.set_visible(True)
                 self.ROI_scan_rect.extents = extents
 
     def pressVline(self, event):

@@ -159,17 +159,25 @@ def write_config(self):
         scan.YonedaScan(self)
 
 
+_CONFIG_DEFAULTS = {
+    "dark_graphs": False,
+    "colorbar": 1,
+    "cbar_pos": "Right",
+    "cmap": "inferno",
+    "cmap_cat": "Perceptually Uniform Sequential",
+    "mapping": "q-space",
+}
+
 def get_config(key):
     config_path = get_path()
     os.chdir(config_path)
     with open("config.json", 'r') as f:
         config = json.load(f)
-    try:
-        item = config[key]
-    except KeyError:
-        print(f"Could not find a config for key {key}, returning None")
-        item = None
-    return item
+    if key not in config:
+        default = _CONFIG_DEFAULTS.get(key)
+        print(f"Could not find config key '{key}', using default: {default}")
+        return default
+    return config[key]
 
 
 def get_cmap():

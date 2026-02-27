@@ -24,10 +24,17 @@ class Sample:
             config = json.load(f)
         self.mapping = config["mapping"]
         self.ai = config["ai"]
+        self.path = ""
+        self.gisaxs_data = np.array([])
+        self.average_bg = 0
         self.vertical_scan_y = []
         self.vertical_scan_x = []
         self.horizontal_scan_y = []
         self.horizontal_scan_x = []
+        self._coord_cache = {}
+
+    def invalidate_cache(self):
+        self._coord_cache = {}
 
     def remove_background(self, heigth = 1, horizontal = True):
         if horizontal:
@@ -61,8 +68,7 @@ class Sample:
         return x_array
 
     def get_y_pixels(self):
-        data = self.gisaxs_data[::-1]
-        y_array = list(range(0, len(data)))
+        y_array = list(range(0, len(self.gisaxs_data)))
         return y_array
 
     def get_wavelength(self):
@@ -78,8 +84,8 @@ class Sample:
         return x_theta_f
 
     def get_y_angular(self):
-        data = self.gisaxs_data[::-1]
-        y_array = list(range(0, len(data)))
+        n = len(self.gisaxs_data)
+        y_array = list(range(0, n))
         y_alpha_f = scanning_tools.convert_y(y_array)
         return y_alpha_f
 

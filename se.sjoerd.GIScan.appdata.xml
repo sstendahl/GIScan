@@ -56,12 +56,20 @@
   <releases>
 
 
-     <release version="1.1.7" date="2026-02-27">
+     <release version="1.2.0" date="2026-02-27">
       <description>
-        <p>Dependency update </p>
+        <p>Performance, bug fixes and code quality improvements</p>
         <ul>
           <li>Update runtimes and dependencies to the latest version on the Flatpak</li>
-          <li>Replace the seaborn styling with bhm, as the specific styling does not come with all versions of matplotlib.</li>
+          <li>Replace the seaborn styling with bhm, as the specific styling does not come with all versions of matplotlib.</li>          
+          <li>Significantly improved performance for scan updates by replacing nested pixel loops with NumPy array slicing</li>
+          <li>Coordinate arrays are now cached and only recomputed when new data is loaded, making repeated scan updates much faster</li>
+          <li>Improved FWHM search performance</li>
+          <li>Added guards to prevent out-of-bounds crashes</li>          
+          <li>Fixed an issue on fresh installs caused by a missing dark_graphs entry in the default config file</li>
+          <li>Older config files from previous versions will no longer cause crashes on startup</li>
+          <li>Fixed compatibility with newer versions of matplotlib</li>
+          <li>Various bug fixes and code cleanup</li>
         </ul>
       </description>
     </release>
