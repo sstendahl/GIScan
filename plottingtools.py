@@ -31,7 +31,7 @@ def plotgGraphFigure(X, Y, canvas, filename="", xlim=None, title="", scale="log"
     canvas.ax.set_yscale(scale)
 
 
-def singlePlotonCanvas(self, layout, data, ylabel="", xlim=None, title="GISAXS Data", style = "seaborn-whitegrid"):
+def singlePlotonCanvas(self, layout, data, ylabel="", xlim=None, title="GISAXS Data", style = "bmh"):
     in_plane_label, out_of_plane_label = gisaxs.get_labels()
     canvas = PlotWidget(xlabel=in_plane_label, ylabel=out_of_plane_label,
                         title=title, style = style)
@@ -72,7 +72,7 @@ def plotFigure(self, data, canvas, filename="", xlim=None, title="", scale="line
 
 
 class PlotWidget(FigureCanvas):
-    def __init__(self, parent=None, xlabel="", ylabel="", title="", scale="linear", style = "seaborn-whitegrid"):
+    def __init__(self, parent=None, xlabel="", ylabel="", title="", scale="linear", style = "bmh"):
         if settings.get_config("dark_graphs"):
             plt.style.use('dark_background')
         else:
