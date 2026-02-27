@@ -55,6 +55,17 @@
   
   <releases>
 
+
+     <release version="1.1.7" date="2026-02-27">
+      <description>
+        <p>Dependency update </p>
+        <ul>
+          <li>Update runtimes and dependencies to the latest version on the Flatpak</li>
+          <li>Replace the seaborn styling with bhm, as the specific styling does not come with all versions of matplotlib.</li>
+        </ul>
+      </description>
+    </release>
+    
      <release version="1.1.6" date="2023-03-14">
       <description>
         <p>Super minor update, the units in the sample to detector distance were wrong. At one point I'll streamline the FWHM scan mode as well, but given my schedule next significant update is still a bit away in the distant future</p>
